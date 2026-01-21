@@ -1,1936 +1,733 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>AI@Astria – Demystify, Adopt, Apply</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
-  <style>
-    :root {
-      /* Core palette */
-      --bg: #f5f5fa;              /* page */
-      --bg-soft: #eef2ff;         /* section alt */
-      --bg-soft-2: #ecfeff;       /* accents */
-      --surface: #ffffff;
-      --surface-elevated: #f9fafb;
-      --text: #0f172a;
-      --muted: #64748b;
-      --primary: #0f766e;
-      --primary-soft: rgba(15, 118, 110, 0.08);
-      --accent: #6366f1;
-      --border: #e2e8f0;
-
-      --danger: #b91c1c;
-
-      --easy: #3b82f6;
-      --medium: #22c55e;
-      --hard: #eab308;
-      --hardest: #ef4444;
-
-      --radius-xs: 6px;
-      --radius-sm: 10px;
-      --radius: 14px;
-      --radius-pill: 999px;
-
-      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
-      --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.12);
-
-      --pad-xs: 6px;
-      --pad-sm: 10px;
-      --pad: 18px;
-      --pad-lg: 26px;
-      --pad-xl: 40px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
-      color: var(--text);
-      background: radial-gradient(circle at top left, #eef2ff, #f7fafc 45%, #f5f5fa);
-      scroll-behavior: smooth;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    body {
-      padding-top: 80px;
-      line-height: 1.6;
-      font-size: 15px;
-    }
-
-    a {
-      color: var(--primary);
-      text-decoration: none;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4 {
-      margin: 0 0 8px;
-      font-weight: 600;
-    }
-
-    p {
-      margin: 0 0 12px;
-    }
-
-    /* NAV */
-
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 72px;
-      background: rgba(248, 250, 252, 0.96);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(226, 232, 240, 0.9);
-      display: flex;
-      align-items: center;
-      z-index: 40;
-      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
-    }
-
-    .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .brand {
-      font-weight: 700;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .brand-pill {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      padding: 3px 10px;
-      border-radius: 999px;
-      background: #eef2ff;
-      color: #4f46e5;
-      border: 1px solid rgba(129, 140, 248, 0.4);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 10px;
-      font-size: 13px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .nav-link {
-      padding: 6px 11px;
-      border-radius: 999px;
-      color: var(--muted);
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: all 0.16s ease;
-      white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .nav-link::before {
-      content: "";
-      width: 4px;
-      height: 4px;
-      border-radius: 999px;
-      background: transparent;
-    }
-
-    .nav-link:hover {
-      color: var(--primary);
-      background: var(--primary-soft);
-      border-color: rgba(148, 163, 184, 0.3);
-    }
-
-    .nav-link.active {
-      color: #0f172a;
-      background: #ecfeff;
-      border-color: rgba(34, 197, 235, 0.6);
-      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.12);
-    }
-
-    .nav-link.active::before {
-      background: #22c55e;
-    }
-
-    /* LAYOUT */
-
-    .section {
-      padding: 84px 20px;
-    }
-
-    .section-alt {
-      background:
-        radial-gradient(circle at top right, rgba(129, 140, 248, 0.08), transparent 55%),
-        linear-gradient(to bottom, rgba(240, 249, 255, 0.9), #f5f5fa 65%);
-    }
-
-    .container {
-      max-width: 1120px;
-      margin: 0 auto;
-    }
-
-    .section-header {
-      margin-bottom: 32px;
-    }
-
-    .kicker {
-      font-size: 12px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .section-title {
-      font-size: 28px;
-      margin-bottom: 6px;
-    }
-
-    .section-subtitle {
-      font-size: 14px;
-      color: var(--muted);
-      max-width: 700px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-      gap: 34px;
-      align-items: flex-start;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 20px;
-    }
-
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 18px;
-    }
-
-    /* HERO / PREAMBLE */
-
-    .hero {
-      padding: 96px 20px 72px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at top left, rgba(56, 189, 248, 0.22), transparent 55%),
-        radial-gradient(circle at top right, rgba(129, 140, 248, 0.18), transparent 50%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      max-width: 1120px;
-      margin: 0 auto;
-      display: grid;
-      gap: 40px;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-      align-items: center;
-    }
-
-    .hero-title {
-      font-size: 34px;
-      margin-bottom: 10px;
-      background: linear-gradient(120deg, #0f766e, #14b8a6, #6366f1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-subtitle {
-      font-size: 16px;
-      color: #1e293b;
-      margin-bottom: 18px;
-      max-width: 540px;
-    }
-
-    .hero-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
-    .tag {
-      font-size: 11px;
-      border-radius: 999px;
-      padding: 4px 11px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(248, 250, 252, 0.95);
-      color: var(--muted);
-      backdrop-filter: blur(6px);
-    }
-
-    .hero-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .btn {
-      border-radius: var(--radius-pill);
-      padding: 9px 18px;
-      font-size: 13px;
-      border: 1px solid transparent;
-      background: linear-gradient(135deg, #0f766e, #14b8a6);
-      color: white;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.24);
-      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.28);
-      filter: brightness(1.02);
-    }
-
-    .btn-outline {
-      background: rgba(248, 250, 252, 0.92);
-      color: #0f172a;
-      border-color: rgba(148, 163, 184, 0.7);
-      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.15);
-    }
-
-    .btn-outline:hover {
-      background: #e0f2fe;
-      border-color: rgba(37, 99, 235, 0.8);
-    }
-
-    .btn-ghost {
-      border-radius: var(--radius-pill);
-      padding: 7px 14px;
-      font-size: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(248, 250, 252, 0.9);
-      color: #0f172a;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-ghost:hover {
-      background: #e5f2ff;
-      border-color: rgba(59, 130, 246, 0.7);
-    }
-
-    .hero-note {
-      font-size: 11px;
-      color: #0f172a;
-      max-width: 520px;
-      background: rgba(248, 250, 252, 0.92);
-      border-radius: 999px;
-      padding: 6px 14px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      display: inline-block;
-      backdrop-filter: blur(6px);
-    }
-
-    .hero-card {
-      background: rgba(248, 250, 252, 0.96);
-      border-radius: 18px;
-      padding: 20px 20px 18px;
-      box-shadow: var(--shadow-md);
-      border: 1px solid rgba(226, 232, 240, 0.9);
-      font-size: 13px;
-      backdrop-filter: blur(10px);
-    }
-
-    .hero-card h3 {
-      font-size: 15px;
-      margin-bottom: 6px;
-    }
-
-    .hero-card ul {
-      padding-left: 20px;
-      margin: 8px 0;
-    }
-
-    .hero-card li {
-      margin-bottom: 4px;
-    }
-
-    .hero-secondary {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .hero-secondary a {
-      font-weight: 500;
-    }
-
-    /* FACILITATOR */
-
-    .facilitator-toggle {
-      position: fixed;
-      right: 20px;
-      bottom: 22px;
-      z-index: 50;
-      border-radius: 999px;
-      padding: 8px 14px;
-      font-size: 11px;
-      border: 1px solid rgba(148, 163, 184, 0.9);
-      background: #020617;
-      color: #e5e7eb;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
-    }
-
-    .facilitator-toggle span {
-      font-size: 14px;
-    }
-
-    .facilitator-note {
-      display: none;
-      margin-bottom: 18px;
-      border-radius: 14px;
-      padding: 10px 12px;
-      font-size: 12px;
-      background: #fef9c3;
-      border: 1px solid #facc15;
-      color: #713f12;
-    }
-
-    .facilitator-note strong {
-      text-transform: uppercase;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      margin-right: 7px;
-    }
-
-    /* BASE CARDS */
-
-    .card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: var(--pad);
-      border: 1px solid rgba(226, 232, 240, 0.9);
-      box-shadow: var(--shadow-sm);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card-title {
-      font-size: 15px;
-      margin-bottom: 4px;
-    }
-
-    .card-subtitle {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .card-icon {
-      font-size: 20px;
-      margin-bottom: 6px;
-    }
-
-    /* Accent stripe + tint for specific cards */
-
-    .card--accent::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      border-radius: 14px 14px 0 0;
-      pointer-events: none;
-    }
-
-    /* Demystify cards */
-    .card--demystify-ai {
-      background: linear-gradient(
-        135deg,
-        rgba(56, 189, 248, 0.12),
-        rgba(239, 246, 255, 0.98)
-      );
-    }
-    .card--demystify-ai::before {
-      background: linear-gradient(90deg, #0ea5e9, #6366f1);
-    }
-
-    .card--demystify-llm {
-      background: linear-gradient(
-        135deg,
-        rgba(96, 165, 250, 0.12),
-        rgba(239, 246, 255, 0.98)
-      );
-    }
-    .card--demystify-llm::before {
-      background: linear-gradient(90deg, #3b82f6, #6366f1);
-    }
-
-    .card--demystify-hitl {
-      background: linear-gradient(
-        135deg,
-        rgba(52, 211, 153, 0.12),
-        rgba(236, 253, 245, 0.98)
-      );
-    }
-    .card--demystify-hitl::before {
-      background: linear-gradient(90deg, #10b981, #22c55e);
-    }
-
-    .card--demystify-vocab {
-      background: linear-gradient(
-        135deg,
-        rgba(129, 140, 248, 0.12),
-        rgba(238, 242, 255, 0.98)
-      );
-    }
-    .card--demystify-vocab::before {
-      background: linear-gradient(90deg, #4f46e5, #6366f1);
-    }
-
-    .card--demystify-hallucinate {
-      background: linear-gradient(
-        135deg,
-        rgba(251, 191, 36, 0.12),
-        rgba(255, 251, 235, 0.98)
-      );
-    }
-    .card--demystify-hallucinate::before {
-      background: linear-gradient(90deg, #f59e0b, #fb923c);
-    }
-
-    .micro-prompt {
-      font-size: 11px;
-      padding: 8px 10px;
-      background: #f1f5f9;
-      border-radius: var(--radius-xs);
-      border: 1px dashed var(--border);
-      margin-top: 8px;
-    }
-
-    .micro-prompt code {
-      background: #e5e7eb;
-      padding: 2px 4px;
-      border-radius: 4px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        "Liberation Mono", "Courier New", monospace;
-      font-size: 11px;
-    }
-
-    /* TOOLS GRID */
-
-    .tool-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid rgba(226, 232, 240, 0.9);
-      padding: 14px 14px 12px;
-      font-size: 13px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      box-shadow: var(--shadow-sm);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .tool-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      border-radius: 14px 14px 0 0;
-      pointer-events: none;
-    }
-
-    .tool-icon {
-      font-size: 20px;
-      margin-bottom: 4px;
-    }
-
-    .tool-name-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .tool-name {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .tool-chip {
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: #ecfeff;
-      color: var(--primary);
-      border: 1px solid rgba(34, 211, 238, 0.55);
-    }
-
-    .tool-tagline {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .tool-list {
-      margin: 6px 0 0;
-      padding-left: 18px;
-    }
-
-    .tool-list li {
-      margin-bottom: 3px;
-    }
-
-    .tool-use {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    .tool-use strong {
-      color: var(--text);
-    }
-
-    /* Tool palette variants */
-
-    .tool-card--chatgpt {
-      background: linear-gradient(
-        135deg,
-        rgba(34, 197, 133, 0.12),
-        rgba(236, 253, 245, 0.98)
-      );
-    }
-    .tool-card--chatgpt::before {
-      background: linear-gradient(90deg, #0f766e, #22c55e);
-    }
-
-    .tool-card--perplexity {
-      background: linear-gradient(
-        135deg,
-        rgba(56, 189, 248, 0.12),
-        rgba(239, 246, 255, 0.98)
-      );
-    }
-    .tool-card--perplexity::before {
-      background: linear-gradient(90deg, #0ea5e9, #6366f1);
-    }
-
-    .tool-card--notebooklm {
-      background: linear-gradient(
-        135deg,
-        rgba(129, 140, 248, 0.12),
-        rgba(238, 242, 255, 0.98)
-      );
-    }
-    .tool-card--notebooklm::before {
-      background: linear-gradient(90deg, #4f46e5, #6366f1);
-    }
-
-    .tool-card--copilot {
-      background: linear-gradient(
-        135deg,
-        rgba(59, 130, 246, 0.12),
-        rgba(239, 246, 255, 0.98)
-      );
-    }
-    .tool-card--copilot::before {
-      background: linear-gradient(90deg, #2563eb, #38bdf8);
-    }
-
-    .tool-card--copilotstudio {
-      background: linear-gradient(
-        135deg,
-        rgba(251, 146, 60, 0.12),
-        rgba(255, 247, 237, 0.98)
-      );
-    }
-    .tool-card--copilotstudio::before {
-      background: linear-gradient(90deg, #f97316, #fb923c);
-    }
-
-    .tool-card--dev {
-      background: linear-gradient(
-        135deg,
-        rgba(37, 99, 235, 0.12),
-        rgba(239, 246, 255, 0.98)
-      );
-    }
-    .tool-card--dev::before {
-      background: linear-gradient(90deg, #1d4ed8, #6366f1);
-    }
-
-    /* GRADIENT */
-
-    .gradient {
-      border-radius: 18px;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      box-shadow: var(--shadow-md);
-      margin-bottom: 20px;
-    }
-
-    .gradient-level {
-      padding: 16px 14px;
-      color: white;
-      font-size: 12px;
-      cursor: pointer;
-      position: relative;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s;
-    }
-
-    .gradient-level:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.35);
-      filter: brightness(1.03);
-    }
-
-    .gradient-level.active::after {
-      content: "Current focus";
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 10px;
-      background: rgba(15, 23, 42, 0.8);
-      padding: 2px 7px;
-      border-radius: 999px;
-    }
-
-    .gradient-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      opacity: 0.9;
-    }
-
-    .gradient-name {
-      font-size: 13px;
-      font-weight: 600;
-      margin: 3px 0 5px;
-    }
-
-    .gradient-blurb {
-      font-size: 11px;
-      opacity: 0.96;
-    }
-
-    .gradient-easy {
-      background: linear-gradient(135deg, var(--easy), #38bdf8);
-    }
-
-    .gradient-medium {
-      background: linear-gradient(135deg, var(--medium), #4ade80);
-    }
-
-    .gradient-hard {
-      background: linear-gradient(135deg, var(--hard), #f97316);
-    }
-
-    .gradient-hardest {
-      background: linear-gradient(135deg, var(--hardest), #7f1d1d);
-    }
-
-    .gradient-details {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-    }
-
-    .gradient-card {
-      border-radius: 14px;
-      padding: 14px 14px 12px;
-      border-left: 4px solid var(--easy);
-      background: var(--surface-elevated);
-      border-top: 1px solid rgba(226, 232, 240, 0.9);
-      border-right: 1px solid rgba(226, 232, 240, 0.9);
-      border-bottom: 1px solid rgba(226, 232, 240, 0.9);
-      font-size: 13px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .gradient-card h4 {
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
-
-    .gradient-card ul {
-      margin: 6px 0 0;
-      padding-left: 18px;
-    }
-
-    .gradient-card li {
-      margin-bottom: 4px;
-    }
-
-    .gradient-card[data-level="easy"] {
-      border-left-color: var(--easy);
-    }
-
-    .gradient-card[data-level="medium"] {
-      border-left-color: var(--medium);
-    }
-
-    .gradient-card[data-level="hard"] {
-      border-left-color: var(--hard);
-    }
-
-    .gradient-card[data-level="hardest"] {
-      border-left-color: var(--hardest);
-    }
-
-    /* WORKSHOP */
-
-    .workshop-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-      gap: 26px;
-    }
-
-    .prompt-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid rgba(226, 232, 240, 0.9);
-      padding: 12px 14px;
-      font-size: 13px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .prompt-card h4 {
-      font-size: 13px;
-      margin-bottom: 4px;
-    }
-
-    .prompt-card textarea {
-      width: 100%;
-      min-height: 70px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      padding: 7px 9px;
-      font-size: 12px;
-      resize: vertical;
-      font-family: inherit;
-      margin-top: 6px;
-      background: #f8fafc;
-    }
-
-    .prompt-card textarea:focus,
-    .mapping-card textarea:focus {
-      outline: none;
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
-      background: #ffffff;
-    }
-
-    .mapping-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid rgba(226, 232, 240, 0.9);
-      padding: 12px 14px;
-      font-size: 13px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .mapping-card textarea {
-      width: 100%;
-      min-height: 52px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      padding: 7px 9px;
-      font-size: 12px;
-      resize: vertical;
-      font-family: inherit;
-      margin-top: 4px;
-      background: #f9fafb;
-    }
-
-    .mapping-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      margin-bottom: 2px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      display: inline-block;
-    }
-
-    .dot-easy {
-      background: var(--easy);
-    }
-
-    .dot-medium {
-      background: var(--medium);
-    }
-
-    .dot-hard {
-      background: var(--hard);
-    }
-
-    .dot-hardest {
-      background: var(--hardest);
-    }
-
-    .score-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .score-pill {
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px dashed var(--border);
-      background: #f8fafc;
-    }
-
-    .workshop-actions {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .btn-small {
-      padding: 6px 10px;
-      font-size: 11px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #f8fafc;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .btn-small:hover {
-      background: #e0f2fe;
-      border-color: rgba(37, 99, 235, 0.7);
-    }
-
-    .output {
-      margin-top: 10px;
-      font-size: 11px;
-      border-radius: 10px;
-      border: 1px dashed var(--border);
-      padding: 8px 9px;
-      background: #f9fafb;
-      max-height: 160px;
-      overflow: auto;
-      display: none;
-      white-space: pre-wrap;
-    }
-
-    /* REVEAL ANIMATION */
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-    }
-
-    .reveal.in-view {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* RESPONSIVE */
-
-    @media (max-width: 880px) {
-      body {
-        padding-top: 88px;
-      }
-
-      .nav-inner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-      }
-
-      .nav-links {
-        justify-content: flex-start;
-      }
-
-      .hero-inner {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      .grid-2,
-      .workshop-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      .hero {
-        padding-top: 90px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .nav-links {
-        font-size: 12px;
-      }
-
-      .hero-title {
-        font-size: 28px;
-      }
-
-      .section {
-        padding: 72px 16px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <!-- NAV -->
-  <div class="nav">
-    <div class="nav-inner">
-      <div class="brand">
-        <span>AI@Astria</span>
-        <span class="brand-pill">Art of the Possible</span>
-      </div>
-      <div class="nav-links">
-        <div class="nav-link active" data-target="preamble">Intro</div>
-        <div class="nav-link" data-target="demystify">1. Demystify</div>
-        <div class="nav-link" data-target="tools">2. Tools & Use Cases</div>
-        <div class="nav-link" data-target="gradient">3. Adoption Gradient</div>
-        <div class="nav-link" data-target="workshop">4. Workshop</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FACILITATOR TOGGLE -->
-  <button class="facilitator-toggle" id="facilitatorToggle">
-    <span>🎤</span>
-    Facilitator Script
-  </button>
-
-  <!-- HERO / PREAMBLE -->
-  <section id="preamble" class="hero">
-    <div class="hero-inner reveal">
-      <div>
-        <div class="facilitator-note">
-          <strong>Say this:</strong>
-          “This is not a ‘thou shalt only use corporate tools’ talk. Today is about
-          art of the possible. We’ll keep it grounded in Astria, but we’ll look
-          at the best tool for each job across OpenAI, Microsoft, Google,
-          Anthropic, and others.”
-        </div>
-        <h1 class="hero-title">Astria Artificial Intelligence Session</h1>
-        <p class="hero-subtitle">
-          A practical, 1-hour, interactive tour of what AI can do for you today —
-          personally and professionally — and how to adopt it safely and sanely.
-        </p>
-        <div class="hero-tags">
-          <span class="tag">Demystify AI</span>
-          <span class="tag">Live tool demos</span>
-          <span class="tag">Astria-specific examples</span>
-          <span class="tag">2-hour workshop</span>
-        </div>
-        <div class="hero-buttons">
-          <button class="btn" data-scroll="demystify">
-            Start with “What is this stuff?” →
-          </button>
-          <button class="btn btn-outline" data-scroll="workshop">
-            Jump to use-case workshop
-          </button>
-        </div>
-        <p class="hero-note">
-          Ground rules: curiosity encouraged, no dumb questions, and you are
-          always the human-in-the-loop. The goal is for you to leave with at
-          least one concrete way AI can help you this week.
-        </p>
-      </div>
-      <div>
-        <div class="hero-card">
-          <h3>What we’ll do today</h3>
-          <ul>
-            <li>Demystify AI vs LLMs in plain language</li>
-            <li>
-              Walk through the main AI tools (ChatGPT, Copilot, Gemini,
-              Claude, Perplexity, NotebookLM)
-            </li>
-            <li>Introduce a simple AI adoption gradient for Astria</li>
-            <li>
-              Workshop individual and team use cases — with prompts you can
-              reuse, using real Astria topics
-            </li>
-          </ul>
-          <div class="hero-secondary">
-            For a great in-depth overview of large language models, I highly
-            recommend Andrej Karpathy’s video:
-            <a href="https://www.youtube.com/watch?v=zjkBMFhNj_g" target="_blank" rel="noopener noreferrer">
-              “Intro to Large Language Models”
-            </a>.
-          </div>
-          <div style="margin-top: 8px;">
-            <a
-              class="btn-ghost"
-              href="https://www.youtube.com/watch?v=zjkBMFhNj_g"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ▶️ Watch Karpathy’s LLM intro
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 1: DEMYSTIFY -->
-  <section id="demystify" class="section">
-    <div class="container reveal">
-      <div class="section-header">
-        <div class="kicker">Stage 1</div>
-        <h2 class="section-title">Demystifying AI & LLMs</h2>
-        <p class="section-subtitle">
-          Clear definitions, a mental model for how this works, and why “you +
-          AI” is the point — not replacing you.
-        </p>
-      </div>
-
-      <div class="facilitator-note">
-        <strong>Say this:</strong>
-        “When people say ‘AI’ right now, they almost always mean large language
-        models — LLMs — like ChatGPT, Claude, Gemini, Perplexity. Let’s put
-        some clean definitions on the board and show how they actually work.”
-      </div>
-
-      <div class="grid-3">
-        <div class="card card--accent card--demystify-ai reveal">
-          <div class="card-icon">🧠</div>
-          <h3 class="card-title">1. What do we mean by “AI” today?</h3>
-          <p>
-            <strong>Artificial Intelligence (AI)</strong> is a broad umbrella:
-            anything where computers perform tasks that typically require human
-            intelligence (perception, reasoning, language, planning).
-          </p>
-          <p>
-            <strong>Large Language Models (LLMs)</strong> are a specific kind of
-            AI trained on huge amounts of text and code to predict the “next
-            token” (piece of text).
-          </p>
-          <p>
-            In practice, when people say “AI” at work today, they usually mean
-            “an LLM-powered assistant” (ChatGPT, Copilot, Gemini, Claude,
-            etc.).
-          </p>
-        </div>
-
-        <div class="card card--accent card--demystify-llm reveal">
-          <div class="card-icon">🧩</div>
-          <h3 class="card-title">2. How does an LLM actually work?</h3>
-          <p>Very compressed mental model:</p>
-          <ul>
-            <li><strong>Training:</strong> read a huge corpus of text + code</li>
-            <li>
-              <strong>Goal:</strong> become extremely good at predicting the
-              next token
-            </li>
-            <li>
-              <strong>Result:</strong> the model learns patterns of language,
-              reasoning, and world knowledge
-            </li>
-            <li>
-              <strong>At run-time:</strong> you give it a prompt → it predicts
-              the next token repeatedly → you see fluent text
-            </li>
-          </ul>
-          <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">
-            LLMs are basically powerful pattern-compressors over text. The Karpathy
-            video linked above goes deep on this if you want more.
-          </p>
-        </div>
-
-        <div class="card card--accent card--demystify-hitl reveal">
-          <div class="card-icon">🤝</div>
-          <h3 class="card-title">3. Human-in-the-loop</h3>
-          <p>
-            LLMs are <strong>pattern engines, not oracles.</strong> They are
-            amazing at:
-          </p>
-          <ul>
-            <li>Drafting and redrafting text</li>
-            <li>Explaining complex topics in plain language</li>
-            <li>Summarizing long material</li>
-            <li>Generating options you can choose from</li>
-          </ul>
-          <p>
-            Your job: provide <strong>context, judgment, and guardrails.</strong>
-            Treat AI outputs as “Version 0” — you decide what ships.
-          </p>
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-top: 34px;">
-        <div class="card card--accent card--demystify-vocab reveal">
-          <div class="card-icon">🔤</div>
-          <h3 class="card-title">Basic vocabulary</h3>
-          <div class="card-subtitle">Words we’ll use later without re-defining</div>
-          <ul>
-            <li>
-              <strong>Prompt:</strong> what you type / say to the model
-            </li>
-            <li>
-              <strong>RAG (Retrieval-Augmented Generation):</strong> LLM +
-              your documents (e.g., policies, protocols, SOPs)
-            </li>
-            <li>
-              <strong>Context window:</strong> how much text the model can
-              “see” at once
-            </li>
-            <li>
-              <strong>Agent:</strong> an LLM that can call tools (search,
-              email, databases) and perform multi-step workflows
-            </li>
-          </ul>
-          <div class="micro-prompt">
-            Example:<br />
-            <code
-              >Explain the difference between AI and an LLM to a new hire in
-              3 bullet points.</code
-            >
-          </div>
-        </div>
-        <div class="card card--accent card--demystify-hallucinate reveal">
-          <div class="card-icon">🌀</div>
-          <h3 class="card-title">Why LLMs sometimes “hallucinate”</h3>
-          <p>
-            LLMs are very good next-token predictors, not verified knowledge
-            bases. They:
-          </p>
-          <ul>
-            <li>Don’t have built-in citations by default</li>
-            <li>Will fill in gaps with plausible-sounding text</li>
-            <li>Can be over-confident in wrong answers</li>
-          </ul>
-          <p>
-            We mitigate this with
-            <strong>RAG, tools like Perplexity, NotebookLM, Copilot
-              notebooks, and your review.</strong>
-          </p>
-          <div class="micro-prompt">
-            Example:<br />
-            <code
-              >Here is a policy / SOP. Summarize key steps and flag anything
-              ambiguous or risky.</code
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 2: TOOLS & USE CASES -->
-  <section id="tools" class="section section-alt">
-    <div class="container reveal">
-      <div class="section-header">
-        <div class="kicker">Stage 2</div>
-        <h2 class="section-title">Tools & Real Use Cases</h2>
-        <p class="section-subtitle">
-          Different AIs are good at different things. We’ll take a
-          “best-tool-for-the-job” view, then jump into quick live demos on a
-          few Astria-flavored topics.
-        </p>
-      </div>
-
-      <div class="facilitator-note">
-        <strong>Say this:</strong>
-        “Think of this like a toolbelt. We don’t have ‘one AI to rule them all.’
-        We have a few that are especially good at certain jobs — Q&amp;A,
-        research, grounded knowledge, agents, development, and productivity.
-        We’ll pick one or two real topics and reuse them across multiple tools
-        so you can see the differences.”
-      </div>
-
-      <!-- TOOLBELT (what we’ll demo) -->
-      <h3 style="font-size: 15px; margin-bottom: 10px;">The toolbelt we’ll demo</h3>
-      <div class="grid-3" style="margin-bottom: 26px;">
-        <div class="tool-card tool-card--chatgpt reveal">
-          <div class="tool-icon">💬</div>
-          <div class="tool-name-row">
-            <div class="tool-name">ChatGPT (OpenAI)</div>
-            <div class="tool-chip">Generalist</div>
-          </div>
-          <div class="tool-tagline">
-            Fast, strong at reasoning, explanation, and content creation.
-          </div>
-          <ul class="tool-list">
-            <li>Draft emails, slides, policies</li>
-            <li>Explain technical or clinical concepts</li>
-            <li>Brainstorm options and trade-offs</li>
-          </ul>
-          <p class="tool-use">
-            <strong>Live demo idea:</strong> “Explain hereditary angioedema and
-            our mechanism of action in 4 bullets for a new non-scientist hire.”
-          </p>
-        </div>
-
-        <div class="tool-card tool-card--perplexity reveal">
-          <div class="tool-icon">🔍</div>
-          <div class="tool-name-row">
-            <div class="tool-name">Perplexity</div>
-            <div class="tool-chip">Deep Research</div>
-          </div>
-          <div class="tool-tagline">
-            LLM + live search with citations. Great for “what’s out there?”
-          </div>
-          <ul class="tool-list">
-            <li>Competitive intelligence with linked sources</li>
-            <li>Landscape scans (HAE, biotech funding, device vendors)</li>
-            <li>Building literature summaries</li>
-          </ul>
-          <p class="tool-use">
-            <strong>Live demo idea:</strong> “What are recent HAE competitive
-            moves? Summarize top 5 competitors with sources and a ‘so what?’
-            column.”
-          </p>
-        </div>
-
-        <div class="tool-card tool-card--notebooklm reveal">
-          <div class="tool-icon">📚</div>
-          <div class="tool-name-row">
-            <div class="tool-name">Gemini / NotebookLM (Google)</div>
-            <div class="tool-chip">Grounded docs</div>
-          </div>
-          <div class="tool-tagline">
-            Great for reading PDFs, slide decks, and collections of documents.
-          </div>
-          <ul class="tool-list">
-            <li>Upload protocols, policies, slide decks</li>
-            <li>Ask questions directly over those documents</li>
-            <li>Generate study guides, FAQs, timelines</li>
-          </ul>
-          <p class="tool-use">
-            <strong>Live demo idea:</strong> “Load the history of Astria slides
-            + recent town-hall decks and ask: ‘Create a 10-min narrative on
-            Astria’s journey so far.’”
-          </p>
-        </div>
-
-        <div class="tool-card tool-card--copilot reveal">
-          <div class="tool-icon">📊</div>
-          <div class="tool-name-row">
-            <div class="tool-name">Microsoft Copilot</div>
-            <div class="tool-chip">Productivity</div>
-          </div>
-          <div class="tool-tagline">
-            AI inside Outlook, Teams, Word, Excel, PowerPoint.
-          </div>
-          <ul class="tool-list">
-            <li>Summarize Teams threads and meetings</li>
-            <li>Draft documents from bullets</li>
-            <li>Analyze spreadsheets and models</li>
-          </ul>
-          <p class="tool-use">
-            <strong>Live demo idea:</strong> “Summarize last week’s device
-            manufacturing issues from Teams and Outlook, and propose top 3
-            actions.”
-          </p>
-        </div>
-
-        <div class="tool-card tool-card--copilotstudio reveal">
-          <div class="tool-icon">🛠️</div>
-          <div class="tool-name-row">
-            <div class="tool-name">Copilot Studio / Agents</div>
-            <div class="tool-chip">Workflow</div>
-          </div>
-          <div class="tool-tagline">
-            Build small agents that connect to M365, line-of-business systems,
-            and APIs.
-          </div>
-          <ul class="tool-list">
-            <li>FAQ bots over policies or SOPs</li>
-            <li>Ticket triage and routing</li>
-            <li>Simple internal “concierge” agents</li>
-          </ul>
-          <p class="tool-use">
-            <strong>Live demo idea:</strong> “Agent that answers ‘How do I…?’
-            HR/IT questions using policies, then logs tickets when needed.”
-          </p>
-        </div>
-
-        <div class="tool-card tool-card--dev reveal">
-          <div class="tool-icon">💻</div>
-          <div class="tool-name-row">
-            <div class="tool-name">Claude, GitHub Copilot, etc.</div>
-            <div class="tool-chip">Dev & long docs</div>
-          </div>
-          <div class="tool-tagline">
-            Strong for large documents, code, and careful reasoning.
-          </div>
-          <ul class="tool-list">
-            <li>Summarize long regulatory or vendor docs</li>
-            <li>Accelerate internal tool development</li>
-            <li>Explain unfamiliar code or scripts</li>
-          </ul>
-          <p class="tool-use">
-            <strong>Live demo idea:</strong> “Explain this device monitoring code
-            and suggest where to add logging and alerts.”
-          </p>
-        </div>
-      </div>
-
-      <!-- TOPICS & PROMPT PATTERNS (how we’ll demo) -->
-      <h3 style="font-size: 15px; margin: 10px 0 10px;">Topics & prompt patterns for demos</h3>
-      <p style="font-size: 13px; color: var(--muted); margin-bottom: 10px;">
-        Pick one or two topics below and reuse them across several tools so people
-        can see how each tool behaves differently on the same question.
-      </p>
-
-      <div class="grid-2">
-        <div class="card reveal card--accent" style="background:linear-gradient(135deg,rgba(244,244,245,0.9),rgba(239,246,255,0.95));">
-          <div class="card-icon">🎯</div>
-          <h3 class="card-title">Good demo topics</h3>
-          <ul style="font-size: 13px; margin-bottom: 6px;">
-            <li>
-              <strong>History of Astria:</strong> “Using these slides, write a
-              3-minute story for an all-hands opening.”
-            </li>
-            <li>
-              <strong>HAE drug development:</strong> “Explain our mechanism of
-              action vs competitor X at a high-school level.”
-            </li>
-            <li>
-              <strong>Competitive intelligence:</strong> “Scan recent press
-              releases + filings for HAE and summarize threats / opportunities.”
-            </li>
-            <li>
-              <strong>Device manufacturing:</strong> “From this SOP, outline
-              steps most prone to human error and mitigation ideas.”
-            </li>
-            <li>
-              <strong>G&A optimization:</strong> “Generate scenarios for
-              automating [AP, onboarding, IT tickets] and estimate impact.”
-            </li>
-          </ul>
-          <div class="micro-prompt">
-            Live challenge:<br />
-            <code
-              >Pick one topic above. In ChatGPT or Perplexity, ask for “3
-              experiments we could run in 2 weeks, low risk, measurable.”</code
-            >
-          </div>
-        </div>
-
-        <div class="card reveal card--accent" style="background:linear-gradient(135deg,rgba(239,246,255,0.96),rgba(236,252,203,0.9));">
-          <div class="card-icon">🧰</div>
-          <h3 class="card-title">Reusable prompt pattern</h3>
-          <p style="font-size: 13px;">
-            <strong>Question &amp; answer / brainstorming:</strong> ChatGPT,
-            Claude, Copilot<br />
-            <strong>Deep research with sources:</strong> Perplexity<br />
-            <strong>RAG & learning from your docs:</strong> NotebookLM, Copilot
-            notebooks, custom RAG<br />
-            <strong>Agents:</strong> Copilot Studio, custom agent frameworks<br />
-            <strong>Dev:</strong> GitHub Copilot, Claude Code, ChatGPT
-          </p>
-          <div class="micro-prompt">
-            Prompt pattern to reuse across tools:<br />
-            <code
-              >You are my AI assistant. I work in [function]. Given this
-              context: [paste], propose 5 high-value, low-risk uses of AI I can
-              try this month. Include which tool (ChatGPT, Perplexity, NotebookLM,
-              Copilot, etc.) is best for each idea.</code
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 3: ADOPTION GRADIENT -->
-  <section id="gradient" class="section">
-    <div class="container reveal">
-      <div class="section-header">
-        <div class="kicker">Stage 3</div>
-        <h2 class="section-title">The AI Adoption Gradient</h2>
-        <p class="section-subtitle">
-          A simple way to think about AI opportunities — from “I just talk to a
-          chatbot” to “we build custom, integrated solutions.” Works for both
-          individual and corporate adoption.
-        </p>
-      </div>
-
-      <div class="facilitator-note">
-        <strong>Say this:</strong>
-        “You don’t have to jump to ‘fully custom platform’ on day one. Most of
-        the value is in Levels 1 and 2. Levels 3 and 4 are where we invest in
-        more structured workflows and custom development.”
-      </div>
-
-      <div class="gradient">
-        <div
-          class="gradient-level gradient-easy active"
-          data-level-select="easy"
-        >
-          <div class="gradient-label">Level 1</div>
-          <div class="gradient-name">Personal Productivity</div>
-          <div class="gradient-blurb">
-            Talk to an AI assistant. Draft, summarize, explain.
-          </div>
-        </div>
-        <div class="gradient-level gradient-medium" data-level-select="medium">
-          <div class="gradient-label">Level 2</div>
-          <div class="gradient-name">Team Knowledge Assistants</div>
-          <div class="gradient-blurb">
-            AI that knows your docs and context.
-          </div>
-        </div>
-        <div class="gradient-level gradient-hard" data-level-select="hard">
-          <div class="gradient-label">Level 3</div>
-          <div class="gradient-name">Automated Workflows & Agents</div>
-          <div class="gradient-blurb">
-            Multi-step tasks with tools and integrations.
-          </div>
-        </div>
-        <div
-          class="gradient-level gradient-hardest"
-          data-level-select="hardest"
-        >
-          <div class="gradient-label">Level 4</div>
-          <div class="gradient-name">Custom Enterprise AI</div>
-          <div class="gradient-blurb">
-            Bespoke solutions, integrated into core systems.
-          </div>
-        </div>
-      </div>
-
-      <div class="gradient-details">
-        <div class="gradient-card reveal" data-level="easy">
-          <h4>Level 1 – Personal Productivity</h4>
-          <p>
-            <strong>Tools:</strong> ChatGPT, Copilot, Gemini, Claude (no
-            special setup).
-          </p>
-          <ul>
-            <li>Drafting emails, documents, slide outlines</li>
-            <li>Summarizing long emails / threads / meeting notes</li>
-            <li>Explaining complex scientific or business topics</li>
-            <li>Brainstorming options and pros/cons</li>
-          </ul>
-          <div class="micro-prompt">
-            <code
-              >You are my personal assistant at Astria. Given this email /
-              document, propose a response in my voice, with 3 options of tone:
-              direct, neutral, and warm.</code
-            >
-          </div>
-        </div>
-
-        <div class="gradient-card reveal" data-level="medium">
-          <h4>Level 2 – Team Knowledge Assistants</h4>
-          <p>
-            <strong>Tools:</strong> NotebookLM, Copilot notebooks, internal RAG
-            pilots.
-          </p>
-          <ul>
-            <li>Q&amp;A over SOPs, policies, and training material</li>
-            <li>Onboarding “copilot” for new hires</li>
-            <li>Search across scattered docs with plain language</li>
-            <li>Create FAQs, cheat sheets, and checklists</li>
-          </ul>
-          <div class="micro-prompt">
-            <code
-              >Here are 10 SOPs related to device manufacturing. Build a
-              step-by-step checklist and flag any conflicting instructions.</code
-            >
-          </div>
-        </div>
-
-        <div class="gradient-card reveal" data-level="hard">
-          <h4>Level 3 – Automated Workflows & Agents</h4>
-          <p>
-            <strong>Tools:</strong> Copilot Studio, Power Automate, custom
-            agents.
-          </p>
-          <ul>
-            <li>Intake &amp; triage (IT, HR, facilities requests)</li>
-            <li>Simple “concierge” bots that call your systems</li>
-            <li>Automated report generation on a schedule</li>
-            <li>Routing approvals and nudging people to act</li>
-          </ul>
-          <div class="micro-prompt">
-            <code
-              >Design an agent for IT ticket triage that reads the ticket,
-              tags it, suggests a solution, and routes to the right queue.</code
-            >
-          </div>
-        </div>
-
-        <div class="gradient-card reveal" data-level="hardest">
-          <h4>Level 4 – Custom Enterprise AI</h4>
-          <p>
-            <strong>Tools:</strong> Azure OpenAI, custom backends, full-stack
-            apps.
-          </p>
-          <ul>
-            <li>Fully integrated pharmacovigilance or device-monitoring tools</li>
-            <li>Custom decision-support dashboards</li>
-            <li>Complex, cross-system workflow orchestration</li>
-            <li>Advanced governance, auditing, and compliance controls</li>
-          </ul>
-          <div class="micro-prompt">
-            <code
-              >Propose a phased plan to move from “ad-hoc AI experiments” to a
-              governed, Azure-hosted enterprise AI platform at Astria.</code
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 4: WORKSHOP -->
-  <section id="workshop" class="section section-alt">
-    <div class="container reveal">
-      <div class="section-header">
-        <div class="kicker">Stage 4</div>
-        <h2 class="section-title">Use-Case Workshop</h2>
-        <p class="section-subtitle">
-          We have two hours total, so we’ll alternate between quick teaching,
-          live demos, and this structured exercise: identify a pain point,
-          sketch an AI assist at each level of the gradient, and pick one
-          low-risk experiment to try. The goal is ideas, not defenses.
-        </p>
-      </div>
-
-      <div class="facilitator-note">
-        <strong>Say this:</strong>
-        “Pick one real workflow you own or feel the pain from. We’ll spend a
-        few minutes drafting Level 1–4 options. You don’t have to fill every
-        box. We’re looking for: fast, safe, and useful experiments.”
-      </div>
-
-      <div class="workshop-grid">
-        <div class="reveal">
-          <div class="prompt-card">
-            <h4>1. What hurts today?</h4>
-            <p>
-              Think about <strong>repetition</strong>, <strong>waiting</strong>,
-              <strong>copy/paste behavior</strong>, or
-              <strong>error-prone steps.</strong>
-            </p>
-            <textarea
-              id="painPoint"
-              placeholder="Example: Monthly device quality report requires pulling data from 4 systems, manually cleaning spreadsheets, and drafting a narrative for leadership."
-            ></textarea>
-          </div>
-
-          <div class="prompt-card">
-            <h4>2. Quick context</h4>
-            <p style="font-size: 12px;">
-              Optional, but helpful if you want to turn this into a real prompt
-              later.
-            </p>
-            <textarea
-              id="context"
-              placeholder="Who is involved, what systems are touched, how often it happens, what ‘good’ looks like…"
-            ></textarea>
-          </div>
-
-          <div class="prompt-card">
-            <h4>3. Who benefits?</h4>
-            <textarea
-              id="beneficiaries"
-              placeholder="Which teams / individuals would feel the impact if this went 2x faster or smoother?"
-            ></textarea>
-          </div>
-        </div>
-
-        <div class="reveal">
-          <div class="mapping-card">
-            <h4 style="margin-bottom: 6px;">Map to the gradient</h4>
-            <p style="font-size: 12px; color: var(--muted);">
-              Describe one possible solution at each level. Fill in only what
-              makes sense.
-            </p>
-
-            <div style="margin-top: 8px;">
-              <div class="mapping-label">
-                <span class="dot dot-easy"></span> Level 1 – Personal
-                Productivity
-              </div>
-              <textarea
-                id="easySolution"
-                placeholder="Ex: Use ChatGPT / Copilot to draft the monthly narrative and talking points using exported data and past reports."
-              ></textarea>
-            </div>
-
-            <div style="margin-top: 8px;">
-              <div class="mapping-label">
-                <span class="dot dot-medium"></span> Level 2 – Team Knowledge
-                Assistant
-              </div>
-              <textarea
-                id="mediumSolution"
-                placeholder="Ex: Create a NotebookLM or Copilot notebook with past reports, metrics definitions, and SOPs to standardize analysis."
-              ></textarea>
-            </div>
-
-            <div style="margin-top: 8px;">
-              <div class="mapping-label">
-                <span class="dot dot-hard"></span> Level 3 – Workflow / Agent
-              </div>
-              <textarea
-                id="hardSolution"
-                placeholder="Ex: Copilot Studio agent that pulls latest data, creates a draft report, and routes it for review each month."
-              ></textarea>
-            </div>
-
-            <div style="margin-top: 8px;">
-              <div class="mapping-label">
-                <span class="dot dot-hardest"></span> Level 4 – Custom
-                Enterprise AI
-              </div>
-              <textarea
-                id="hardestSolution"
-                placeholder="Ex: Azure-hosted quality-monitoring dashboard with alerts, narrative generation, and full audit trail."
-              ></textarea>
-            </div>
-
-            <div class="score-row">
-              <div class="score-pill">
-                Frequency (1–5): how often this happens
-              </div>
-              <div class="score-pill">Pain (1–5): how annoying / risky</div>
-              <div class="score-pill">
-                Impact (1–5): value if improved
-              </div>
-              <div class="score-pill">
-                Time to first value: aim ≤ 2–4 weeks
-              </div>
-            </div>
-
-            <div class="workshop-actions">
-              <button class="btn-small" id="makePromptBtn">
-                ⚙️ Turn into AI prompt
-              </button>
-              <button class="btn-small" id="copyPromptBtn">
-                📋 Copy to clipboard
-              </button>
-            </div>
-
-            <div class="output" id="promptOutput"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <script>
-    // Smooth scroll for nav and hero buttons
-    function scrollToSection(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const y = el.getBoundingClientRect().top + window.scrollY - 90;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
-
-    document.querySelectorAll("[data-scroll]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        scrollToSection(btn.getAttribute("data-scroll"));
-      });
-    });
-
-    document.querySelectorAll(".nav-link").forEach((link) => {
-      link.addEventListener("click", () => {
-        const target = link.getAttribute("data-target");
-        scrollToSection(target);
-      });
-    });
-
-    // Active nav on scroll
-    const sections = ["preamble", "demystify", "tools", "gradient", "workshop"];
-
-    function updateActiveNav() {
-      const scrollPos = window.scrollY + 140;
-      let current = "preamble";
-      sections.forEach((id) => {
-        const el = document.getElementById(id);
-        if (el && el.offsetTop <= scrollPos) {
-          current = id;
-        }
-      });
-      document.querySelectorAll(".nav-link").forEach((link) => {
-        link.classList.toggle(
-          "active",
-          link.getAttribute("data-target") === current
-        );
-      });
-    }
-
-    window.addEventListener("scroll", updateActiveNav);
-    updateActiveNav();
-
-    // Facilitator toggle
-    const facilitatorToggle = document.getElementById("facilitatorToggle");
-    facilitatorToggle.addEventListener("click", () => {
-      const notes = document.querySelectorAll(".facilitator-note");
-      const anyVisible = Array.from(notes).some(
-        (n) => n.style.display === "block"
-      );
-      notes.forEach((n) => {
-        n.style.display = anyVisible ? "none" : "block";
-      });
-      facilitatorToggle.textContent = anyVisible
-        ? "🎤 Facilitator Script"
-        : "🎤 Hide Facilitator Script";
-    });
-
-    // Gradient highlight
-    document
-      .querySelectorAll("[data-level-select]")
-      .forEach((levelButton) => {
-        levelButton.addEventListener("click", () => {
-          document
-            .querySelectorAll("[data-level-select]")
-            .forEach((b) => b.classList.remove("active"));
-          levelButton.classList.add("active");
-        });
-      });
-
-    // Workshop: build prompt
-    const makePromptBtn = document.getElementById("makePromptBtn");
-    const copyPromptBtn = document.getElementById("copyPromptBtn");
-    const promptOutput = document.getElementById("promptOutput");
-
-    function buildPrompt() {
-      const pain = document.getElementById("painPoint").value.trim();
-      const ctx = document.getElementById("context").value.trim();
-      const ben = document.getElementById("beneficiaries").value.trim();
-      const easy = document.getElementById("easySolution").value.trim();
-      const med = document.getElementById("mediumSolution").value.trim();
-      const hard = document.getElementById("hardSolution").value.trim();
-      const hardest = document.getElementById("hardestSolution").value.trim();
-
-      let prompt = "You are an AI assistant helping a biotech company.\n\n";
-      if (ctx) {
-        prompt += "Context:\n" + ctx + "\n\n";
-      }
-      if (pain) {
-        prompt += "Pain point:\n" + pain + "\n\n";
-      }
-      if (ben) {
-        prompt += "Who benefits:\n" + ben + "\n\n";
-      }
-      prompt +=
-        "We have brainstormed possible solutions at different levels of complexity:\n\n";
-      if (easy) prompt += "Level 1 – Personal productivity idea:\n" + easy + "\n\n";
-      if (med)
-        prompt += "Level 2 – Team knowledge assistant idea:\n" + med + "\n\n";
-      if (hard)
-        prompt += "Level 3 – Workflow / agent idea:\n" + hard + "\n\n";
-      if (hardest)
-        prompt += "Level 4 – Custom enterprise AI idea:\n" + hardest + "\n\n";
-
-      prompt +=
-        "Task: Suggest a practical next step we could test in the next 2–4 weeks, keeping risk low and time-to-value high. Output a short plan with:\n" +
-        "- Recommended level to start (1–4)\n" +
-        "- Steps\n" +
-        "- Dependencies\n" +
-        "- Rough effort (hours)";
-
-      promptOutput.textContent = prompt;
-      promptOutput.style.display = "block";
-    }
-
-    makePromptBtn.addEventListener("click", buildPrompt);
-
-    copyPromptBtn.addEventListener("click", async () => {
-      if (!promptOutput.textContent.trim()) {
-        buildPrompt();
-      }
-      try {
-        await navigator.clipboard.writeText(promptOutput.textContent);
-        copyPromptBtn.textContent = "✅ Copied";
-        setTimeout(() => {
-          copyPromptBtn.textContent = "📋 Copy to clipboard";
-        }, 1500);
-      } catch (e) {
-        copyPromptBtn.textContent = "❗ Copy failed";
-        setTimeout(() => {
-          copyPromptBtn.textContent = "📋 Copy to clipboard";
-        }, 1500);
-      }
-    });
-
-    // Scroll reveal
-    const revealEls = document.querySelectorAll(".reveal");
-    if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver(
-        (entries, obs) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("in-view");
-              obs.unobserve(entry.target);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Training – Demystify, Adopt, Apply</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#1e293b', 
+                        },
+                        brand: {
+                            cyan: '#06b6d4',
+                            blue: '#3b82f6',
+                            green: '#22c55e',
+                            purple: '#a855f7',
+                            orange: '#f97316',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        heading: ['Space Grotesk', 'sans-serif'],
+                    }
+                }
             }
-          });
-        },
-        { threshold: 0.12 }
-      );
-      revealEls.forEach((el) => observer.observe(el));
-    } else {
-      // Fallback: just show all
-      revealEls.forEach((el) => el.classList.add("in-view"));
-    }
-  </script>
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        h1, h2, h3, h4, .brand {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Animated Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            transition: opacity 0.5s ease;
+            opacity: 0.4; /* Slightly higher opacity for light mode impact */
+        }
+        
+        .dark #bg-canvas {
+            opacity: 0.3;
+        }
+
+        /* Glassmorphism Panels */
+        .glass-panel {
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.85); /* Whiter glass for light mode */
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+        }
+
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Facilitator Note */
+        .facilitator-note {
+            display: none;
+            border-left: 4px solid #f59e0b;
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Gradient Cards Active State */
+        .gradient-level.active {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Custom Inputs */
+        textarea {
+            transition: all 0.3s;
+        }
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+
+    <!-- Interactive Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-40 glass-panel border-b border-slate-200 dark:border-white/10">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="/" class="flex items-center gap-2 hover:opacity-80 transition group">
+                    <i data-lucide="arrow-left" class="w-5 h-5 text-cyan-600 dark:text-cyan-400 group-hover:-translate-x-1 transition-transform"></i>
+                    <span class="font-bold text-slate-700 dark:text-slate-300">Home</span>
+                </a>
+                <div class="h-6 w-px bg-slate-300 dark:bg-slate-700 mx-2"></div>
+                <div class="brand flex items-center gap-3">
+                    <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white">AI Training</span>
+                    <span class="hidden md:inline-block text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-700/50">Module 1.0</span>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-400">
+                <button class="nav-link px-3 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition" data-target="preamble">Intro</button>
+                <button class="nav-link px-3 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition" data-target="demystify">1. Demystify</button>
+                <button class="nav-link px-3 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition" data-target="tools">2. Tools</button>
+                <button class="nav-link px-3 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition" data-target="gradient">3. Gradient</button>
+                <button class="nav-link px-3 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition" data-target="workshop">4. Workshop</button>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300" title="Toggle Theme">
+                    <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>
+                    <i data-lucide="sun" class="w-5 h-5 block dark:hidden"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Facilitator Toggle -->
+    <button id="facilitatorToggle" class="fixed right-6 bottom-6 z-50 flex items-center gap-2 bg-slate-900 dark:bg-cyan-500 text-white dark:text-slate-900 px-4 py-3 rounded-full shadow-xl hover:scale-105 transition-transform font-bold text-sm">
+        <i data-lucide="mic" class="w-4 h-4"></i> <span>View Speaker Notes</span>
+    </button>
+
+    <!-- HERO / PREAMBLE -->
+    <section id="preamble" class="pt-32 pb-20 px-4">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center reveal">
+            <div>
+                <!-- Facilitator Note -->
+                <div class="facilitator-note mb-6 bg-amber-50 dark:bg-amber-900/20 p-4 rounded-r-lg text-amber-800 dark:text-amber-200 text-sm border-l-4 border-amber-400">
+                    <strong class="uppercase tracking-wider text-xs block mb-1 text-amber-600">Speaker Note:</strong>
+                    “Set the stage: This isn't a lecture on theory. It's a hands-on guide to the 'Art of the Possible' using tools available today.”
+                </div>
+
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400">
+                    Practical AI Adoption
+                </h1>
+                <p class="text-xl text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
+                    A comprehensive guide to demystifying Artificial Intelligence, selecting the right tools, and applying them to real business workflows safely and effectively.
+                </p>
+                
+                <div class="flex flex-wrap gap-2 mb-8">
+                    <span class="px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-400 shadow-sm">Demystify AI</span>
+                    <span class="px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-400 shadow-sm">Tool Selection</span>
+                    <span class="px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-400 shadow-sm">Live Workshop</span>
+                </div>
+
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <button data-scroll="demystify" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-cyan-500/20 transition-all hover:-translate-y-1">
+                        Start Learning →
+                    </button>
+                    <button data-scroll="workshop" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-cyan-500 dark:hover:border-cyan-400 text-slate-700 dark:text-slate-200 px-6 py-3 rounded-full font-semibold transition-all hover:-translate-y-1 shadow-sm">
+                        Jump to Use-Cases
+                    </button>
+                </div>
+                
+                <p class="text-sm text-slate-500 dark:text-slate-400 italic border-l-2 border-slate-300 dark:border-slate-700 pl-4">
+                    Core Philosophy: You are always the human-in-the-loop. AI is the engine; you are the steering wheel.
+                </p>
+            </div>
+
+            <div class="glass-panel p-8 rounded-2xl relative">
+                <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
+                    <i data-lucide="layers" class="text-cyan-500"></i> Module Overview
+                </h3>
+                <ul class="space-y-4 text-slate-600 dark:text-slate-300">
+                    <li class="flex items-start gap-3">
+                        <div class="bg-cyan-100 dark:bg-cyan-900/30 p-1 rounded text-cyan-600 dark:text-cyan-400 mt-0.5"><i data-lucide="brain-circuit" class="w-4 h-4"></i></div>
+                        <span><strong>Demystify:</strong> AI vs LLMs in plain English.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="bg-blue-100 dark:bg-blue-900/30 p-1 rounded text-blue-600 dark:text-blue-400 mt-0.5"><i data-lucide="wrench" class="w-4 h-4"></i></div>
+                        <span><strong>The Toolbelt:</strong> When to use ChatGPT vs Copilot vs Perplexity.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="bg-green-100 dark:bg-green-900/30 p-1 rounded text-green-600 dark:text-green-400 mt-0.5"><i data-lucide="bar-chart-3" class="w-4 h-4"></i></div>
+                        <span><strong>Adoption Gradient:</strong> Moving from personal tasks to enterprise agents.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="bg-purple-100 dark:bg-purple-900/30 p-1 rounded text-purple-600 dark:text-purple-400 mt-0.5"><i data-lucide="flask-conical" class="w-4 h-4"></i></div>
+                        <span><strong>Workshop:</strong> Build a real adoption plan.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1: DEMYSTIFY -->
+    <section id="demystify" class="py-20 bg-slate-50/50 dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 reveal">
+            <div class="mb-12">
+                <span class="text-cyan-600 dark:text-cyan-400 font-mono text-sm uppercase tracking-widest font-bold">Stage 1</span>
+                <h2 class="text-3xl font-bold mt-2 text-slate-900 dark:text-white">Demystifying AI & LLMs</h2>
+                <p class="text-slate-600 dark:text-slate-400 max-w-2xl mt-2">Clear definitions, a mental model for how this works, and avoiding the hype.</p>
+            </div>
+
+            <div class="facilitator-note mb-8 bg-amber-50 dark:bg-amber-900/20 p-4 rounded-r-lg text-amber-800 dark:text-amber-200 text-sm border-l-4 border-amber-400">
+                <strong class="uppercase tracking-wider text-xs block mb-1 text-amber-600">Speaker Note:</strong>
+                “Clarify the terminology first. Most people say 'AI' when they specifically mean 'Large Language Models' (LLMs). The distinction matters for setting expectations.”
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-t-cyan-500">
+                    <div class="text-4xl mb-4">🧠</div>
+                    <h3 class="text-lg font-bold mb-2 text-slate-900 dark:text-white">1. What is "AI"?</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                        <strong>Artificial Intelligence (AI)</strong> is the broad umbrella. 
+                        <strong>Large Language Models (LLMs)</strong> are a specific kind trained on text to predict the "next token".
+                    </p>
+                    <div class="bg-cyan-50 dark:bg-cyan-900/20 p-2 rounded text-xs text-cyan-800 dark:text-cyan-200">
+                        In practice: "AI" usually means "LLM-powered assistant".
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-t-blue-500">
+                    <div class="text-4xl mb-4">🧩</div>
+                    <h3 class="text-lg font-bold mb-2 text-slate-900 dark:text-white">2. How LLMs Work</h3>
+                    <ul class="text-sm text-slate-600 dark:text-slate-300 space-y-2 mb-4">
+                        <li><strong>Training:</strong> Read huge corpus of text.</li>
+                        <li><strong>Goal:</strong> Predict the next word.</li>
+                        <li><strong>Result:</strong> Learns patterns of reasoning.</li>
+                    </ul>
+                    <div class="bg-blue-50 dark:bg-blue-900/20 p-2 rounded text-xs text-blue-800 dark:text-blue-200">
+                        They are powerful pattern-compressors, not databases of facts.
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-t-green-500">
+                    <div class="text-4xl mb-4">🤝</div>
+                    <h3 class="text-lg font-bold mb-2 text-slate-900 dark:text-white">3. Human-in-the-loop</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                        LLMs are amazing at drafting, explaining, and summarizing. They are bad at being "truth oracles".
+                    </p>
+                    <div class="bg-green-50 dark:bg-green-900/20 p-2 rounded text-xs text-green-800 dark:text-green-200">
+                        <strong>Rule:</strong> Treat output as "Version 0". You verify Version 1.
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 mt-6">
+                <div class="glass-panel p-6 rounded-xl border-l-4 border-l-purple-500">
+                    <h3 class="text-lg font-bold mb-2 text-slate-900 dark:text-white flex items-center gap-2">
+                        <i data-lucide="book-open" class="w-5 h-5 text-purple-500"></i> Key Vocabulary
+                    </h3>
+                    <ul class="text-sm text-slate-600 dark:text-slate-300 space-y-2">
+                        <li><strong>Prompt:</strong> The instruction you type to the model.</li>
+                        <li><strong>RAG (Retrieval-Augmented Generation):</strong> Connecting an LLM to your own documents.</li>
+                        <li><strong>Context Window:</strong> How much memory the model has in a single conversation.</li>
+                        <li><strong>Agent:</strong> An AI that can use tools (Search, Email) to complete tasks.</li>
+                    </ul>
+                </div>
+
+                <div class="glass-panel p-6 rounded-xl border-l-4 border-l-orange-500">
+                    <h3 class="text-lg font-bold mb-2 text-slate-900 dark:text-white flex items-center gap-2">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 text-orange-500"></i> Hallucinations
+                    </h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">
+                        LLMs can confidently make things up. This is a feature of their creativity, but a bug for factual accuracy.
+                    </p>
+                    <div class="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg border border-orange-200 dark:border-orange-800">
+                        <code class="text-xs font-mono text-orange-800 dark:text-orange-200">
+                            Strategy: Use tools with citations (Perplexity) or grounded contexts (NotebookLM).
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: TOOLS -->
+    <section id="tools" class="py-20">
+        <div class="max-w-6xl mx-auto px-4 reveal">
+            <div class="mb-12">
+                <span class="text-cyan-600 dark:text-cyan-400 font-mono text-sm uppercase tracking-widest font-bold">Stage 2</span>
+                <h2 class="text-3xl font-bold mt-2 text-slate-900 dark:text-white">The Toolbelt</h2>
+                <p class="text-slate-600 dark:text-slate-400 max-w-2xl mt-2">One size does not fit all. We take a "best-tool-for-the-job" approach.</p>
+            </div>
+
+            <div class="facilitator-note mb-8 bg-amber-50 dark:bg-amber-900/20 p-4 rounded-r-lg text-amber-800 dark:text-amber-200 text-sm border-l-4 border-amber-400">
+                <strong class="uppercase tracking-wider text-xs block mb-1 text-amber-600">Speaker Note:</strong>
+                “Demonstrate the difference live. Ask the same question to ChatGPT (reasoning) and Perplexity (search) to show how the outputs differ.”
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <!-- ChatGPT -->
+                <div class="glass-panel p-5 rounded-xl border-t-4 border-t-green-500 hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="bg-green-100 dark:bg-green-900/30 p-2 rounded text-2xl">💬</div>
+                        <span class="text-[10px] font-bold uppercase px-2 py-1 rounded bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">Generalist</span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white">ChatGPT</h3>
+                    <p class="text-xs text-slate-500 mb-3">OpenAI</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">Fast, strong reasoning. Best for drafting, brainstorming, and explaining concepts.</p>
+                    <div class="text-xs bg-slate-50 dark:bg-slate-800 p-2 rounded border border-slate-200 dark:border-slate-700">
+                        <strong>Try:</strong> "Explain our product's core value proposition in 3 bullets."
+                    </div>
+                </div>
+
+                <!-- Perplexity -->
+                <div class="glass-panel p-5 rounded-xl border-t-4 border-t-cyan-500 hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="bg-cyan-100 dark:bg-cyan-900/30 p-2 rounded text-2xl">🔍</div>
+                        <span class="text-[10px] font-bold uppercase px-2 py-1 rounded bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-300">Research</span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white">Perplexity</h3>
+                    <p class="text-xs text-slate-500 mb-3">Perplexity AI</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">Live search with citations. Great for "What's happening right now?" and market scans.</p>
+                    <div class="text-xs bg-slate-50 dark:bg-slate-800 p-2 rounded border border-slate-200 dark:border-slate-700">
+                        <strong>Try:</strong> "Summarize top 5 competitors in our sector with sources."
+                    </div>
+                </div>
+
+                <!-- NotebookLM -->
+                <div class="glass-panel p-5 rounded-xl border-t-4 border-t-purple-500 hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="bg-purple-100 dark:bg-purple-900/30 p-2 rounded text-2xl">📚</div>
+                        <span class="text-[10px] font-bold uppercase px-2 py-1 rounded bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300">Grounded</span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white">NotebookLM</h3>
+                    <p class="text-xs text-slate-500 mb-3">Google</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">Upload PDFs/Slides. Q&A specifically over your documents. Minimal hallucinations.</p>
+                    <div class="text-xs bg-slate-50 dark:bg-slate-800 p-2 rounded border border-slate-200 dark:border-slate-700">
+                        <strong>Try:</strong> "Create a briefing document from these town-hall slides."
+                    </div>
+                </div>
+
+                <!-- Copilot -->
+                <div class="glass-panel p-5 rounded-xl border-t-4 border-t-blue-500 hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="bg-blue-100 dark:bg-blue-900/30 p-2 rounded text-2xl">📊</div>
+                        <span class="text-[10px] font-bold uppercase px-2 py-1 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">Productivity</span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white">Copilot</h3>
+                    <p class="text-xs text-slate-500 mb-3">Microsoft</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">Integrated into Outlook, Teams, Word. Best for internal meetings and email.</p>
+                    <div class="text-xs bg-slate-50 dark:bg-slate-800 p-2 rounded border border-slate-200 dark:border-slate-700">
+                        <strong>Try:</strong> "Summarize the key decisions from last week's Ops meeting."
+                    </div>
+                </div>
+
+                <!-- Agents -->
+                <div class="glass-panel p-5 rounded-xl border-t-4 border-t-orange-500 hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="bg-orange-100 dark:bg-orange-900/30 p-2 rounded text-2xl">🛠️</div>
+                        <span class="text-[10px] font-bold uppercase px-2 py-1 rounded bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300">Workflow</span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white">Copilot Studio</h3>
+                    <p class="text-xs text-slate-500 mb-3">Microsoft</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">Build small agents that connect to systems. FAQ bots, ticket triage.</p>
+                    <div class="text-xs bg-slate-50 dark:bg-slate-800 p-2 rounded border border-slate-200 dark:border-slate-700">
+                        <strong>Try:</strong> "Agent that answers HR questions from the handbook."
+                    </div>
+                </div>
+
+                 <!-- Dev -->
+                 <div class="glass-panel p-5 rounded-xl border-t-4 border-t-indigo-500 hover:shadow-lg transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="bg-indigo-100 dark:bg-indigo-900/30 p-2 rounded text-2xl">💻</div>
+                        <span class="text-[10px] font-bold uppercase px-2 py-1 rounded bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300">Code</span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white">Claude / GitHub</h3>
+                    <p class="text-xs text-slate-500 mb-3">Anthropic / MS</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">Deep reasoning and coding. Great for large documents and complex logic.</p>
+                    <div class="text-xs bg-slate-50 dark:bg-slate-800 p-2 rounded border border-slate-200 dark:border-slate-700">
+                        <strong>Try:</strong> "Analyze this SQL query and suggest optimization."
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: GRADIENT -->
+    <section id="gradient" class="py-20 bg-slate-50/50 dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 reveal">
+            <div class="mb-12">
+                <span class="text-cyan-600 dark:text-cyan-400 font-mono text-sm uppercase tracking-widest font-bold">Stage 3</span>
+                <h2 class="text-3xl font-bold mt-2 text-slate-900 dark:text-white">The Adoption Gradient</h2>
+                <p class="text-slate-600 dark:text-slate-400 max-w-2xl mt-2">A framework for moving from "I talk to a bot" to "We built a platform".</p>
+            </div>
+
+            <div class="facilitator-note mb-8 bg-amber-50 dark:bg-amber-900/20 p-4 rounded-r-lg text-amber-800 dark:text-amber-200 text-sm border-l-4 border-amber-400">
+                <strong class="uppercase tracking-wider text-xs block mb-1 text-amber-600">Speaker Note:</strong>
+                “Don't get overwhelmed by Enterprise AI. 80% of immediate value comes from mastering Levels 1 and 2.”
+            </div>
+
+            <!-- Gradient Visual -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="gradient-level active cursor-pointer p-5 rounded-xl bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-900/50 hover:border-blue-400 dark:hover:border-blue-500 transition-all group" data-level-select="easy">
+                    <div class="text-[10px] uppercase font-bold text-blue-600 dark:text-blue-400 mb-2">Level 1</div>
+                    <div class="font-bold text-slate-900 dark:text-white mb-1">Personal</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400">Drafting, Summarizing, explaining.</div>
+                    <div class="h-1 w-full bg-blue-500 mt-3 rounded-full"></div>
+                </div>
+                <div class="gradient-level cursor-pointer p-5 rounded-xl bg-white dark:bg-slate-800 border border-green-200 dark:border-green-900/50 hover:border-green-400 dark:hover:border-green-500 transition-all group" data-level-select="medium">
+                    <div class="text-[10px] uppercase font-bold text-green-600 dark:text-green-400 mb-2">Level 2</div>
+                    <div class="font-bold text-slate-900 dark:text-white mb-1">Team Knowledge</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400">RAG over your specific docs.</div>
+                    <div class="h-1 w-full bg-green-500 mt-3 rounded-full opacity-50 group-hover:opacity-100"></div>
+                </div>
+                <div class="gradient-level cursor-pointer p-5 rounded-xl bg-white dark:bg-slate-800 border border-orange-200 dark:border-orange-900/50 hover:border-orange-400 dark:hover:border-orange-500 transition-all group" data-level-select="hard">
+                    <div class="text-[10px] uppercase font-bold text-orange-600 dark:text-orange-400 mb-2">Level 3</div>
+                    <div class="font-bold text-slate-900 dark:text-white mb-1">Agents</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400">Automated workflows & tools.</div>
+                    <div class="h-1 w-full bg-orange-500 mt-3 rounded-full opacity-50 group-hover:opacity-100"></div>
+                </div>
+                <div class="gradient-level cursor-pointer p-5 rounded-xl bg-white dark:bg-slate-800 border border-purple-200 dark:border-purple-900/50 hover:border-purple-400 dark:hover:border-purple-500 transition-all group" data-level-select="hardest">
+                    <div class="text-[10px] uppercase font-bold text-purple-600 dark:text-purple-400 mb-2">Level 4</div>
+                    <div class="font-bold text-slate-900 dark:text-white mb-1">Enterprise</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400">Custom, hosted platforms.</div>
+                    <div class="h-1 w-full bg-purple-500 mt-3 rounded-full opacity-50 group-hover:opacity-100"></div>
+                </div>
+            </div>
+
+            <!-- Detail Cards -->
+            <div class="grid gap-4">
+                <div class="glass-panel p-6 rounded-xl border-l-4 border-l-blue-500 reveal" data-level="easy">
+                    <h4 class="font-bold text-lg text-slate-900 dark:text-white mb-2">Level 1: Personal Productivity</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-3"><strong>Tools:</strong> ChatGPT, Copilot, Claude.</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-600 dark:text-slate-300 space-y-1 mb-4">
+                        <li>Drafting emails & documents</li>
+                        <li>Summarizing meeting notes</li>
+                        <li>Brainstorming pros/cons</li>
+                    </ul>
+                    <div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded font-mono text-xs text-blue-800 dark:text-blue-300">
+                        Prompt: "Propose a response to this email in my voice."
+                    </div>
+                </div>
+                
+                <!-- (Other levels hidden by default logic in original script, but we show them all for visual layout, logic handles scrolling/focus) -->
+                <div class="glass-panel p-6 rounded-xl border-l-4 border-l-green-500 reveal" data-level="medium">
+                    <h4 class="font-bold text-lg text-slate-900 dark:text-white mb-2">Level 2: Team Knowledge</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-3"><strong>Tools:</strong> NotebookLM, Internal RAG.</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-600 dark:text-slate-300 space-y-1 mb-4">
+                        <li>Q&A over SOPs</li>
+                        <li>Onboarding "copilot"</li>
+                        <li>Standardizing analysis</li>
+                    </ul>
+                </div>
+
+                 <div class="glass-panel p-6 rounded-xl border-l-4 border-l-orange-500 reveal" data-level="hard">
+                    <h4 class="font-bold text-lg text-slate-900 dark:text-white mb-2">Level 3: Automated Workflows</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-3"><strong>Tools:</strong> Copilot Studio, Power Automate.</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-600 dark:text-slate-300 space-y-1 mb-4">
+                        <li>Intake & Triage</li>
+                        <li>Automated Reporting</li>
+                        <li>Routing approvals</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- DOWNLOADS (New Section) -->
+    <section id="downloads" class="py-12">
+        <div class="max-w-6xl mx-auto px-4 reveal">
+            <div class="glass-panel p-8 rounded-2xl bg-gradient-to-r from-slate-100 to-white dark:from-slate-800 dark:to-slate-900 border-none">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Get the Cheat Sheets</h3>
+                        <p class="text-slate-600 dark:text-slate-300">Download the PDF summaries of this module, including the Prompt Library.</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <button class="flex items-center gap-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-4 py-2 rounded-lg text-sm font-semibold shadow-sm hover:scale-105 transition-transform">
+                            <i data-lucide="file-text" class="w-4 h-4 text-cyan-600"></i> Module Summary
+                        </button>
+                        <button class="flex items-center gap-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-4 py-2 rounded-lg text-sm font-semibold shadow-sm hover:scale-105 transition-transform">
+                            <i data-lucide="terminal" class="w-4 h-4 text-purple-600"></i> Prompt Library
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: WORKSHOP -->
+    <section id="workshop" class="py-20 pb-32 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 reveal">
+            <div class="mb-12">
+                <span class="text-cyan-600 dark:text-cyan-400 font-mono text-sm uppercase tracking-widest font-bold">Stage 4</span>
+                <h2 class="text-3xl font-bold mt-2 text-slate-900 dark:text-white">Use-Case Workshop</h2>
+                <p class="text-slate-600 dark:text-slate-400 max-w-2xl mt-2">Identify a pain point. Sketch a solution. Pick an experiment.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Inputs -->
+                <div class="space-y-6">
+                    <div class="glass-panel p-6 rounded-xl">
+                        <label class="block text-sm font-bold text-slate-900 dark:text-white mb-2">1. What hurts today?</label>
+                        <p class="text-xs text-slate-500 mb-3">Repetition, waiting, errors, copy-paste work.</p>
+                        <textarea id="painPoint" class="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-cyan-500 transition-colors h-24" placeholder="Ex: Monthly operational report requires pulling data from 4 systems manually..."></textarea>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-xl">
+                        <label class="block text-sm font-bold text-slate-900 dark:text-white mb-2">2. Context</label>
+                        <textarea id="context" class="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-sm focus:border-cyan-500 transition-colors h-20" placeholder="Who is involved? What systems? What does 'good' look like?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Mapping -->
+                <div class="glass-panel p-6 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50">
+                    <h3 class="font-bold text-slate-900 dark:text-white mb-4">Map to the Gradient</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Level 1 (Easy)</span>
+                            <textarea id="easySolution" class="w-full mt-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-xs focus:border-blue-500 h-16" placeholder="Use ChatGPT to draft narrative..."></textarea>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-green-600 dark:text-green-400 uppercase tracking-wider">Level 2 (Medium)</span>
+                            <textarea id="mediumSolution" class="w-full mt-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-xs focus:border-green-500 h-16" placeholder="Create a NotebookLM with past reports..."></textarea>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider">Level 3 (Hard)</span>
+                            <textarea id="hardSolution" class="w-full mt-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-xs focus:border-orange-500 h-16" placeholder="Agent that pulls data automatically..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700 flex gap-3">
+                        <button id="makePromptBtn" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white py-2 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> Generate AI Plan
+                        </button>
+                        <button id="copyPromptBtn" class="bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-900 dark:text-white px-4 rounded-lg font-medium text-sm transition-colors">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <div id="promptOutput" class="hidden mt-4 p-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-mono text-slate-700 dark:text-slate-300 whitespace-pre-wrap"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER CTA -->
+    <footer class="py-12 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
+        <div class="max-w-xl mx-auto text-center px-4">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Bring this workshop to your team</h3>
+            <p class="text-slate-600 dark:text-slate-400 mb-6 text-sm">
+                This is just Module 1. The full program includes hands-on labs for Marketing, HR, Ops, and Engineering.
+            </p>
+            <a href="mailto:brendan.hanna@gmail.com" class="inline-flex items-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
+                <i data-lucide="mail" class="w-4 h-4"></i> Contact Brendan
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // --- Theme Logic ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        // Default to Light Mode if no preference
+        if (!localStorage.theme || localStorage.theme === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+
+        // --- Background Animation ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.3; 
+                this.vy = (Math.random() - 0.5) * 0.3; 
+                this.size = Math.random() * 2;
+                this.alpha = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if(this.x < 0 || this.x > width) this.vx *= -1;
+                if(this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() {
+                const isDark = document.documentElement.classList.contains('dark');
+                // Use a slightly darker color for light mode visibility
+                const color = isDark ? `rgba(6, 182, 212, ${this.alpha})` : `rgba(8, 145, 178, ${this.alpha * 0.6})`;
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        for(let i=0; i<50; i++) particles.push(new Particle()); // Increased particle count slightly
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // --- Navigation Scroll ---
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const y = el.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({ top: y, behavior: "smooth" });
+        }
+        document.querySelectorAll("[data-target], [data-scroll]").forEach(btn => {
+            btn.addEventListener("click", () => {
+                scrollToSection(btn.getAttribute("data-target") || btn.getAttribute("data-scroll"));
+            });
+        });
+
+        // --- Facilitator Toggle ---
+        const facBtn = document.getElementById("facilitatorToggle");
+        facBtn.addEventListener("click", () => {
+            const notes = document.querySelectorAll(".facilitator-note");
+            const anyVisible = Array.from(notes).some(n => n.style.display === "block");
+            notes.forEach(n => n.style.display = anyVisible ? "none" : "block");
+            facBtn.innerHTML = anyVisible ? `<i data-lucide="mic" class="w-4 h-4"></i> <span>View Speaker Notes</span>` : `<i data-lucide="mic-off" class="w-4 h-4"></i> <span>Hide Speaker Notes</span>`;
+            lucide.createIcons();
+        });
+
+        // --- Gradient Interactivity ---
+        const levels = document.querySelectorAll(".gradient-level");
+        const details = document.querySelectorAll("[data-level]");
+        levels.forEach(lvl => {
+            lvl.addEventListener("click", () => {
+                levels.forEach(l => l.classList.remove("active", "scale-105"));
+                lvl.classList.add("active", "scale-105");
+                const sel = lvl.getAttribute("data-level-select");
+                const targetCard = document.querySelector(`[data-level="${sel}"]`);
+                if(targetCard) {
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    targetCard.classList.add("ring-2", "ring-cyan-400");
+                    setTimeout(() => targetCard.classList.remove("ring-2", "ring-cyan-400"), 1000);
+                }
+            });
+        });
+
+        // --- Prompt Builder ---
+        const makeBtn = document.getElementById("makePromptBtn");
+        const copyBtn = document.getElementById("copyPromptBtn");
+        const output = document.getElementById("promptOutput");
+
+        makeBtn.addEventListener("click", () => {
+            const p = document.getElementById("painPoint").value;
+            const c = document.getElementById("context").value;
+            const s1 = document.getElementById("easySolution").value;
+            const s2 = document.getElementById("mediumSolution").value;
+            const s3 = document.getElementById("hardSolution").value;
+
+            const prompt = `You are an AI assistant helping a team optimize their workflow.\n\nContext:\n${c}\n\nPain Point:\n${p}\n\nProposed Solutions:\n1. Personal: ${s1}\n2. Team: ${s2}\n3. Workflow: ${s3}\n\nTask: Suggest a practical next step to test this in 2-4 weeks. Outline dependencies and effort.`;
+            
+            output.textContent = prompt;
+            output.classList.remove("hidden");
+        });
+
+        copyBtn.addEventListener("click", () => {
+            if(output.textContent) {
+                navigator.clipboard.writeText(output.textContent);
+                const original = copyBtn.innerHTML;
+                copyBtn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-green-500"></i>`;
+                lucide.createIcons();
+                setTimeout(() => { copyBtn.innerHTML = original; lucide.createIcons(); }, 2000);
+            }
+        });
+
+        // --- Scroll Reveal ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("in-view");
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+    </script>
 </body>
 </html>
