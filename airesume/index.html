@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brendan Hanna | AI Resume Guide</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyan: {
+                            50: '#ecfeff',
+                            100: '#cffafe',
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            900: '#164e63',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Background Animation */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Light mode specific canvas opacity */
+        html:not(.dark) #bg-canvas {
+            opacity: 0.15;
+        }
+
+        /* Glass Cards */
+        .glass-panel {
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+        
+        /* Dark Mode Glass */
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Light Mode Glass */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Prompt Box Styling */
+        .prompt-box {
+            transition: all 0.3s ease;
+        }
+        
+        .dark .prompt-box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            color: #cffafe;
+        }
+        
+        .prompt-box {
+            background: rgba(241, 245, 249, 0.8);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: #334155;
+        }
+
+        .dark .prompt-box:hover {
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.1);
+        }
+        
+        .prompt-box:hover {
+            border-color: rgba(6, 182, 212, 0.6);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.2s ease;
+        }
+        
+        .prompt-box:hover .copy-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(to right, #06b6d4, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Step Badge */
+        .step-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            border-width: 1px;
+        }
+        
+        .dark .step-badge {
+            background: rgba(6, 182, 212, 0.1);
+            border-color: rgba(6, 182, 212, 0.2);
+            color: #22d3ee;
+        }
+        
+        .step-badge {
+            background: rgba(6, 182, 212, 0.1);
+            border-color: rgba(6, 182, 212, 0.3);
+            color: #0891b2;
+        }
+        
+        /* Teaching Moment Box */
+        .teaching-moment {
+            border-left-width: 4px;
+        }
+        
+        .dark .teaching-moment {
+            background: rgba(15, 23, 42, 0.4);
+            border-left-color: #f59e0b; /* Amber */
+        }
+        
+        .teaching-moment {
+            background: rgba(255, 251, 235, 0.8); /* Amber 50 */
+            border-left-color: #f59e0b;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-e2e8f0">
+
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-slate-200 dark:border-white/10">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2 hover:opacity-80 transition group">
+                <i data-lucide="arrow-left" class="w-5 h-5 text-cyan-600 dark:text-cyan-400 group-hover:-translate-x-1 transition-transform"></i>
+                <span class="font-bold tracking-tight text-slate-900 dark:text-white">BRENDAN HANNA</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300" title="Toggle Theme">
+                    <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>
+                    <i data-lucide="sun" class="w-5 h-5 block dark:hidden"></i>
+                </button>
+                
+                <a href="https://linkedin.com/in/brendanhanna" target="_blank" class="text-slate-500 hover:text-cyan-600 dark:text-slate-400 dark:hover:text-white transition">
+                    <i data-lucide="linkedin" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-32 pb-12 px-4 text-center relative z-10">
+        <div class="inline-block p-1 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-600 mb-6 animate-pulse">
+            <div class="bg-white dark:bg-slate-900 rounded-full p-3">
+                <i data-lucide="bot" class="w-8 h-8 text-cyan-600 dark:text-cyan-400"></i>
+            </div>
+        </div>
+        <h1 class="text-5xl md:text-6xl font-bold mb-4 text-slate-900 dark:text-white">
+            AI Resume <span class="text-gradient">Architect</span>
+        </h1>
+        <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-light">
+            A practical, modular guide for building and tailoring resumes with AI.
+        </p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 pb-24 relative z-10 space-y-12">
+        
+        <!-- Section 1: The Strategy -->
+        <section class="glass-panel rounded-2xl p-8 md:p-10">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+                <i data-lucide="compass" class="w-6 h-6 text-cyan-600 dark:text-cyan-400"></i>
+                The Core Philosophy
+            </h2>
+            <div class="prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 space-y-6 leading-relaxed">
+                <p class="text-lg">
+                    The goal isn’t to let AI write your resume. The goal is to stop fighting the mechanics so you can focus on judgment, accuracy, and strategy.
+                </p>
+                <div class="grid md:grid-cols-3 gap-6 mt-6">
+                    <div class="p-4 rounded-lg bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+                        <strong class="block text-cyan-600 dark:text-cyan-400 mb-2">1. Master Library</strong>
+                        <span class="text-sm">Stop rewriting. Build one messy, giant source of truth and let AI organize it.</span>
+                    </div>
+                    <div class="p-4 rounded-lg bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+                        <strong class="block text-cyan-600 dark:text-cyan-400 mb-2">2. Context Engineering</strong>
+                        <span class="text-sm">Never prompt without a target. Always feed the Job Description (JD) to the AI first.</span>
+                    </div>
+                    <div class="p-4 rounded-lg bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+                        <strong class="block text-cyan-600 dark:text-cyan-400 mb-2">3. Strategic Review</strong>
+                        <span class="text-sm">Use AI as a blunt executive reviewer to find gaps you can't see yourself.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Workflow -->
+        <section>
+            <div class="flex items-center gap-3 mb-8">
+                <i data-lucide="layers" class="w-6 h-6 text-cyan-600 dark:text-cyan-400"></i>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">The Workflow</h2>
+            </div>
+            
+            <div class="grid gap-8">
+
+                <!-- Step 1: Master Library -->
+                <div class="glass-panel rounded-xl p-1 overflow-hidden group">
+                    <div class="bg-white/50 dark:bg-slate-900/50 p-6 md:p-8">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 dark:text-white text-xl">Build the Master Resume Library</h3>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Goal: Turn a messy resume into an organized, reusable content system.</p>
+                            </div>
+                            <span class="step-badge whitespace-nowrap">Step 1</span>
+                        </div>
+                        
+                        <!-- Prompt -->
+                        <div class="relative prompt-box rounded-lg p-5 font-mono text-sm mb-4">
+                            <p id="prompt-1">
+                                Treat this resume as a master resume. Break it into modular components:
+                                <br>1. Leadership & governance
+                                <br>2. Program delivery & execution
+                                <br>3. Clinical / regulatory exposure
+                                <br>4. Tools & methods
+                                <br>5. Scope, scale, and seniority indicators
+                                <br><br>
+                                Do not rewrite yet—just extract and organize.
+                                <br><br>
+                                [PASTE YOUR MESSY RESUME HERE]
+                            </p>
+                            <button onclick="copyToClipboard('prompt-1', this)" class="copy-btn absolute top-3 right-3 bg-cyan-600 hover:bg-cyan-500 text-white p-2 rounded-md shadow-lg flex items-center gap-2">
+                                <i data-lucide="copy" class="w-4 h-4"></i> <span class="text-xs font-bold">Copy</span>
+                            </button>
+                        </div>
+
+                        <!-- Key Idea -->
+                        <div class="teaching-moment p-4 rounded-r-lg text-sm text-slate-700 dark:text-slate-300">
+                            <strong class="text-amber-600 dark:text-amber-400 flex items-center gap-2 mb-1">
+                                <i data-lucide="lightbulb" class="w-4 h-4"></i> Key Idea
+                            </strong>
+                            "We didn’t improve anything yet. We just made the resume addressable. Redundancies and weak areas will become obvious."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Map to JD -->
+                <div class="glass-panel rounded-xl p-1 overflow-hidden group">
+                    <div class="bg-white/50 dark:bg-slate-900/50 p-6 md:p-8">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 dark:text-white text-xl">Map to Job Description</h3>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Goal: Upgrade generic bullets into employer-aligned, director-level language.</p>
+                            </div>
+                            <span class="step-badge whitespace-nowrap">Step 2</span>
+                        </div>
+                        
+                        <!-- Prompt -->
+                        <div class="relative prompt-box rounded-lg p-5 font-mono text-sm mb-4">
+                            <p id="prompt-2">
+                                Map this resume to the following job description.
+                                <br>
+                                Rewrite only the Director, Project Management bullets using the employer’s language and priorities.
+                                <br>
+                                Preserve facts. Elevate impact.
+                                <br><br>
+                                Job Description: [PASTE JD]
+                                <br>
+                                Resume Section: [PASTE RELEVANT BULLETS]
+                            </p>
+                            <button onclick="copyToClipboard('prompt-2', this)" class="copy-btn absolute top-3 right-3 bg-cyan-600 hover:bg-cyan-500 text-white p-2 rounded-md shadow-lg flex items-center gap-2">
+                                <i data-lucide="copy" class="w-4 h-4"></i> <span class="text-xs font-bold">Copy</span>
+                            </button>
+                        </div>
+
+                        <!-- Key Idea -->
+                        <div class="teaching-moment p-4 rounded-r-lg text-sm text-slate-700 dark:text-slate-300">
+                            <strong class="text-amber-600 dark:text-amber-400 flex items-center gap-2 mb-1">
+                                <i data-lucide="lightbulb" class="w-4 h-4"></i> Key Idea
+                            </strong>
+                            "Same experience. Different signal. Watch how it integrates keywords like 'cross-functional alignment' or 'critical path milestones'."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Gap Analysis -->
+                <div class="glass-panel rounded-xl p-1 overflow-hidden group">
+                    <div class="bg-white/50 dark:bg-slate-900/50 p-6 md:p-8">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 dark:text-white text-xl">Gap + Weakness Review</h3>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Goal: Have AI behave like an executive reviewer—objective, blunt, and specific.</p>
+                            </div>
+                            <span class="step-badge whitespace-nowrap">Step 3</span>
+                        </div>
+                        
+                        <!-- Prompt -->
+                        <div class="relative prompt-box rounded-lg p-5 font-mono text-sm mb-4">
+                            <p id="prompt-3">
+                                Act as a VP of Development reviewing this resume for a Director‑level biotech PM role.
+                                <br>
+                                Identify:
+                                <br>– Missing capabilities
+                                <br>– Weak or under‑signaled areas
+                                <br>– Content that reads below director level
+                                <br><br>
+                                Be specific.
+                            </p>
+                            <button onclick="copyToClipboard('prompt-3', this)" class="copy-btn absolute top-3 right-3 bg-cyan-600 hover:bg-cyan-500 text-white p-2 rounded-md shadow-lg flex items-center gap-2">
+                                <i data-lucide="copy" class="w-4 h-4"></i> <span class="text-xs font-bold">Copy</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Follow Up Prompt (Sub-box) -->
+                        <div class="relative prompt-box rounded-lg p-3 font-mono text-xs mb-4 opacity-80 border-dashed">
+                            <strong class="text-cyan-600 dark:text-cyan-400 block mb-1">// Follow Up</strong>
+                            <p id="prompt-3b">Suggest honest additions or reframes to address these gaps without inventing experience.</p>
+                            <button onclick="copyToClipboard('prompt-3b', this)" class="absolute top-2 right-2 text-cyan-600 dark:text-cyan-400 hover:text-cyan-500">
+                                <i data-lucide="copy" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+
+                        <!-- Key Idea -->
+                        <div class="teaching-moment p-4 rounded-r-lg text-sm text-slate-700 dark:text-slate-300">
+                            <strong class="text-amber-600 dark:text-amber-400 flex items-center gap-2 mb-1">
+                                <i data-lucide="lightbulb" class="w-4 h-4"></i> Key Idea
+                            </strong>
+                            "AI doesn’t just tell you what’s wrong—it shows you how to fix it responsibly. Look for missing scope metrics like budgets or team size."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Versioning -->
+                <div class="glass-panel rounded-xl p-1 overflow-hidden group">
+                    <div class="bg-white/50 dark:bg-slate-900/50 p-6 md:p-8">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 dark:text-white text-xl">Create Instant Role-Specific Versions</h3>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Goal: Generate tailored resumes in minutes instead of hours.</p>
+                            </div>
+                            <span class="step-badge whitespace-nowrap">Step 4</span>
+                        </div>
+                        
+                        <!-- Prompt -->
+                        <div class="relative prompt-box rounded-lg p-5 font-mono text-sm mb-4">
+                            <p id="prompt-4">
+                                Create three resume versions from this master content:
+                                <br>1. Director, Project Management – Large Pharma
+                                <br>2. Senior Director, Program Management – Mid‑size Biotech
+                                <br>3. Program Lead – Fast‑moving startup
+                                <br><br>
+                                Adjust emphasis and tone only. Do not change facts.
+                            </p>
+                            <button onclick="copyToClipboard('prompt-4', this)" class="copy-btn absolute top-3 right-3 bg-cyan-600 hover:bg-cyan-500 text-white p-2 rounded-md shadow-lg flex items-center gap-2">
+                                <i data-lucide="copy" class="w-4 h-4"></i> <span class="text-xs font-bold">Copy</span>
+                            </button>
+                        </div>
+
+                        <!-- Key Idea -->
+                        <div class="teaching-moment p-4 rounded-r-lg text-sm text-slate-700 dark:text-slate-300">
+                            <strong class="text-amber-600 dark:text-amber-400 flex items-center gap-2 mb-1">
+                                <i data-lucide="lightbulb" class="w-4 h-4"></i> Key Idea
+                            </strong>
+                            "Versioning is no longer the hard part. Notice how 'governance' appears for Pharma, but 'velocity' appears for Startup."
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 5: Accelerate Search -->
+                <div class="glass-panel rounded-xl p-1 overflow-hidden group">
+                    <div class="bg-white/50 dark:bg-slate-900/50 p-6 md:p-8">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 dark:text-white text-xl">Accelerate the Job Search</h3>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Goal: Use the same content to fuel the entire search workflow.</p>
+                            </div>
+                            <span class="step-badge whitespace-nowrap">Step 5</span>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <!-- A -->
+                            <div class="relative prompt-box rounded-lg p-4 font-mono text-xs">
+                                <strong class="block text-cyan-600 dark:text-cyan-400 mb-2">Job Title Expansion</strong>
+                                <p id="prompt-5a">Based on this resume, generate alternative job titles that recruiters might use for this role.</p>
+                                <button onclick="copyToClipboard('prompt-5a', this)" class="mt-2 text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1">
+                                    <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                                </button>
+                            </div>
+                            <!-- B -->
+                            <div class="relative prompt-box rounded-lg p-4 font-mono text-xs">
+                                <strong class="block text-cyan-600 dark:text-cyan-400 mb-2">Recruiter Outreach</strong>
+                                <p id="prompt-5b">Draft a concise LinkedIn message to a biotech recruiter referencing program leadership, IND/clinical experience, and cross‑functional execution.</p>
+                                <button onclick="copyToClipboard('prompt-5b', this)" class="mt-2 text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1">
+                                    <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                                </button>
+                            </div>
+                            <!-- C -->
+                            <div class="relative prompt-box rounded-lg p-4 font-mono text-xs">
+                                <strong class="block text-cyan-600 dark:text-cyan-400 mb-2">Interview Prep</strong>
+                                <p id="prompt-5c">Based on this resume, generate 5 director‑level interview questions and guidance on how to answer them.</p>
+                                <button onclick="copyToClipboard('prompt-5c', this)" class="mt-2 text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1">
+                                    <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-cyan-600 text-white px-6 py-3 rounded-full shadow-2xl opacity-0 transition-opacity duration-300 pointer-events-none z-50 font-semibold flex items-center gap-2">
+        <i data-lucide="check-circle" class="w-5 h-5"></i>
+        Prompt Copied!
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Theme Toggle Logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Check LocalStorage on load
+        if (localStorage.theme === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Background Animation
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.2; 
+                this.vy = (Math.random() - 0.5) * 0.2; 
+                this.size = Math.random() * 2;
+                this.alpha = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.vx; 
+                this.y += this.vy;
+                if(this.x < 0 || this.x > width) this.vx *= -1;
+                if(this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() {
+                // Adjust color based on theme
+                const isDark = document.documentElement.classList.contains('dark');
+                const color = isDark ? `rgba(6, 182, 212, ${this.alpha})` : `rgba(6, 182, 212, ${this.alpha * 0.7})`;
+                
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for(let i=0; i<50; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Copy Function
+        function copyToClipboard(elementId, btnElement) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                // Show Toast
+                const toast = document.getElementById('toast');
+                toast.style.opacity = '1';
+                setTimeout(() => toast.style.opacity = '0', 2000);
+
+                // Button Feedback
+                const originalContent = btnElement.innerHTML;
+                
+                // Only change styles if it's the main button type
+                if (btnElement.classList.contains('copy-btn')) {
+                    btnElement.classList.remove('bg-cyan-600', 'hover:bg-cyan-500');
+                    btnElement.classList.add('bg-green-600', 'hover:bg-green-500');
+                    btnElement.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> <span class="text-xs font-bold">Copied</span>';
+                    lucide.createIcons();
+
+                    setTimeout(() => {
+                        btnElement.classList.add('bg-cyan-600', 'hover:bg-cyan-500');
+                        btnElement.classList.remove('bg-green-600', 'hover:bg-green-500');
+                        btnElement.innerHTML = originalContent;
+                        lucide.createIcons();
+                    }, 2000);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
