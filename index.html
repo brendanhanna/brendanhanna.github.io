@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,20 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#1e293b', // Custom dark slate
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -18,10 +32,7 @@
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: #0f172a; /* Slate 900 */
-            color: #e2e8f0;
-            overflow-x: hidden;
-            margin: 0;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
 
         h1, h2, h3 {
@@ -36,15 +47,28 @@
             width: 100%;
             height: 100%;
             z-index: -1;
+            transition: opacity 0.5s ease;
         }
 
         /* Glassmorphism Card */
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Dark Mode Glass */
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Light Mode Glass */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
         }
 
         /* Button Glow Effect */
@@ -56,7 +80,16 @@
         
         .glow-button:hover {
             transform: translateY(-2px);
+        }
+        
+        .dark .glow-button:hover {
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.5); /* Sky blue glow */
+            border-color: #38bdf8;
+        }
+        
+        .glow-button:hover {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.25); /* Cyan glow light */
+            border-color: #06b6d4;
         }
 
         .glow-button::after {
@@ -66,74 +99,100 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
             transition: 0.5s;
         }
         
         .glow-button:hover::after {
             left: 100%;
         }
+        
+        /* Entrance Animation */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up {
+            animation: fadeUp 0.8s ease-out forwards;
+        }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex items-center justify-center p-4 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-e2e8f0">
 
     <!-- Interactive Background -->
     <canvas id="bg-canvas"></canvas>
+    
+    <!-- Theme Toggle -->
+    <button onclick="toggleTheme()" class="absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-700 backdrop-blur-sm shadow-sm transition-all z-50 group border border-slate-200 dark:border-slate-700">
+        <i data-lucide="sun" class="w-6 h-6 text-amber-500 block dark:hidden group-hover:rotate-45 transition-transform"></i>
+        <i data-lucide="moon" class="w-6 h-6 text-cyan-400 hidden dark:block group-hover:-rotate-12 transition-transform"></i>
+    </button>
 
     <!-- Main Content Container -->
-    <main class="glass-card w-full max-w-2xl rounded-2xl p-8 md:p-12 text-center relative z-10 fade-in-up">
+    <main class="glass-card w-full max-w-3xl rounded-2xl p-8 md:p-12 text-center relative z-10 fade-in-up">
         
         <!-- Header -->
         <header class="mb-8">
             <div class="inline-block p-1 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-600 mb-6">
-                <div class="bg-slate-900 rounded-full p-4">
-                    <i data-lucide="cpu" class="w-10 h-10 text-cyan-400"></i>
+                <div class="bg-white dark:bg-slate-900 rounded-full p-4 transition-colors duration-300">
+                    <i data-lucide="cpu" class="w-10 h-10 text-cyan-600 dark:text-cyan-400"></i>
                 </div>
             </div>
-            <h1 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400 mb-2">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2 text-slate-900 dark:text-white dark:bg-clip-text dark:text-transparent dark:bg-gradient-to-r dark:from-white dark:to-slate-400 transition-colors">
                 Brendan Hanna
             </h1>
-            <p class="text-slate-400 text-lg md:text-xl font-light">
+            <p class="text-slate-500 dark:text-slate-400 text-lg md:text-xl font-light">
                 Digital Creator & Technologist
             </p>
         </header>
 
         <!-- Bio / Intro -->
-        <section class="mb-10 text-slate-300 leading-relaxed max-w-lg mx-auto">
+        <section class="mb-10 text-slate-600 dark:text-slate-300 leading-relaxed max-w-lg mx-auto">
             <p>
                 Welcome to my personal hub. I explore the intersection of technology, 
                 design, and artificial intelligence. 
             </p>
         </section>
 
-        <!-- Featured Section (AI Training) -->
-        <section class="mb-10">
-            <a href="/aitraining" class="glow-button group flex items-center justify-between w-full p-4 rounded-xl bg-slate-800 border border-slate-700 hover:border-cyan-500 hover:bg-slate-800/80 text-left">
-                <div class="flex items-center gap-4">
-                    <div class="bg-cyan-500/10 p-3 rounded-lg text-cyan-400 group-hover:text-cyan-300">
-                        <i data-lucide="brain-circuit"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-white text-lg">AI Training Module</h3>
-                        <p class="text-sm text-slate-400">Access the latest documentation and tools.</p>
-                    </div>
+        <!-- Featured Section (Navigation Grid) -->
+        <section class="mb-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- AI Training Link -->
+            <a href="/aitraining" class="glow-button group flex flex-col items-center justify-center p-6 rounded-xl bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/80 text-center gap-3 shadow-sm dark:shadow-none">
+                <div class="bg-cyan-50 dark:bg-cyan-500/10 p-3 rounded-lg text-cyan-600 dark:text-cyan-400 group-hover:text-cyan-500 dark:group-hover:text-cyan-300 transition-colors">
+                    <i data-lucide="brain-circuit" class="w-8 h-8"></i>
                 </div>
-                <i data-lucide="arrow-right" class="text-slate-500 group-hover:text-cyan-400 transition-transform group-hover:translate-x-1"></i>
+                <div>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-lg">AI Training</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Documentation & Tools</p>
+                </div>
             </a>
+
+            <!-- AI Resume Link -->
+            <a href="/airesume" class="glow-button group flex flex-col items-center justify-center p-6 rounded-xl bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/80 text-center gap-3 shadow-sm dark:shadow-none">
+                <div class="bg-purple-50 dark:bg-purple-500/10 p-3 rounded-lg text-purple-600 dark:text-purple-400 group-hover:text-purple-500 dark:group-hover:text-purple-300 transition-colors">
+                    <i data-lucide="file-text" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-lg">AI Resume Architect</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Prompts & Guides</p>
+                </div>
+            </a>
+
         </section>
 
         <!-- Social / Contact Links -->
-        <footer class="flex justify-center gap-6 mt-8 border-t border-slate-700/50 pt-8">
-            <a href="mailto:brendan.hanna@gmail.com" class="text-slate-400 hover:text-white transition-colors hover:scale-110 transform duration-200" title="Email Me" onclick="copyEmail(event)">
+        <footer class="flex justify-center gap-6 mt-8 border-t border-slate-200 dark:border-slate-700/50 pt-8 transition-colors">
+            <a href="mailto:brendan.hanna@gmail.com" class="text-slate-400 hover:text-cyan-600 dark:hover:text-white transition-colors hover:scale-110 transform duration-200" title="Email Me" onclick="copyEmail(event)">
                 <i data-lucide="mail" class="w-6 h-6"></i>
             </a>
-            <a href="https://www.linkedin.com/in/brendanhanna/" target="_blank" class="text-slate-400 hover:text-white transition-colors hover:scale-110 transform duration-200" title="LinkedIn">
+            <a href="https://www.linkedin.com/in/brendanhanna/" target="_blank" class="text-slate-400 hover:text-cyan-600 dark:hover:text-white transition-colors hover:scale-110 transform duration-200" title="LinkedIn">
                 <i data-lucide="linkedin" class="w-6 h-6"></i>
             </a>
-            <a href="https://github.com/brendanhanna" target="_blank" class="text-slate-400 hover:text-white transition-colors hover:scale-110 transform duration-200" title="GitHub">
+            <a href="https://github.com/brendanhanna" target="_blank" class="text-slate-400 hover:text-cyan-600 dark:hover:text-white transition-colors hover:scale-110 transform duration-200" title="GitHub">
                 <i data-lucide="github" class="w-6 h-6"></i>
             </a>
-            <a href="https://x.com/brendan_hanna" target="_blank" class="text-slate-400 hover:text-white transition-colors hover:scale-110 transform duration-200" title="Twitter">
+            <a href="https://x.com/brendan_hanna" target="_blank" class="text-slate-400 hover:text-cyan-600 dark:hover:text-white transition-colors hover:scale-110 transform duration-200" title="Twitter">
                 <i data-lucide="twitter" class="w-6 h-6"></i>
             </a>
         </footer>
@@ -147,6 +206,26 @@
     <script>
         // Initialize Icons
         lucide.createIcons();
+
+        // Theme Toggle Logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Check LocalStorage on load
+        if (localStorage.theme === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            // Default to dark if no preference or explicitly dark
+            document.documentElement.classList.add('dark');
+        }
 
         // Canvas Animation - "Neural Network" Style
         const canvas = document.getElementById('bg-canvas');
@@ -222,7 +301,12 @@
             }
 
             draw() {
-                ctx.fillStyle = 'rgba(56, 189, 248, 0.5)'; // Sky blue
+                // Adjust colors based on theme
+                const isDark = document.documentElement.classList.contains('dark');
+                
+                // Particle color: Sky Blue in Dark, Darker Cyan in Light
+                ctx.fillStyle = isDark ? 'rgba(56, 189, 248, 0.5)' : 'rgba(8, 145, 178, 0.4)';
+                
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -239,6 +323,8 @@
         function animate() {
             ctx.clearRect(0, 0, width, height);
             
+            const isDark = document.documentElement.classList.contains('dark');
+
             for (let i = 0; i < particles.length; i++) {
                 particles[i].update();
                 particles[i].draw();
@@ -252,7 +338,14 @@
                     if (distance < connectionDistance) {
                         ctx.beginPath();
                         let opacity = 1 - (distance / connectionDistance);
-                        ctx.strokeStyle = 'rgba(56, 189, 248, ' + opacity * 0.2 + ')'; // Faint lines
+                        
+                        // Line color adjustment
+                        if (isDark) {
+                            ctx.strokeStyle = 'rgba(56, 189, 248, ' + opacity * 0.2 + ')';
+                        } else {
+                            ctx.strokeStyle = 'rgba(8, 145, 178, ' + opacity * 0.15 + ')';
+                        }
+                        
                         ctx.lineWidth = 1;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -268,7 +361,7 @@
 
         // Email Copy Function
         function copyEmail(e) {
-            e.preventDefault(); // Prevent opening mail client immediately to show toast
+            e.preventDefault(); 
             // Replace with your actual email
             const email = "brendan.hanna@gmail.com"; 
             navigator.clipboard.writeText(email).then(() => {
