@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDC Financial Pulse — Weekly P&L Variance Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  button { font-family: inherit; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.3); border-radius: 3px; }
+</style>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.12.7/Recharts.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, createContext, useContext } = React;
+const { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Cell, Area, AreaChart, ComposedChart } = Recharts;
+
+const ThemeContext = createContext();
+
+const themes = {
+  dark: {
+    bg:"#0f1820", bgCard:"rgba(255,255,255,0.02)",
+    border:"rgba(255,255,255,0.08)", borderSub:"rgba(255,255,255,0.05)", borderStrong:"rgba(255,255,255,0.06)",
+    text:"#e8edf2", textMuted:"#8899aa", textDim:"#5a6a78", textFaint:"#3a4a58",
+    textSecondary:"#c0cdd8", gridLine:"rgba(255,255,255,0.04)",
+    sectionBg:"rgba(255,255,255,0.03)", headerBg:"rgba(255,255,255,0.01)",
+    activeTab:"rgba(255,255,255,0.1)", tabBg:"rgba(255,255,255,0.04)",
+    tooltipBg:"#1a2332", tooltipBorder:"rgba(255,255,255,0.1)",
+    alertCritBg:"rgba(239,68,68,0.08)", alertCritBorder:"rgba(239,68,68,0.2)",
+    alertWarnBg:"rgba(245,158,11,0.05)", alertCritRow:"rgba(239,68,68,0.08)", alertWarnRow:"rgba(245,158,11,0.05)",
+    barPrev:"#3b5a80", dotStroke:"#0f1820", bgSub:"rgba(255,255,255,0.03)",
+  },
+  light: {
+    bg:"#f5f7fa", bgCard:"#ffffff",
+    border:"rgba(0,0,0,0.08)", borderSub:"rgba(0,0,0,0.06)", borderStrong:"rgba(0,0,0,0.1)",
+    text:"#1a2332", textMuted:"#5a6878", textDim:"#8895a5", textFaint:"#b0bcc8",
+    textSecondary:"#3a4a5c", gridLine:"rgba(0,0,0,0.06)",
+    sectionBg:"rgba(0,0,0,0.02)", headerBg:"#ffffff",
+    activeTab:"rgba(0,0,0,0.07)", tabBg:"rgba(0,0,0,0.03)",
+    tooltipBg:"#ffffff", tooltipBorder:"rgba(0,0,0,0.12)",
+    alertCritBg:"rgba(239,68,68,0.06)", alertCritBorder:"rgba(239,68,68,0.2)",
+    alertWarnBg:"rgba(245,158,11,0.06)", alertCritRow:"rgba(239,68,68,0.05)", alertWarnRow:"rgba(245,158,11,0.04)",
+    barPrev:"#94b0d0", dotStroke:"#ffffff", bgSub:"rgba(0,0,0,0.02)",
+  }
+};
+
+const VENUES = {
+  oceancliff: {
+    name:"OceanCliff Hotel",
+    weeklyData: [
+      {week:"W1",food:38200,bev:12800,rooms:7200,kitchenPay:4200,banqPay:5100,restPay:2400,roomsPay:1800,adminPay:900,cateringPay:1400,cogFood:6100},
+      {week:"W2",food:41500,bev:14200,rooms:8100,kitchenPay:4500,banqPay:5600,restPay:2200,roomsPay:1900,adminPay:950,cateringPay:1500,cogFood:6800},
+      {week:"W3",food:39800,bev:13500,rooms:6900,kitchenPay:4800,banqPay:5200,restPay:2800,roomsPay:1750,adminPay:880,cateringPay:1450,cogFood:6400},
+      {week:"W4",food:36900,bev:12100,rooms:6400,kitchenPay:4600,banqPay:4900,restPay:3100,roomsPay:1850,adminPay:920,cateringPay:1380,cogFood:5900},
+      {week:"W5",food:39864,bev:13245,rooms:7283,kitchenPay:4609,banqPay:5243,restPay:2927,roomsPay:1850,adminPay:941,cateringPay:1419,cogFood:6316},
+      {week:"W6",food:43200,bev:15800,rooms:8500,kitchenPay:5100,banqPay:5800,restPay:2600,roomsPay:2050,adminPay:980,cateringPay:1550,cogFood:7200},
+      {week:"W7",food:44800,bev:16200,rooms:9100,kitchenPay:5400,banqPay:6100,restPay:2500,roomsPay:2100,adminPay:1010,cateringPay:1600,cogFood:7500},
+      {week:"W8",food:42100,bev:14900,rooms:8300,kitchenPay:5600,banqPay:5500,restPay:3400,roomsPay:1950,adminPay:960,cateringPay:1480,cogFood:6900},
+    ],
+    ytd2025:{totalIncome:423890,foodRev:196264,bevRev:66145,roomRev:35883,payrollExp:102252,cogsSold:43769,netIncome:251439},
+    ytd2024:{totalIncome:379029,foodRev:165459,bevRev:64782,roomRev:39165,payrollExp:87447,cogsSold:11994,netIncome:246281},
+    payrollDetail2025:{kitchen:23009,banquets:26217,restaurant:12927,rooms:9250,admin:4941,catering:7099},
+    payrollDetail2024:{kitchen:18630,banquets:25883,restaurant:7618,rooms:9769,admin:1893,catering:7150},
+  },
+  regatta: {
+    name:"Regatta Place",
+    weeklyData: [
+      {week:"W1",food:34500,bev:11200,rooms:0,kitchenPay:3800,banqPay:4600,restPay:0,roomsPay:0,adminPay:800,cateringPay:1200,cogFood:5500},
+      {week:"W2",food:37200,bev:12800,rooms:0,kitchenPay:4100,banqPay:5100,restPay:0,roomsPay:0,adminPay:850,cateringPay:1300,cogFood:6100},
+      {week:"W3",food:35800,bev:11900,rooms:0,kitchenPay:4300,banqPay:4800,restPay:0,roomsPay:0,adminPay:780,cateringPay:1250,cogFood:5700},
+      {week:"W4",food:33100,bev:10500,rooms:0,kitchenPay:4100,banqPay:4400,restPay:0,roomsPay:0,adminPay:820,cateringPay:1180,cogFood:5200},
+      {week:"W5",food:35400,bev:11600,rooms:0,kitchenPay:4075,banqPay:4725,restPay:0,roomsPay:0,adminPay:813,cateringPay:1233,cogFood:5625},
+      {week:"W6",food:38900,bev:13500,rooms:0,kitchenPay:4600,banqPay:5300,restPay:0,roomsPay:0,adminPay:880,cateringPay:1350,cogFood:6400},
+      {week:"W7",food:40200,bev:14100,rooms:0,kitchenPay:4900,banqPay:5600,restPay:0,roomsPay:0,adminPay:910,cateringPay:1400,cogFood:6700},
+      {week:"W8",food:37800,bev:12900,rooms:0,kitchenPay:5100,banqPay:5000,restPay:0,roomsPay:0,adminPay:860,cateringPay:1300,cogFood:6100},
+    ],
+    ytd2025:{totalIncome:348800,foodRev:173374,bevRev:66145,roomRev:0,payrollExp:88200,cogsSold:38500,netIncome:210000},
+    ytd2024:{totalIncome:312000,foodRev:143793,bevRev:64782,roomRev:0,payrollExp:74000,cogsSold:10500,netIncome:215000},
+    payrollDetail2025:{kitchen:20500,banquets:24000,restaurant:0,rooms:0,admin:4200,catering:6500},
+    payrollDetail2024:{kitchen:16800,banquets:22000,restaurant:0,rooms:0,admin:1700,catering:6300},
+  },
+  stonehouse: {
+    name:"Stone House",
+    weeklyData: [
+      {week:"W1",food:28500,bev:9800,rooms:5100,kitchenPay:3200,banqPay:3800,restPay:1800,roomsPay:1400,adminPay:700,cateringPay:1000,cogFood:4600},
+      {week:"W2",food:31200,bev:11100,rooms:5800,kitchenPay:3500,banqPay:4200,restPay:1700,roomsPay:1500,adminPay:740,cateringPay:1080,cogFood:5100},
+      {week:"W3",food:29800,bev:10200,rooms:5400,kitchenPay:3700,banqPay:3900,restPay:2100,roomsPay:1350,adminPay:680,cateringPay:1040,cogFood:4800},
+      {week:"W4",food:27100,bev:9200,rooms:4800,kitchenPay:3500,banqPay:3600,restPay:2400,roomsPay:1420,adminPay:720,cateringPay:980,cogFood:4300},
+      {week:"W5",food:29150,bev:10075,rooms:5275,kitchenPay:3475,banqPay:3875,restPay:2000,roomsPay:1418,adminPay:710,cateringPay:1025,cogFood:4700},
+      {week:"W6",food:32800,bev:12000,rooms:6200,kitchenPay:3900,banqPay:4400,restPay:1900,roomsPay:1600,adminPay:760,cateringPay:1120,cogFood:5400},
+      {week:"W7",food:34100,bev:12600,rooms:6700,kitchenPay:4100,banqPay:4600,restPay:1850,roomsPay:1650,adminPay:790,cateringPay:1150,cogFood:5700},
+      {week:"W8",food:31500,bev:11400,rooms:5900,kitchenPay:4300,banqPay:4100,restPay:2600,roomsPay:1520,adminPay:740,cateringPay:1080,cogFood:5200},
+    ],
+    ytd2025:{totalIncome:310200,foodRev:155000,bevRev:55000,roomRev:28000,payrollExp:78000,cogsSold:32000,netIncome:185000},
+    ytd2024:{totalIncome:278000,foodRev:132000,bevRev:52000,roomRev:30000,payrollExp:65000,cogsSold:9000,netIncome:192000},
+    payrollDetail2025:{kitchen:17500,banquets:20000,restaurant:9800,rooms:7200,admin:3800,catering:5500},
+    payrollDetail2024:{kitchen:14200,banquets:18500,restaurant:5800,rooms:7800,admin:1500,catering:5200},
+  }
+};
+
+const THRESHOLDS = {
+  kitchenToFood:{warn:0.13,crit:0.15,label:"Kitchen / Food Rev"},
+  banqToFBBanq:{warn:0.14,crit:0.16,label:"Banquets / F&B Banq"},
+  restToFBCarte:{warn:0.25,crit:0.35,label:"Restaurant / F&B À la Carte"},
+  roomsToRoomRev:{warn:0.27,crit:0.32,label:"Rooms / Room Rev"},
+  payrollToRev:{warn:0.25,crit:0.28,label:"Total Payroll / Revenue"},
+  cogFoodToFoodRev:{warn:0.16,crit:0.19,label:"COG Food / Food Rev"},
+};
+
+const fmt = n => n>=1e6?`$${(n/1e6).toFixed(1)}M`:n>=1e3?`$${(n/1e3).toFixed(0)}K`:`$${n.toFixed(0)}`;
+const pct = n => `${(n*100).toFixed(1)}%`;
+const dlt = (a,b) => b!==0?((a-b)/Math.abs(b)):0;
+
+function computeRatios(data) {
+  return data.map(w => {
+    const tr = w.food+w.bev+(w.rooms||0);
+    const tp = w.kitchenPay+w.banqPay+w.restPay+w.roomsPay+w.adminPay+w.cateringPay;
+    return {
+      week:w.week, kitchenToFood:w.kitchenPay/w.food,
+      banqToFBBanq:w.banqPay/(w.food*0.82),
+      restToFBCarte:w.restPay>0?w.restPay/(w.food*0.12+w.bev*0.18):null,
+      roomsToRoomRev:w.rooms>0?w.roomsPay/w.rooms:null,
+      payrollToRev:tp/tr, cogFoodToFoodRev:w.cogFood/w.food, totalRev:tr, totalPayroll:tp,
+    };
+  });
+}
+
+function alertStatus(v,t){if(v==null)return"na";if(v>=t.crit)return"critical";if(v>=t.warn)return"warning";return"ok";}
+
+const Dot = ({status}) => {
+  const c={ok:"#22c55e",warning:"#f59e0b",critical:"#ef4444",na:"#6b7280"};
+  return <span style={{display:"inline-block",width:10,height:10,borderRadius:"50%",backgroundColor:c[status],boxShadow:status==="critical"?"0 0 8px rgba(239,68,68,0.6)":status==="warning"?"0 0 6px rgba(245,158,11,0.4)":"none"}}/>;
+};
+
+const Toggle = () => {
+  const {mode,toggle}=useContext(ThemeContext);
+  return (
+    <button onClick={toggle} aria-label="Toggle theme" style={{
+      position:"relative",width:52,height:28,borderRadius:14,border:"none",cursor:"pointer",
+      background:mode==="dark"?"rgba(255,255,255,0.08)":"rgba(0,0,0,0.1)",
+      transition:"all 0.3s ease",display:"flex",alignItems:"center",padding:"0 4px",
+    }}>
+      <div style={{
+        width:20,height:20,borderRadius:"50%",transition:"all 0.3s cubic-bezier(0.4,0,0.2,1)",
+        transform:mode==="dark"?"translateX(0px)":"translateX(24px)",
+        background:mode==="dark"?"#1a2332":"#fff",
+        display:"flex",alignItems:"center",justifyContent:"center",
+        boxShadow:"0 1px 3px rgba(0,0,0,0.3)",
+      }}>
+        <span style={{fontSize:11,lineHeight:1}}>{mode==="dark"?"🌙":"☀️"}</span>
+      </div>
+    </button>
+  );
+};
+
+const Card = ({label,value,prev,isRatio=false}) => {
+  const {theme:t}=useContext(ThemeContext);
+  const d=prev?dlt(value,prev):0;
+  const bad=isRatio?d>0:d<0;
+  return (
+    <div style={{background:t.bgCard,border:`1px solid ${t.border}`,borderRadius:8,padding:"14px 16px",minWidth:0}}>
+      <div style={{fontSize:11,color:t.textMuted,letterSpacing:"0.05em",textTransform:"uppercase",marginBottom:6,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{label}</div>
+      <div style={{fontSize:20,fontWeight:600,color:t.text,fontFamily:"'DM Mono',monospace"}}>{isRatio?pct(value):fmt(value)}</div>
+      {prev!=null&&<div style={{fontSize:12,marginTop:4,color:bad?"#ef4444":"#22c55e",fontFamily:"'DM Mono',monospace"}}>{d>0?"▲":"▼"} {pct(Math.abs(d))} vs PY</div>}
+    </div>
+  );
+};
+
+const RChart = ({data,dataKey,threshold,label,color}) => {
+  const {theme:t}=useContext(ThemeContext);
+  return (
+    <div style={{background:t.bgCard,border:`1px solid ${t.border}`,borderRadius:8,padding:"14px 16px"}}>
+      <div style={{fontSize:12,color:t.textMuted,marginBottom:8}}>{label}</div>
+      <ResponsiveContainer width="100%" height={120}>
+        <ComposedChart data={data} margin={{top:5,right:5,bottom:0,left:-20}}>
+          <CartesianGrid strokeDasharray="3 3" stroke={t.gridLine}/>
+          <XAxis dataKey="week" tick={{fill:t.textDim,fontSize:10}} axisLine={false} tickLine={false}/>
+          <YAxis tickFormatter={v=>`${(v*100).toFixed(0)}%`} tick={{fill:t.textDim,fontSize:10}} axisLine={false} tickLine={false} domain={['auto','auto']}/>
+          <Tooltip contentStyle={{background:t.tooltipBg,border:`1px solid ${t.tooltipBorder}`,borderRadius:6,fontSize:12,color:t.text}} formatter={v=>[pct(v),label]} labelStyle={{color:t.textMuted}}/>
+          <ReferenceLine y={threshold.warn} stroke="#f59e0b" strokeDasharray="4 4" strokeWidth={1}/>
+          <ReferenceLine y={threshold.crit} stroke="#ef4444" strokeDasharray="4 4" strokeWidth={1}/>
+          <Area type="monotone" dataKey={dataKey} fill={`${color}15`} stroke="none"/>
+          <Line type="monotone" dataKey={dataKey} stroke={color} strokeWidth={2} dot={{r:3,fill:color,stroke:t.dotStroke,strokeWidth:2}}/>
+        </ComposedChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
+const PayComp = ({d25,d24}) => {
+  const {theme:t}=useContext(ThemeContext);
+  const depts=["kitchen","banquets","restaurant","rooms","admin","catering"].filter(k=>d25[k]>0).map(k=>({key:k,label:k.charAt(0).toUpperCase()+k.slice(1)}));
+  const cd=depts.map(d=>({dept:d.label,"2025":d25[d.key],"2024":d24[d.key],pc:dlt(d25[d.key],d24[d.key])}));
+  return (
+    <div style={{background:t.bgCard,border:`1px solid ${t.border}`,borderRadius:8,padding:"14px 16px"}}>
+      <div style={{fontSize:12,color:t.textMuted,marginBottom:12,letterSpacing:"0.03em",textTransform:"uppercase"}}>Payroll by Department — YTD</div>
+      <ResponsiveContainer width="100%" height={200}>
+        <BarChart data={cd} margin={{top:5,right:5,bottom:0,left:-10}}>
+          <CartesianGrid strokeDasharray="3 3" stroke={t.gridLine}/>
+          <XAxis dataKey="dept" tick={{fill:t.textMuted,fontSize:11}} axisLine={false} tickLine={false}/>
+          <YAxis tickFormatter={v=>`$${(v/1000).toFixed(0)}K`} tick={{fill:t.textDim,fontSize:10}} axisLine={false} tickLine={false}/>
+          <Tooltip contentStyle={{background:t.tooltipBg,border:`1px solid ${t.tooltipBorder}`,borderRadius:6,fontSize:12,color:t.text}} formatter={(v,n)=>[fmt(v),n]} labelStyle={{color:t.textMuted}}/>
+          <Bar dataKey="2024" fill={t.barPrev} radius={[3,3,0,0]} barSize={18}/>
+          <Bar dataKey="2025" radius={[3,3,0,0]} barSize={18}>
+            {cd.map((e,i)=><Cell key={i} fill={e.pc>0.15?"#ef4444":e.pc>0.05?"#f59e0b":"#22c55e"}/>)}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+      <div style={{display:"flex",gap:16,marginTop:8,justifyContent:"center"}}>
+        {[["2024",t.barPrev],["<5%","#22c55e"],["5-15%","#f59e0b"],[">15%","#ef4444"]].map(([l,c])=>(
+          <div key={l} style={{display:"flex",alignItems:"center",gap:6,fontSize:11,color:t.textDim}}>
+            <div style={{width:10,height:10,borderRadius:2,background:c}}/>{l}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const RevChart = ({data}) => {
+  const {theme:t}=useContext(ThemeContext);
+  const cd=data.map(w=>({week:w.week,Food:w.food,Beverage:w.bev,Rooms:w.rooms||0}));
+  return (
+    <div style={{background:t.bgCard,border:`1px solid ${t.border}`,borderRadius:8,padding:"14px 16px"}}>
+      <div style={{fontSize:12,color:t.textMuted,marginBottom:8,textTransform:"uppercase"}}>Weekly Revenue Trend</div>
+      <ResponsiveContainer width="100%" height={160}>
+        <AreaChart data={cd} margin={{top:5,right:5,bottom:0,left:-10}}>
+          <CartesianGrid strokeDasharray="3 3" stroke={t.gridLine}/>
+          <XAxis dataKey="week" tick={{fill:t.textDim,fontSize:10}} axisLine={false} tickLine={false}/>
+          <YAxis tickFormatter={v=>`$${(v/1000).toFixed(0)}K`} tick={{fill:t.textDim,fontSize:10}} axisLine={false} tickLine={false}/>
+          <Tooltip contentStyle={{background:t.tooltipBg,border:`1px solid ${t.tooltipBorder}`,borderRadius:6,fontSize:12,color:t.text}} formatter={v=>[fmt(v)]} labelStyle={{color:t.textMuted}}/>
+          <Area type="monotone" dataKey="Rooms" stackId="1" stroke="#6366f1" fill="#6366f120" strokeWidth={1.5}/>
+          <Area type="monotone" dataKey="Beverage" stackId="1" stroke="#06b6d4" fill="#06b6d420" strokeWidth={1.5}/>
+          <Area type="monotone" dataKey="Food" stackId="1" stroke="#22c55e" fill="#22c55e20" strokeWidth={1.5}/>
+        </AreaChart>
+      </ResponsiveContainer>
+      <div style={{display:"flex",gap:16,marginTop:6,justifyContent:"center"}}>
+        {[["Food","#22c55e"],["Beverage","#06b6d4"],["Rooms","#6366f1"]].map(([l,c])=>(
+          <div key={l} style={{display:"flex",alignItems:"center",gap:6,fontSize:11,color:t.textDim}}>
+            <div style={{width:10,height:10,borderRadius:2,background:c}}/>{l}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+function App() {
+  const [mode,setMode]=useState("light");
+  const toggle=()=>setMode(m=>m==="dark"?"light":"dark");
+  const theme=themes[mode];
+  const [sv,setSv]=useState("oceancliff");
+  const [view,setView]=useState("dashboard");
+  const venue=VENUES[sv];
+  const ratios=computeRatios(venue.weeklyData);
+  const lr=ratios[ratios.length-1];
+  const pr=ratios[ratios.length-2];
+  const ac=Object.entries(THRESHOLDS).filter(([k,t])=>{const v=lr[k];return v!=null&&v>=t.warn;}).length;
+  const cc=Object.entries(THRESHOLDS).filter(([k,t])=>{const v=lr[k];return v!=null&&v>=t.crit;}).length;
+  const excess=venue.ytd2025.payrollExp-(venue.ytd2024.payrollExp*(venue.ytd2025.totalIncome/venue.ytd2024.totalIncome));
+
+  // Responsive
+  const [w,setW]=useState(window.innerWidth);
+  useEffect(()=>{const h=()=>setW(window.innerWidth);window.addEventListener('resize',h);return()=>window.removeEventListener('resize',h);},[]);
+  const mobile=w<768;
+
+  return (
+    <ThemeContext.Provider value={{mode,toggle,theme}}>
+      <div style={{minHeight:"100vh",background:theme.bg,color:theme.text,transition:"background 0.3s,color 0.3s"}}>
+
+        {/* HEADER */}
+        <div style={{
+          borderBottom:`1px solid ${theme.borderStrong}`,padding:mobile?"12px 16px":"16px 24px",
+          display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12,
+          background:theme.headerBg,transition:"all 0.3s",position:"sticky",top:0,zIndex:10,
+          backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",
+        }}>
+          <div>
+            <span style={{fontFamily:"'Instrument Serif',serif",fontSize:mobile?18:22,color:theme.text,letterSpacing:"-0.02em"}}>IDC Financial Pulse</span>
+            <div style={{fontSize:11,color:theme.textDim,letterSpacing:"0.08em",textTransform:"uppercase"}}>Weekly P&L Variance Analysis</div>
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:mobile?8:12,flexWrap:"wrap"}}>
+            <div style={{display:"flex",background:theme.tabBg,borderRadius:6,padding:2,gap:2}}>
+              {Object.entries(VENUES).map(([k,v])=>(
+                <button key={k} onClick={()=>setSv(k)} style={{padding:mobile?"5px 10px":"6px 14px",borderRadius:4,border:"none",cursor:"pointer",fontSize:mobile?11:12,fontWeight:500,fontFamily:"'DM Sans',sans-serif",background:sv===k?theme.activeTab:"transparent",color:sv===k?theme.text:theme.textDim,transition:"all 0.2s"}}>{v.name.split(" ")[0]}</button>
+              ))}
+            </div>
+            {ac>0&&!mobile&&(
+              <div style={{display:"flex",alignItems:"center",gap:6,padding:"5px 12px",borderRadius:20,fontSize:12,fontWeight:600,background:cc>0?theme.alertCritBg:theme.alertWarnBg,color:cc>0?"#ef4444":"#f59e0b",border:`1px solid ${cc>0?"rgba(239,68,68,0.3)":"rgba(245,158,11,0.25)"}`}}>
+                {cc>0?"⚠":"●"} {ac} Alert{ac!==1?"s":""}
+              </div>
+            )}
+            {!mobile&&<div style={{fontSize:12,color:theme.textDim,padding:"5px 10px",background:theme.bgSub,borderRadius:4}}>Week ending Feb 8, 2025</div>}
+            <Toggle/>
+          </div>
+        </div>
+
+        <div style={{padding:mobile?"16px":"20px 24px",maxWidth:1200,margin:"0 auto"}}>
+          {/* Mobile date + alerts */}
+          {mobile&&(
+            <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center"}}>
+              <div style={{fontSize:11,color:theme.textDim,padding:"4px 8px",background:theme.bgSub,borderRadius:4}}>Week ending Feb 8, 2025</div>
+              {ac>0&&<div style={{fontSize:11,fontWeight:600,color:cc>0?"#ef4444":"#f59e0b"}}>{cc>0?"⚠":"●"} {ac} Alert{ac!==1?"s":""}</div>}
+            </div>
+          )}
+
+          {/* View tabs */}
+          <div style={{display:"flex",gap:2,marginBottom:20,background:theme.tabBg,borderRadius:6,padding:2,width:"fit-content"}}>
+            {[["dashboard","Dashboard"],["alerts","Alerts & Ratios"],["detail","P&L Detail"]].map(([k,l])=>(
+              <button key={k} onClick={()=>setView(k)} style={{padding:"6px 16px",borderRadius:4,border:"none",cursor:"pointer",fontSize:12,fontWeight:500,fontFamily:"'DM Sans',sans-serif",background:view===k?theme.activeTab:"transparent",color:view===k?theme.text:theme.textDim,transition:"all 0.2s"}}>{l}</button>
+            ))}
+          </div>
+
+          {/* DASHBOARD VIEW */}
+          {view==="dashboard"&&(<>
+            {excess>5000&&(
+              <div style={{background:theme.alertCritBg,border:`1px solid ${theme.alertCritBorder}`,borderRadius:8,padding:mobile?"12px":"14px 18px",marginBottom:16,display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:8}}>
+                <div style={{flex:1,minWidth:200}}>
+                  <div style={{fontSize:13,fontWeight:600,color:"#ef4444",marginBottom:2}}>⚠ Estimated Excess Labor Cost Detected</div>
+                  <div style={{fontSize:12,color:theme.textMuted}}>YTD payroll running {fmt(excess)} above revenue-adjusted PY benchmark. Annualized: ~{fmt(excess*52/8)}.</div>
+                </div>
+                <div style={{fontSize:mobile?20:24,fontWeight:700,color:"#ef4444",fontFamily:"'DM Mono',monospace"}}>{fmt(excess)}</div>
+              </div>
+            )}
+            <div style={{display:"grid",gridTemplateColumns:mobile?"repeat(2,1fr)":"repeat(auto-fit,minmax(150px,1fr))",gap:mobile?8:10,marginBottom:20}}>
+              <Card label="Total Revenue" value={venue.ytd2025.totalIncome} prev={venue.ytd2024.totalIncome}/>
+              <Card label="Net Income" value={venue.ytd2025.netIncome} prev={venue.ytd2024.netIncome}/>
+              <Card label="Total Payroll" value={venue.ytd2025.payrollExp} prev={venue.ytd2024.payrollExp}/>
+              <Card label="Payroll / Rev" value={lr.payrollToRev} isRatio prev={pr.payrollToRev}/>
+              <Card label="COGS" value={venue.ytd2025.cogsSold} prev={venue.ytd2024.cogsSold}/>
+              <Card label="COG Food / Food" value={lr.cogFoodToFoodRev} isRatio prev={pr.cogFoodToFoodRev}/>
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:mobile?"1fr":"1fr 1fr",gap:14,marginBottom:16}}>
+              <RevChart data={venue.weeklyData}/>
+              <PayComp d25={venue.payrollDetail2025} d24={venue.payrollDetail2024}/>
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:mobile?"1fr":"1fr 1fr 1fr",gap:14}}>
+              <RChart data={ratios} dataKey="kitchenToFood" threshold={THRESHOLDS.kitchenToFood} label="Kitchen Payroll / Food Revenue" color="#06b6d4"/>
+              <RChart data={ratios} dataKey="payrollToRev" threshold={THRESHOLDS.payrollToRev} label="Total Payroll / Total Revenue" color="#a78bfa"/>
+              <RChart data={ratios} dataKey="cogFoodToFoodRev" threshold={THRESHOLDS.cogFoodToFoodRev} label="COG Food / Food Revenue" color="#f59e0b"/>
+              {lr.restToFBCarte!=null&&<RChart data={ratios} dataKey="restToFBCarte" threshold={THRESHOLDS.restToFBCarte} label="Restaurant / F&B À la Carte" color="#ef4444"/>}
+              <RChart data={ratios} dataKey="banqToFBBanq" threshold={THRESHOLDS.banqToFBBanq} label="Banquet / F&B Banquets" color="#22c55e"/>
+              {lr.roomsToRoomRev!=null&&<RChart data={ratios} dataKey="roomsToRoomRev" threshold={THRESHOLDS.roomsToRoomRev} label="Rooms / Room Revenue" color="#6366f1"/>}
+            </div>
+          </>)}
+
+          {/* ALERTS VIEW */}
+          {view==="alerts"&&(
+            <div>
+              <div style={{marginBottom:16}}>
+                <div style={{fontSize:16,fontWeight:600,color:theme.text,marginBottom:4}}>Alert Status — {venue.name}</div>
+                <div style={{fontSize:12,color:theme.textDim}}>Current week ratios vs. configured thresholds.</div>
+              </div>
+              <div style={{background:theme.bgCard,border:`1px solid ${theme.border}`,borderRadius:8,overflow:"hidden",marginBottom:20}}>
+                <div style={{padding:"10px 14px",borderBottom:`1px solid ${theme.borderStrong}`,display:"flex",justifyContent:"space-between"}}>
+                  <span style={{fontSize:12,fontWeight:600,color:theme.textMuted,textTransform:"uppercase",letterSpacing:"0.05em"}}>Expense Ratio</span>
+                  <span style={{fontSize:12,fontWeight:600,color:theme.textMuted,textTransform:"uppercase",letterSpacing:"0.05em"}}>Current / Thresholds</span>
+                </div>
+                {Object.entries(THRESHOLDS).map(([k,thr])=>{
+                  const val=lr[k];if(val==null)return null;
+                  const st=alertStatus(val,thr);
+                  return (
+                    <div key={k} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderBottom:`1px solid ${theme.borderSub}`,background:st==="critical"?theme.alertCritRow:st==="warning"?theme.alertWarnRow:"transparent",borderLeft:st==="critical"?"3px solid #ef4444":st==="warning"?"3px solid #f59e0b":"3px solid transparent"}}>
+                      <div style={{display:"flex",alignItems:"center",gap:10}}><Dot status={st}/><span style={{fontSize:13,color:theme.textSecondary}}>{thr.label}</span></div>
+                      <div style={{display:"flex",alignItems:"center",gap:mobile?8:16,flexWrap:"wrap",justifyContent:"flex-end"}}>
+                        <span style={{fontSize:14,fontWeight:600,fontFamily:"'DM Mono',monospace",color:st==="critical"?"#ef4444":st==="warning"?"#f59e0b":"#22c55e"}}>{pct(val)}</span>
+                        <span style={{fontSize:11,color:theme.textDim}}>warn: {pct(thr.warn)} | crit: {pct(thr.crit)}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div style={{background:theme.bgCard,border:`1px solid ${theme.border}`,borderRadius:8,overflow:"hidden"}}>
+                <div style={{padding:"10px 14px",borderBottom:`1px solid ${theme.borderStrong}`}}>
+                  <span style={{fontSize:12,fontWeight:600,color:theme.textMuted,textTransform:"uppercase"}}>Weekly Ratio History</span>
+                </div>
+                <div style={{overflowX:"auto"}}>
+                  <table style={{width:"100%",borderCollapse:"collapse",fontSize:12,minWidth:700}}>
+                    <thead><tr style={{borderBottom:`1px solid ${theme.borderStrong}`}}>
+                      <th style={{padding:"8px 14px",textAlign:"left",color:theme.textDim,fontWeight:500}}>Week</th>
+                      {Object.values(THRESHOLDS).map(t=><th key={t.label} style={{padding:"8px 10px",textAlign:"right",color:theme.textDim,fontWeight:500,whiteSpace:"nowrap"}}>{t.label}</th>)}
+                    </tr></thead>
+                    <tbody>{ratios.map((r,i)=>(
+                      <tr key={i} style={{borderBottom:`1px solid ${theme.borderSub}`}}>
+                        <td style={{padding:"7px 14px",color:theme.textSecondary,fontFamily:"'DM Mono',monospace"}}>{r.week}</td>
+                        {Object.entries(THRESHOLDS).map(([k,thr])=>{const v=r[k];const s=alertStatus(v,thr);return(
+                          <td key={k} style={{padding:"7px 10px",textAlign:"right",fontFamily:"'DM Mono',monospace",color:v==null?theme.textFaint:s==="critical"?"#ef4444":s==="warning"?"#f59e0b":theme.textMuted}}>{v==null?"—":pct(v)}</td>
+                        );})}
+                      </tr>
+                    ))}</tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* P&L DETAIL VIEW */}
+          {view==="detail"&&(
+            <div>
+              <div style={{marginBottom:16}}>
+                <div style={{fontSize:16,fontWeight:600,color:theme.text,marginBottom:4}}>P&L Variance Detail — {venue.name}</div>
+                <div style={{fontSize:12,color:theme.textDim}}>Year-to-date comparison, 2025 vs 2024.</div>
+              </div>
+              <div style={{background:theme.bgCard,border:`1px solid ${theme.border}`,borderRadius:8,overflow:"hidden"}}>
+                {[
+                  {label:"REVENUE",items:[
+                    {n:"Food Revenue",a:venue.ytd2025.foodRev,b:venue.ytd2024.foodRev},
+                    {n:"Beverage Revenue",a:venue.ytd2025.bevRev,b:venue.ytd2024.bevRev},
+                    {n:"Guest Room Revenue",a:venue.ytd2025.roomRev,b:venue.ytd2024.roomRev},
+                  ],total:{n:"Total Income",a:venue.ytd2025.totalIncome,b:venue.ytd2024.totalIncome}},
+                  {label:"COST OF GOODS SOLD",items:[{n:"F&B COGS",a:venue.ytd2025.cogsSold,b:venue.ytd2024.cogsSold}]},
+                  {label:"LABOR BY DEPARTMENT",items:[
+                    {n:"Kitchen",a:venue.payrollDetail2025.kitchen,b:venue.payrollDetail2024.kitchen},
+                    {n:"Banquets",a:venue.payrollDetail2025.banquets,b:venue.payrollDetail2024.banquets},
+                    ...(venue.payrollDetail2025.restaurant>0?[{n:"Restaurant",a:venue.payrollDetail2025.restaurant,b:venue.payrollDetail2024.restaurant}]:[]),
+                    ...(venue.payrollDetail2025.rooms>0?[{n:"Rooms",a:venue.payrollDetail2025.rooms,b:venue.payrollDetail2024.rooms}]:[]),
+                    {n:"Admin",a:venue.payrollDetail2025.admin,b:venue.payrollDetail2024.admin},
+                    {n:"Catering",a:venue.payrollDetail2025.catering,b:venue.payrollDetail2024.catering},
+                  ],total:{n:"Total Payroll",a:venue.ytd2025.payrollExp,b:venue.ytd2024.payrollExp}},
+                  {label:"BOTTOM LINE",items:[{n:"Net Income",a:venue.ytd2025.netIncome,b:venue.ytd2024.netIncome}]},
+                ].map(sec=>(
+                  <div key={sec.label}>
+                    <div style={{padding:"10px 14px",background:theme.sectionBg,borderBottom:`1px solid ${theme.borderStrong}`}}>
+                      <span style={{fontSize:11,fontWeight:600,color:theme.textDim,letterSpacing:"0.08em"}}>{sec.label}</span>
+                    </div>
+                    <div style={{overflowX:"auto"}}>
+                    <table style={{width:"100%",borderCollapse:"collapse",minWidth:500}}>
+                      <thead><tr style={{borderBottom:`1px solid ${theme.borderSub}`}}>
+                        {["Line Item","2025 YTD","2024 YTD","Var ($)","Var (%)"].map((h,i)=>(
+                          <th key={h} style={{padding:"6px 14px",textAlign:i===0?"left":"right",color:theme.textDim,fontSize:11,fontWeight:500}}>{h}</th>
+                        ))}
+                      </tr></thead>
+                      <tbody>
+                        {sec.items.filter(i=>i.a>0||i.b>0).map(item=>{
+                          const v=item.a-item.b;
+                          const p=item.b!==0?v/Math.abs(item.b):0;
+                          const isExp=sec.label.includes("LABOR")||sec.label.includes("COST");
+                          const bad=isExp?v>0:v<0;
+                          return (
+                            <tr key={item.n} style={{borderBottom:`1px solid ${theme.borderSub}`}}>
+                              <td style={{padding:"7px 14px",color:theme.textSecondary,fontSize:12}}>{item.n}</td>
+                              <td style={{padding:"7px 14px",textAlign:"right",fontFamily:"'DM Mono',monospace",fontSize:12,color:theme.textSecondary}}>{fmt(item.a)}</td>
+                              <td style={{padding:"7px 14px",textAlign:"right",fontFamily:"'DM Mono',monospace",fontSize:12,color:theme.textMuted}}>{fmt(item.b)}</td>
+                              <td style={{padding:"7px 14px",textAlign:"right",fontFamily:"'DM Mono',monospace",fontSize:12,color:bad?"#ef4444":"#22c55e"}}>{v>=0?"+":""}{fmt(v)}</td>
+                              <td style={{padding:"7px 14px",textAlign:"right",fontFamily:"'DM Mono',monospace",fontSize:12,color:bad?"#ef4444":"#22c55e"}}>{p>=0?"▲":"▼"} {pct(Math.abs(p))}</td>
+                            </tr>
+                          );
+                        })}
+                        {sec.total&&(
+                          <tr style={{borderBottom:`1px solid ${theme.borderStrong}`,background:theme.sectionBg}}>
+                            <td style={{padding:"8px 14px",color:theme.text,fontSize:12,fontWeight:600}}>{sec.total.n}</td>
+                            <td style={{padding:"8px 14px",textAlign:"right",fontFamily:"'DM Mono',monospace",fontSize:12,fontWeight:600,color:theme.text}}>{fmt(sec.total.a)}</td>
+                            <td style={{padding:"8px 14px",textAlign:"right",fontFamily:"'DM Mono',monospace",fontSize:12,fontWeight:600,color:theme.textMuted}}>{fmt(sec.total.b)}</td>
+                            <td style={{padding:"8px 14px",textAlign:"right",fontFamily:"'DM Mono',monospace",fontSize:12,fontWeight:600,color:(sec.total.a-sec.total.b)>0&&sec.label.includes("LABOR")?"#ef4444":"#22c55e"}}>{fmt(sec.total.a-sec.total.b)}</td>
+                            <td style={{padding:"8px 14px",textAlign:"right",fontFamily:"'DM Mono',monospace",fontSize:12,fontWeight:600,color:theme.textMuted}}>{pct(Math.abs(dlt(sec.total.a,sec.total.b)))}</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* FOOTER */}
+          <div style={{marginTop:24,padding:"14px 0",borderTop:`1px solid ${theme.borderStrong}`,display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:8}}>
+            <div style={{fontSize:11,color:theme.textFaint}}>IDC Financial Pulse — Automated P&L Variance & Anomaly Detection</div>
+            <div style={{fontSize:11,color:theme.textFaint}}>Prototype · Sample data · Thresholds configurable per venue</div>
+          </div>
+        </div>
+      </div>
+    </ThemeContext.Provider>
+  );
+}
+
+ReactDOM.render(<App/>, document.getElementById('root'));
+</script>
+</body>
+</html>
