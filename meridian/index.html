@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian — Family Travel Architects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;1,6..12,300;1,6..12,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #2d2a26;
+    --cream: #faf7f2;
+    --sand: #f0ebe2;
+    --terracotta: #c4704b;
+    --terra-light: #d98e6e;
+    --terra-deep: #a85a38;
+    --forest: #3d6b5e;
+    --forest-light: #5a9484;
+    --sky: #6a9ab5;
+    --golden: #d4a94b;
+    --golden-light: #e8c97a;
+    --warm-gray: #8a7e74;
+    --light-gray: #d6d0c8;
+    --serif: 'Libre Baskerville', Georgia, serif;
+    --display: 'DM Serif Display', Georgia, serif;
+    --sans: 'Nunito Sans', -apple-system, sans-serif;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--terracotta); color: white; }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.4rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: all 0.5s ease;
+  }
+  nav.scrolled {
+    background: rgba(250, 247, 242, 0.95);
+    backdrop-filter: blur(16px);
+    padding: 1rem 3rem;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+  }
+  .nav-logo {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    color: var(--ink);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav-logo .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--terracotta);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-size: 0.85rem;
+    font-family: var(--sans);
+    font-weight: 600;
+  }
+  .nav-links {
+    display: flex; gap: 2.25rem; list-style: none; align-items: center;
+  }
+  .nav-links a {
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--terracotta); }
+  .nav-cta-btn {
+    font-family: var(--sans) !important;
+    font-size: 0.78rem !important;
+    font-weight: 500 !important;
+    padding: 0.6rem 1.6rem;
+    background: var(--terracotta);
+    color: white !important;
+    border-radius: 100px;
+    transition: all 0.3s ease;
+  }
+  .nav-cta-btn:hover {
+    background: var(--terra-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(196, 112, 75, 0.3);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Warm gradient background with mountain silhouettes */
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(175deg, #faf7f2 0%, #f5efe5 30%, #ede4d6 60%, #e8dbc8 100%);
+  }
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40%;
+    background:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 400 L0 280 Q120 200 240 260 Q360 180 480 220 Q520 140 600 180 Q680 80 760 140 Q840 60 920 120 Q1000 40 1080 100 Q1160 60 1240 110 Q1320 140 1440 160 L1440 400Z' fill='%233d6b5e' opacity='0.08'/%3E%3Cpath d='M0 400 L0 320 Q180 260 360 300 Q480 240 600 280 Q720 200 840 260 Q960 220 1080 270 Q1200 240 1320 280 Q1380 260 1440 280 L1440 400Z' fill='%233d6b5e' opacity='0.05'/%3E%3C/svg%3E") center bottom / cover no-repeat;
+  }
+
+  /* Floating warm shapes */
+  .hero-shape {
+    position: absolute; border-radius: 50%;
+    z-index: 0;
+    animation: float 8s ease-in-out infinite;
+  }
+  .hero-shape-1 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(196,112,75,0.06) 0%, transparent 70%);
+    top: 10%; right: -5%;
+    animation-delay: 0s;
+  }
+  .hero-shape-2 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(61,107,94,0.06) 0%, transparent 70%);
+    bottom: 15%; left: -3%;
+    animation-delay: -3s;
+  }
+  .hero-shape-3 {
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(212,169,75,0.08) 0%, transparent 70%);
+    top: 30%; left: 15%;
+    animation-delay: -5s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(15px, -20px); }
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 780px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: rgba(61,107,94,0.08);
+    border: 1px solid rgba(61,107,94,0.12);
+    border-radius: 100px;
+    padding: 0.45rem 1.2rem;
+    margin-bottom: 2rem;
+    font-size: 0.75rem; font-weight: 500;
+    color: var(--forest);
+    letter-spacing: 0.04em;
+    opacity: 0; transform: translateY(16px);
+    animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+  .hero-badge-dot {
+    width: 6px; height: 6px;
+    background: var(--forest-light);
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero-title {
+    font-family: var(--display);
+    font-size: clamp(2.8rem, 5.5vw, 4.2rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+    opacity: 0; transform: translateY(24px);
+    animation: fadeUp 1s 0.4s ease forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--terracotta);
+  }
+  .hero-title .highlight {
+    position: relative;
+    display: inline-block;
+  }
+  .hero-title .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 4px; left: -4px; right: -4px;
+    height: 12px;
+    background: var(--golden-light);
+    opacity: 0.3;
+    z-index: -1;
+    border-radius: 2px;
+  }
+
+  .hero-sub {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1.75;
+    color: var(--warm-gray);
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    opacity: 0; transform: translateY(24px);
+    animation: fadeUp 1s 0.6s ease forwards;
+  }
+
+  .hero-ctas {
+    display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap;
+    opacity: 0; transform: translateY(16px);
+    animation: fadeUp 0.8s 0.8s ease forwards;
+  }
+
+  .btn-warm {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--sans); font-size: 0.85rem; font-weight: 500;
+    padding: 0.9rem 2.2rem;
+    background: var(--terracotta); color: white;
+    border: none; border-radius: 100px;
+    text-decoration: none; cursor: pointer;
+    transition: all 0.35s ease;
+  }
+  .btn-warm:hover {
+    background: var(--terra-deep);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(196,112,75,0.3);
+  }
+  .btn-warm svg { width: 16px; height: 16px; }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--sans); font-size: 0.85rem; font-weight: 400;
+    padding: 0.9rem 1.8rem;
+    color: var(--ink);
+    border: 1.5px solid var(--light-gray);
+    border-radius: 100px;
+    text-decoration: none; cursor: pointer;
+    transition: all 0.35s ease;
+    background: transparent;
+  }
+  .btn-ghost:hover {
+    border-color: var(--terracotta);
+    color: var(--terracotta);
+  }
+
+  /* ── Proof bar ── */
+  .proof-bar {
+    padding: 2.5rem 3rem;
+    display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    align-items: center;
+    opacity: 0; animation: fadeIn 1s 1s ease forwards;
+    position: relative; z-index: 2;
+  }
+  .proof-item {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    color: var(--warm-gray);
+    font-weight: 400;
+  }
+  .proof-item strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .proof-divider {
+    width: 1px; height: 24px;
+    background: var(--light-gray);
+  }
+
+  /* ── Ticker ── */
+  .ticker {
+    background: var(--forest);
+    padding: 0.85rem 0;
+    overflow: hidden;
+  }
+  .ticker-track {
+    display: flex;
+    animation: scroll 35s linear infinite;
+    width: max-content;
+  }
+  .ticker-item {
+    font-family: var(--sans);
+    font-size: 0.75rem; font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    white-space: nowrap;
+    padding: 0 1.5rem;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .ticker-item::after {
+    content: '·';
+    font-size: 1.2rem;
+    opacity: 0.4;
+  }
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── Story Section ── */
+  .story {
+    padding: 7rem 3rem;
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .story-visual {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    background: linear-gradient(150deg, var(--forest) 0%, #2a5548 40%, #4a8070 100%);
+  }
+  .story-visual-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 2.5rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);
+  }
+  .story-visual-tag {
+    font-family: var(--sans);
+    font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--golden-light);
+    margin-bottom: 0.5rem;
+  }
+  .story-visual-caption {
+    font-family: var(--display);
+    font-size: 1.4rem;
+    color: white;
+    line-height: 1.3;
+  }
+  /* Scenic elements inside visual */
+  .story-visual::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 60%;
+    z-index: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 300 L0 180 Q50 120 100 160 Q130 80 180 130 Q210 60 260 100 Q300 50 340 90 Q370 70 400 100 L400 300Z' fill='rgba(255,255,255,0.06)'/%3E%3Cpath d='M0 300 L0 230 Q80 180 160 220 Q240 170 320 210 Q360 190 400 220 L400 300Z' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E") center bottom / cover no-repeat;
+  }
+  /* Decorative badge */
+  .story-visual-badge {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    z-index: 2;
+  }
+  .story-visual-badge-num {
+    font-family: var(--display);
+    font-size: 1.6rem;
+    color: white;
+    line-height: 1;
+  }
+  .story-visual-badge-label {
+    font-family: var(--sans);
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.8);
+    margin-top: 0.15rem;
+  }
+
+  .story-content {}
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--sans);
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 1.25rem;
+  }
+  .section-tag::before {
+    content: '';
+    width: 24px; height: 2px;
+    background: var(--terracotta);
+    border-radius: 2px;
+  }
+
+  .story h2 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+  .story h2 em { font-style: italic; color: var(--terracotta); }
+
+  .story-text {
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--warm-gray);
+    margin-bottom: 2rem;
+  }
+
+  .story-values {
+    display: flex; flex-direction: column; gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  .story-value {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--sand);
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+  }
+  .story-value:hover { transform: translateX(4px); }
+  .story-value-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .sv-green { background: rgba(61,107,94,0.1); }
+  .sv-orange { background: rgba(196,112,75,0.1); }
+  .sv-gold { background: rgba(212,169,75,0.1); }
+  .story-value-content h4 {
+    font-family: var(--sans);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+  }
+  .story-value-content p {
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: var(--warm-gray);
+    line-height: 1.6;
+  }
+
+  /* ── Adventures Grid ── */
+  .adventures {
+    padding: 5rem 3rem 7rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .adventures-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+  .adventures-header h2 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+  .adventures-header h2 em { font-style: italic; color: var(--terracotta); }
+  .adventures-header p {
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--warm-gray);
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .adv-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .adv-card {
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    aspect-ratio: 3/4;
+  }
+  .adv-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+  }
+  .adv-card-bg {
+    position: absolute; inset: 0;
+    background: var(--ink);
+  }
+
+  .adv-card-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .adv-card:hover .adv-card-img { transform: scale(1.06); }
+
+  .adv-card-overlay {
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 40%, transparent 100%);
+  }
+  .adv-card-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 1.75rem;
+    z-index: 2;
+  }
+  .adv-card-region {
+    font-family: var(--sans);
+    font-size: 0.6rem; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--golden-light);
+    margin-bottom: 0.4rem;
+  }
+  .adv-card-name {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 0.35rem;
+  }
+  .adv-card-desc {
+    font-family: var(--sans);
+    font-size: 0.78rem; font-weight: 300;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.55;
+    opacity: 0; transform: translateY(6px);
+    transition: all 0.4s 0.05s ease;
+  }
+  .adv-card:hover .adv-card-desc {
+    opacity: 1; transform: translateY(0);
+  }
+  .adv-card-tags {
+    display: flex; gap: 0.4rem; flex-wrap: wrap;
+    margin-top: 0.75rem;
+    opacity: 0; transform: translateY(6px);
+    transition: all 0.4s 0.1s ease;
+  }
+  .adv-card:hover .adv-card-tags {
+    opacity: 1; transform: translateY(0);
+  }
+  .adv-tag {
+    font-family: var(--sans);
+    font-size: 0.58rem; font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.65rem;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border-radius: 100px;
+    color: white;
+  }
+
+  /* ── Experiences ── */
+  .experiences {
+    background: var(--sand);
+    padding: 7rem 3rem;
+  }
+  .exp-inner {
+    max-width: 1300px; margin: 0 auto;
+  }
+  .exp-header {
+    text-align: center; margin-bottom: 4rem;
+  }
+  .exp-header h2 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+  .exp-header h2 em { font-style: italic; color: var(--terracotta); }
+  .exp-header p {
+    font-family: var(--sans);
+    font-size: 0.95rem; font-weight: 300;
+    color: var(--warm-gray);
+    max-width: 600px; margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .exp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .exp-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2.25rem 2rem;
+    transition: all 0.4s ease;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .exp-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    border-radius: 16px 16px 0 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .exp-card:hover::before { opacity: 1; }
+  .exp-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.08);
+    border-color: rgba(0,0,0,0.04);
+  }
+
+  .exp-card:nth-child(1)::before { background: var(--terracotta); }
+  .exp-card:nth-child(2)::before { background: var(--forest); }
+  .exp-card:nth-child(3)::before { background: var(--golden); }
+  .exp-card:nth-child(4)::before { background: var(--sky); }
+  .exp-card:nth-child(5)::before { background: var(--terra-light); }
+  .exp-card:nth-child(6)::before { background: var(--forest-light); }
+
+  .exp-emoji {
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+    display: block;
+  }
+  .exp-card h3 {
+    font-family: var(--display);
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+  }
+  .exp-card p {
+    font-family: var(--sans);
+    font-size: 0.82rem; font-weight: 300;
+    line-height: 1.7;
+    color: var(--warm-gray);
+  }
+  .exp-card-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 1.25rem;
+    font-family: var(--sans);
+    font-size: 0.75rem; font-weight: 500;
+    color: var(--terracotta);
+    text-decoration: none;
+    transition: gap 0.3s ease;
+  }
+  .exp-card-link:hover { gap: 0.7rem; }
+
+  /* ── Testimonials ── */
+  .testimonials {
+    padding: 7rem 3rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .test-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+  .test-header h2 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    font-weight: 400;
+  }
+  .test-header h2 em { font-style: italic; color: var(--terracotta); }
+
+  .test-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .test-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+  .test-stars {
+    color: var(--golden);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+  }
+  .test-quote {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-style: italic;
+    line-height: 1.75;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+  .test-author {
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .test-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans);
+    font-size: 0.75rem; font-weight: 600;
+    color: white;
+  }
+  .ta-1 { background: var(--forest); }
+  .ta-2 { background: var(--terracotta); }
+  .test-author-info h4 {
+    font-family: var(--sans);
+    font-size: 0.85rem; font-weight: 600;
+    color: var(--ink);
+  }
+  .test-author-info p {
+    font-family: var(--sans);
+    font-size: 0.75rem; font-weight: 300;
+    color: var(--warm-gray);
+  }
+
+  /* ── Process ── */
+  .process {
+    padding: 5rem 3rem 7rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .process-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .process-header h2 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+  }
+  .process-header h2 em { font-style: italic; color: var(--terracotta); }
+  .process-header p {
+    font-family: var(--sans);
+    font-size: 0.95rem; font-weight: 300;
+    color: var(--warm-gray);
+  }
+
+  .process-steps {
+    display: flex; flex-direction: column; gap: 0;
+    position: relative;
+  }
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    left: 27px;
+    top: 30px; bottom: 30px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--terracotta), var(--forest), var(--golden), var(--sky));
+    border-radius: 2px;
+  }
+  .process-step {
+    display: flex; align-items: flex-start; gap: 2rem;
+    padding: 1.75rem 0;
+  }
+  .step-marker {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display);
+    font-size: 1.1rem;
+    color: white;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .sm-1 { background: var(--terracotta); }
+  .sm-2 { background: var(--forest); }
+  .sm-3 { background: var(--golden); }
+  .sm-4 { background: var(--sky); }
+
+  .step-content h3 {
+    font-family: var(--display);
+    font-size: 1.3rem;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+  .step-content p {
+    font-family: var(--sans);
+    font-size: 0.88rem; font-weight: 300;
+    line-height: 1.7;
+    color: var(--warm-gray);
+    max-width: 500px;
+  }
+
+  /* ── CTA ── */
+  .cta {
+    background: var(--forest);
+    padding: 6rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    margin: 0 3rem 5rem;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cta::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 800 400' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='650' cy='80' r='180' fill='rgba(255,255,255,0.03)'/%3E%3Ccircle cx='150' cy='320' r='140' fill='rgba(255,255,255,0.02)'/%3E%3C/svg%3E") center / cover no-repeat;
+  }
+  .cta-content { position: relative; z-index: 2; }
+
+  .cta h2 {
+    font-family: var(--display);
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 400;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+  }
+  .cta h2 em {
+    font-style: italic;
+    color: var(--golden-light);
+  }
+  .cta p {
+    font-family: var(--sans);
+    font-size: 1rem; font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+  .btn-light {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--sans); font-size: 0.85rem; font-weight: 500;
+    padding: 1rem 2.5rem;
+    background: white;
+    color: var(--forest);
+    border: none; border-radius: 100px;
+    text-decoration: none; cursor: pointer;
+    transition: all 0.35s ease;
+  }
+  .btn-light:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+  }
+  .cta-note {
+    margin-top: 1.5rem;
+    font-family: var(--sans);
+    font-size: 0.75rem; font-weight: 300;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ── Footer ── */
+  footer {
+    padding: 4rem 3rem 2.5rem;
+    max-width: 1300px; margin: 0 auto;
+    border-top: 1px solid var(--light-gray);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  .footer-brand {
+    font-family: var(--display);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  .footer-tagline {
+    font-family: var(--sans);
+    font-size: 0.85rem; font-weight: 300;
+    line-height: 1.65;
+    color: var(--warm-gray);
+    max-width: 280px;
+  }
+  .footer-heading {
+    font-family: var(--sans);
+    font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 1.25rem;
+  }
+  .footer-links {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .footer-links a {
+    font-family: var(--sans);
+    font-size: 0.85rem; font-weight: 300;
+    color: var(--warm-gray);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--terracotta); }
+
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--light-gray);
+  }
+  .footer-copy {
+    font-family: var(--sans);
+    font-size: 0.75rem; font-weight: 300;
+    color: var(--warm-gray);
+  }
+  .footer-social {
+    display: flex; gap: 1.5rem;
+  }
+  .footer-social a {
+    font-family: var(--sans);
+    font-size: 0.78rem; font-weight: 400;
+    color: var(--warm-gray);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-social a:hover { color: var(--terracotta); }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-d1 { transition-delay: 0.1s; }
+  .reveal-d2 { transition-delay: 0.2s; }
+  .reveal-d3 { transition-delay: 0.3s; }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .story { grid-template-columns: 1fr; gap: 3rem; }
+    .story-visual { max-height: 400px; }
+    .adv-grid { grid-template-columns: 1fr 1fr; }
+    .exp-grid { grid-template-columns: 1fr 1fr; }
+    .test-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 640px) {
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .story { padding: 4rem 1.5rem; }
+    .adventures { padding: 4rem 1.5rem 5rem; }
+    .adv-grid { grid-template-columns: 1fr; }
+    .adv-card { aspect-ratio: 4/3; }
+    .experiences { padding: 4rem 1.5rem; }
+    .exp-grid { grid-template-columns: 1fr; }
+    .testimonials { padding: 4rem 1.5rem; }
+    .process { padding: 4rem 1.5rem; }
+    .cta { margin: 0 1rem 3rem; padding: 4rem 1.5rem; border-radius: 16px; }
+    footer { padding: 3rem 1.5rem 2rem; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 1rem; }
+    .proof-bar { gap: 1.5rem; }
+    .proof-divider { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <span class="logo-icon">M</span>
+    Meridian
+  </a>
+  <ul class="nav-links">
+    <li><a href="#story">Our Story</a></li>
+    <li><a href="#adventures">Destinations</a></li>
+    <li><a href="#experiences">Adventures</a></li>
+    <li><a href="#process">How It Works</a></li>
+    <li><a href="#cta" class="nav-cta-btn">Let's Plan Together</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-shape hero-shape-1"></div>
+  <div class="hero-shape hero-shape-2"></div>
+  <div class="hero-shape hero-shape-3"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Now booking Summer & Fall 2026 adventures
+    </div>
+    <h1 class="hero-title">We Design Adventures<br>Your <span class="highlight">Family</span> Will<br>Talk About <em>Forever</em></h1>
+    <p class="hero-sub">Meridian is a travel architecture studio for families who want more than a trip — we craft extraordinary, deeply personal adventures across North America and Europe.</p>
+    <div class="hero-ctas">
+      <a href="#cta" class="btn-warm">
+        Start Planning
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+      <a href="#story" class="btn-ghost">See How We Work</a>
+    </div>
+  </div>
+
+  <div class="proof-bar">
+    <div class="proof-item"><strong>200+</strong> families served</div>
+    <div class="proof-divider"></div>
+    <div class="proof-item"><strong>14</strong> countries</div>
+    <div class="proof-divider"></div>
+    <div class="proof-item"><strong>98%</strong> rebook within a year</div>
+    <div class="proof-divider"></div>
+    <div class="proof-item">⭐ <strong>5.0</strong> average rating</div>
+  </div>
+</section>
+
+<!-- Ticker -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Iceland</span>
+    <span class="ticker-item">Scottish Highlands</span>
+    <span class="ticker-item">Dolomites</span>
+    <span class="ticker-item">Norwegian Fjords</span>
+    <span class="ticker-item">British Columbia</span>
+    <span class="ticker-item">Tuscany</span>
+    <span class="ticker-item">Swiss Alps</span>
+    <span class="ticker-item">Pacific Northwest</span>
+    <span class="ticker-item">Provence</span>
+    <span class="ticker-item">Nova Scotia</span>
+    <span class="ticker-item">Costa Rica</span>
+    <span class="ticker-item">Amalfi Coast</span>
+    <span class="ticker-item">Iceland</span>
+    <span class="ticker-item">Scottish Highlands</span>
+    <span class="ticker-item">Dolomites</span>
+    <span class="ticker-item">Norwegian Fjords</span>
+    <span class="ticker-item">British Columbia</span>
+    <span class="ticker-item">Tuscany</span>
+    <span class="ticker-item">Swiss Alps</span>
+    <span class="ticker-item">Pacific Northwest</span>
+    <span class="ticker-item">Provence</span>
+    <span class="ticker-item">Nova Scotia</span>
+    <span class="ticker-item">Costa Rica</span>
+    <span class="ticker-item">Amalfi Coast</span>
+  </div>
+</div>
+
+<!-- Story -->
+<section class="story" id="story">
+  <div class="story-visual reveal">
+    <div class="story-visual-badge">
+      <div class="story-visual-badge-num">8</div>
+      <div class="story-visual-badge-label">Years of Design</div>
+    </div>
+    <div class="story-visual-overlay">
+      <div class="story-visual-tag">The Andersen Family · Norway 2025</div>
+      <div class="story-visual-caption">Three generations, one fjord,<br>a lifetime of stories.</div>
+    </div>
+  </div>
+
+  <div class="story-content reveal">
+    <div class="section-tag">Why Meridian</div>
+    <h2>We Get to Know<br>Your Family <em>First</em></h2>
+    <p class="story-text">Most travel agencies hand you a brochure. We start with a real conversation — about your kids' energy levels, your family's inside jokes, the pace that actually lets everyone relax. Then we build something that fits like it was made just for you. Because it was.</p>
+
+    <div class="story-values">
+      <div class="story-value">
+        <div class="story-value-icon sv-green">🎯</div>
+        <div class="story-value-content">
+          <h4>Built Around Your Rhythms</h4>
+          <p>Toddler nap schedules, teen screen-free zones, grandma's knees — we design around real life, not fantasy itineraries.</p>
+        </div>
+      </div>
+      <div class="story-value">
+        <div class="story-value-icon sv-orange">🔑</div>
+        <div class="story-value-content">
+          <h4>Doors You Can't Open Alone</h4>
+          <p>Private castle tours, backstage vineyard access, fishing with local families — connections built over years of trust.</p>
+        </div>
+      </div>
+      <div class="story-value">
+        <div class="story-value-icon sv-gold">🤙</div>
+        <div class="story-value-content">
+          <h4>We're With You the Whole Way</h4>
+          <p>Rain in Reykjavik? Toddler meltdown in Tuscany? We adapt your plan in real time so nothing derails the magic.</p>
+        </div>
+      </div>
+    </div>
+
+    <a href="#cta" class="btn-warm">
+      Tell Us About Your Family
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- Adventures / Destinations -->
+<section class="adventures" id="adventures">
+  <div class="adventures-header reveal">
+    <div class="section-tag" style="justify-content: center;">Where We Take Families</div>
+    <h2>Places That Become<br><em>Part of Your Story</em></h2>
+    <p>From volcanoes to vineyards, every destination is chosen because it transforms a family trip into a family legend.</p>
+  </div>
+
+  <div class="adv-grid">
+    <div class="adv-card reveal">
+      <div class="adv-card-bg"><img class="adv-card-img" src="https://images.pexels.com/photos/17214262/pexels-photo-17214262.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop" alt="Northern lights in Iceland" loading="lazy"></div>
+      <div class="adv-card-overlay"></div>
+      <div class="adv-card-content">
+        <p class="adv-card-region">North Atlantic</p>
+        <h3 class="adv-card-name">Iceland</h3>
+        <p class="adv-card-desc">Glaciers, geothermal pools, and northern lights that make your kids forget their phones exist.</p>
+        <div class="adv-card-tags">
+          <span class="adv-tag">All Ages</span>
+          <span class="adv-tag">Adventure</span>
+          <span class="adv-tag">Nature</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="adv-card reveal reveal-d1">
+      <div class="adv-card-bg"><img class="adv-card-img" src="https://images.pexels.com/photos/28217964/pexels-photo-28217964.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop" alt="Dolomites mountains at sunset" loading="lazy"></div>
+      <div class="adv-card-overlay"></div>
+      <div class="adv-card-content">
+        <p class="adv-card-region">Northern Italy</p>
+        <h3 class="adv-card-name">The Dolomites</h3>
+        <p class="adv-card-desc">Alpine hikes with mountain hut lunches — the kind of day that ends with everyone sun-tired and smiling.</p>
+        <div class="adv-card-tags">
+          <span class="adv-tag">Hiking</span>
+          <span class="adv-tag">Food</span>
+          <span class="adv-tag">Active</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="adv-card reveal reveal-d2">
+      <div class="adv-card-bg"><img class="adv-card-img" src="https://images.pexels.com/photos/18144859/pexels-photo-18144859.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop" alt="Eilean Donan Castle in the Scottish Highlands" loading="lazy"></div>
+      <div class="adv-card-overlay"></div>
+      <div class="adv-card-content">
+        <p class="adv-card-region">United Kingdom</p>
+        <h3 class="adv-card-name">Scottish Highlands</h3>
+        <p class="adv-card-desc">Castle stays, wildlife tracking, and whisky for the grown-ups after the kids crash out.</p>
+        <div class="adv-card-tags">
+          <span class="adv-tag">Culture</span>
+          <span class="adv-tag">Wildlife</span>
+          <span class="adv-tag">History</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="adv-card reveal">
+      <div class="adv-card-bg"><img class="adv-card-img" src="https://images.pexels.com/photos/26180279/pexels-photo-26180279.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop" alt="Mountains and rivers of British Columbia" loading="lazy"></div>
+      <div class="adv-card-overlay"></div>
+      <div class="adv-card-content">
+        <p class="adv-card-region">Pacific Northwest</p>
+        <h3 class="adv-card-name">British Columbia</h3>
+        <p class="adv-card-desc">Orca watching, rainforest hikes, and indigenous cultural experiences your family won't find in any guidebook.</p>
+        <div class="adv-card-tags">
+          <span class="adv-tag">Wildlife</span>
+          <span class="adv-tag">Culture</span>
+          <span class="adv-tag">Outdoors</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="adv-card reveal reveal-d1">
+      <div class="adv-card-bg"><img class="adv-card-img" src="https://images.pexels.com/photos/29106463/pexels-photo-29106463.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop" alt="Norwegian fjord landscape in autumn" loading="lazy"></div>
+      <div class="adv-card-overlay"></div>
+      <div class="adv-card-content">
+        <p class="adv-card-region">Scandinavia</p>
+        <h3 class="adv-card-name">Norwegian Fjords</h3>
+        <p class="adv-card-desc">Kayak ancient waterways, sleep in cliffside cabins, and watch your kids' jaws actually drop.</p>
+        <div class="adv-card-tags">
+          <span class="adv-tag">Kayaking</span>
+          <span class="adv-tag">Scenic</span>
+          <span class="adv-tag">Remote</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="adv-card reveal reveal-d2">
+      <div class="adv-card-bg"><img class="adv-card-img" src="https://images.pexels.com/photos/27659795/pexels-photo-27659795.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop" alt="Rolling hills and cypress trees of Tuscany" loading="lazy"></div>
+      <div class="adv-card-overlay"></div>
+      <div class="adv-card-content">
+        <p class="adv-card-region">Central Italy</p>
+        <h3 class="adv-card-name">Tuscany</h3>
+        <p class="adv-card-desc">Farmhouse living, pasta-making with nonnas, and long golden afternoons with nowhere to be.</p>
+        <div class="adv-card-tags">
+          <span class="adv-tag">Food</span>
+          <span class="adv-tag">Slow Living</span>
+          <span class="adv-tag">Family</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Experiences -->
+<section class="experiences" id="experiences">
+  <div class="exp-inner">
+    <div class="exp-header reveal">
+      <div class="section-tag" style="justify-content: center;">Adventure Styles</div>
+      <h2>Designed for How<br>Your Family <em>Actually Travels</em></h2>
+      <p>Because a family with three teenagers needs a completely different adventure than one with a curious four-year-old and grandparents along for the ride.</p>
+    </div>
+
+    <div class="exp-grid">
+      <div class="exp-card reveal">
+        <span class="exp-emoji">🏔️</span>
+        <h3>Family Expeditions</h3>
+        <p>Multi-generational adventures paced so every age group is engaged — glacier walks for the brave, hot cocoa by the fire for everyone else.</p>
+        <a href="#" class="exp-card-link">Learn more →</a>
+      </div>
+      <div class="exp-card reveal reveal-d1">
+        <span class="exp-emoji">🏡</span>
+        <h3>Slow Living Retreats</h3>
+        <p>Rent the farmhouse, meet the neighbors, shop the local market. A week where your family finds a rhythm that feels like actual life — just somewhere beautiful.</p>
+        <a href="#" class="exp-card-link">Learn more →</a>
+      </div>
+      <div class="exp-card reveal reveal-d2">
+        <span class="exp-emoji">🎨</span>
+        <h3>Cultural Deep Dives</h3>
+        <p>Hands-on with local artisans, chefs, and historians. Your kids learn to make pasta in Tuscany. You learn to forage in Provence. Everyone leaves a little different.</p>
+        <a href="#" class="exp-card-link">Learn more →</a>
+      </div>
+      <div class="exp-card reveal">
+        <span class="exp-emoji">⛺</span>
+        <h3>Wilderness Adventures</h3>
+        <p>Off-grid luxury for families ready to unplug. Hut-to-hut hikes, forest bathing, campfire dinners — with fluffy beds and hot showers waiting at the end.</p>
+        <a href="#" class="exp-card-link">Learn more →</a>
+      </div>
+      <div class="exp-card reveal reveal-d1">
+        <span class="exp-emoji">🎉</span>
+        <h3>Milestone Celebrations</h3>
+        <p>Big birthdays, anniversaries, graduations, retirements. We wrap your celebration into a place and experience your family will never forget.</p>
+        <a href="#" class="exp-card-link">Learn more →</a>
+      </div>
+      <div class="exp-card reveal reveal-d2">
+        <span class="exp-emoji">🧭</span>
+        <h3>Teen & Tween Trips</h3>
+        <p>Adventures designed to impress the unimpressable. Rock climbing, street food tours, photography challenges — they'll actually want to put their phone down.</p>
+        <a href="#" class="exp-card-link">Learn more →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div class="test-header reveal">
+    <div class="section-tag" style="justify-content: center;">From Our Families</div>
+    <h2>Stories from the <em>Road</em></h2>
+  </div>
+  <div class="test-grid">
+    <div class="test-card reveal">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-quote">Meridian didn't just plan our trip to Scotland — they understood our family in a way no travel company ever has. Our teenagers were as captivated as we were. It felt less like a vacation and more like coming home to a place we'd never been.</p>
+      <div class="test-author">
+        <div class="test-avatar ta-1">JH</div>
+        <div class="test-author-info">
+          <h4>The Harrington Family</h4>
+          <p>12-day Scottish Highlands & Isle of Skye</p>
+        </div>
+      </div>
+    </div>
+    <div class="test-card reveal reveal-d1">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-quote">Our kids still talk about the "pizza farm" in Tuscany and the night we saw the northern lights in Iceland. Meridian made the logistics invisible — all we had to do was show up and be a family. Best money we've ever spent.</p>
+      <div class="test-author">
+        <div class="test-avatar ta-2">DP</div>
+        <div class="test-author-info">
+          <h4>The Patel Family</h4>
+          <p>Three-country European summer, 21 days</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="process" id="process">
+  <div class="process-header reveal">
+    <div class="section-tag" style="justify-content: center;">How It Works</div>
+    <h2>Four Steps to <em>Your Next Adventure</em></h2>
+    <p>Simple, collaborative, and honestly kind of fun.</p>
+  </div>
+
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="step-marker sm-1">01</div>
+      <div class="step-content">
+        <h3>Tell Us Your Story</h3>
+        <p>A relaxed 45-minute call where we learn about your family — who gets carsick, who needs a daily swim, who's dying to try rock climbing, and what "vacation" actually means to you.</p>
+      </div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-marker sm-2">02</div>
+      <div class="step-content">
+        <h3>We Design Your Adventure</h3>
+        <p>Not a spreadsheet — a visual journey blueprint with mood boards, daily arcs, and the kind of details that make you start counting the days. Think of it as a story with your family as the main characters.</p>
+      </div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-marker sm-3">03</div>
+      <div class="step-content">
+        <h3>Refine Together</h3>
+        <p>Swap the castle for a treehouse? Add a cooking class? Drop the museum? It's your trip. We refine until every piece feels right, then we handle all the bookings and logistics.</p>
+      </div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-marker sm-4">04</div>
+      <div class="step-content">
+        <h3>Go Live It</h3>
+        <p>You're never on your own. Your dedicated Meridian guide is a text away — adjusting plans for weather, mood, or the serendipity of discovering the best gelato shop in the village.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="cta-content reveal">
+    <h2>Ready to Give Your Family<br>Something <em>Unforgettable?</em></h2>
+    <p>We work with a limited number of families each season so we can give every adventure our full creative attention. Let's start with a conversation.</p>
+    <a href="#" class="btn-light">
+      Schedule a Free Discovery Call
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </a>
+    <p class="cta-note">No commitment. No pressure. Just a great chat about where your family should go next.</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">Meridian</div>
+      <p class="footer-tagline">Family travel architects. We design adventures across North America and Europe for families who want trips worth talking about forever.</p>
+    </div>
+    <div>
+      <h4 class="footer-heading">Explore</h4>
+      <ul class="footer-links">
+        <li><a href="#">Destinations</a></li>
+        <li><a href="#">Adventure Styles</a></li>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Journal & Tips</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-heading">Get in Touch</h4>
+      <ul class="footer-links">
+        <li><a href="#">Book a Call</a></li>
+        <li><a href="#">hello@meridiantravel.co</a></li>
+        <li><a href="#">(617) 555-0180</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-heading">Resources</h4>
+      <ul class="footer-links">
+        <li><a href="#">Family Travel Guide</a></li>
+        <li><a href="#">Packing Lists</a></li>
+        <li><a href="#">Travel Insurance Tips</a></li>
+        <li><a href="#">Gift an Adventure</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Meridian Travel Co. All rights reserved. Photos via <a href="https://www.pexels.com" style="color:var(--warm-gray);">Pexels</a>.</p>
+    <div class="footer-social">
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+      <a href="#">Facebook</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => obs.observe(el));
+
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+
+</body>
+</html>
