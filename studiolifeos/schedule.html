@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Life OS - Schedule</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body data-page="schedule" data-requires-auth="true">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">PS</div>
+          <div>
+            <h2>Studio Life OS</h2>
+            <p>2 locations | 278 active enrollments</p>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <a class="nav-link" data-nav href="dashboard.html"><span class="nav-ico" aria-hidden="true">&#128200;</span>Dashboard</a>
+          <a class="nav-link" data-nav href="schedule.html"><span class="nav-ico" aria-hidden="true">&#128197;</span>Schedule</a>
+          <a class="nav-link" data-nav href="students.html"><span class="nav-ico" aria-hidden="true">&#128101;</span>Students</a>
+          <a class="nav-link" data-nav href="payments.html"><span class="nav-ico" aria-hidden="true">&#128179;</span>Payments</a>
+          <a class="nav-link" data-nav href="events.html"><span class="nav-ico" aria-hidden="true">&#127917;</span>Recitals / Events</a>
+        </nav>
+
+        <div class="sidebar-foot">
+          <strong>Tip</strong><br />
+          Click any class block to open roster and details.
+        </div>
+      </aside>
+
+      <main>
+        <div class="topbar">
+          <div>
+            <h1 class="page-title">Schedule</h1>
+            <div class="subtitle">Weekly view (Monday to Saturday)</div>
+          </div>
+          <div class="actions">
+            <button class="button button-primary" id="addClassButton">Add Class</button>
+          </div>
+        </div>
+
+        <div class="legend-row" id="scheduleLegend"></div>
+
+        <section class="calendar">
+          <div class="calendar-shell">
+            <div class="time-rail" id="timeRail"></div>
+            <div class="day-columns" id="dayColumns"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <aside class="drawer" id="classPanel">
+      <div class="drawer-header">
+        <h3 id="classPanelTitle">Class Details</h3>
+        <div>
+          <button class="button" id="editClassButton">Edit</button>
+          <button class="close-btn" id="closeClassPanel">x</button>
+        </div>
+      </div>
+      <div class="drawer-body" id="classPanelBody"></div>
+    </aside>
+
+    <div class="modal" id="classModal">
+      <div class="modal-inner">
+        <div class="modal-head">
+          <h3 id="classModalTitle">Add Class</h3>
+          <button class="close-btn" data-close-modal>x</button>
+        </div>
+
+        <form id="classForm">
+          <div class="form-grid">
+            <div>
+              <label for="classNameInput">Class Name</label>
+              <input id="classNameInput" required />
+            </div>
+            <div>
+              <label for="classStyleInput">Style</label>
+              <select id="classStyleInput" required>
+                <option value="">Select style</option>
+              </select>
+            </div>
+            <div>
+              <label for="classInstructorInput">Instructor</label>
+              <input id="classInstructorInput" required />
+            </div>
+            <div>
+              <label for="classRoomInput">Room</label>
+              <input id="classRoomInput" required />
+            </div>
+            <div>
+              <label for="classStartInput">Start Time</label>
+              <input id="classStartInput" type="time" required />
+            </div>
+            <div>
+              <label for="classEndInput">End Time</label>
+              <input id="classEndInput" type="time" required />
+            </div>
+            <div>
+              <label for="classCapacityInput">Capacity</label>
+              <input id="classCapacityInput" type="number" min="1" max="40" required />
+            </div>
+            <div>
+              <label for="classAgeRangeInput">Age Range</label>
+              <input id="classAgeRangeInput" placeholder="Ages 8-12" />
+            </div>
+            <div class="full">
+              <label>Days</label>
+              <div class="check-row">
+                <label><input type="checkbox" name="classDays" value="Mon" />Mon</label>
+                <label><input type="checkbox" name="classDays" value="Tue" />Tue</label>
+                <label><input type="checkbox" name="classDays" value="Wed" />Wed</label>
+                <label><input type="checkbox" name="classDays" value="Thu" />Thu</label>
+                <label><input type="checkbox" name="classDays" value="Fri" />Fri</label>
+                <label><input type="checkbox" name="classDays" value="Sat" />Sat</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button class="button" type="button" data-close-modal>Cancel</button>
+            <button class="button button-primary" type="submit">Save Class</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <nav class="bottom-nav">
+      <a class="bottom-link" data-nav href="dashboard.html">D<br />Dashboard</a>
+      <a class="bottom-link" data-nav href="schedule.html">S<br />Schedule</a>
+      <a class="bottom-link" data-nav href="students.html">ST<br />Students</a>
+      <a class="bottom-link" data-nav href="payments.html">P<br />Payments</a>
+      <a class="bottom-link" data-nav href="events.html">E<br />Events</a>
+    </nav>
+
+    <script src="data.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Life OS - Parent View</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body data-page="parent" data-requires-auth="true">
+    <main class="role-shell">
+      <header class="role-header">
+        <div>
+          <p class="eyebrow">Parent Portal</p>
+          <h1 id="parentStudentName">Student</h1>
+          <p class="subtitle" id="parentStudentMeta"></p>
+        </div>
+        <div class="role-links">
+          <a class="button" href="events.html">Recitals & Events</a>
+          <a class="button" href="payments.html">Billing Center</a>
+        </div>
+      </header>
+
+      <section class="cards-grid">
+        <div class="card">
+          <div class="kpi-label">Active Classes</div>
+          <div class="kpi-value" id="parentUpcomingCount">-</div>
+        </div>
+        <div class="card">
+          <div class="kpi-label">Attendance (Recent)</div>
+          <div class="kpi-value" id="parentAttendanceRate">-</div>
+        </div>
+        <div class="card">
+          <div class="kpi-label">Current Balance</div>
+          <div class="kpi-value" id="parentBalance">-</div>
+        </div>
+        <div class="card">
+          <div class="kpi-label">Next Class</div>
+          <div class="kpi-value small" id="parentNextClass">-</div>
+        </div>
+      </section>
+
+      <section class="two-col">
+        <article class="card">
+          <div class="section-title-row"><h3>Weekly Schedule</h3></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Style</th>
+                  <th>Days</th>
+                  <th>Time</th>
+                  <th>Instructor</th>
+                </tr>
+              </thead>
+              <tbody id="parentScheduleList"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="section-title-row"><h3>Studio Announcements</h3></div>
+          <ul class="simple-list" id="parentAnnouncements"></ul>
+        </article>
+      </section>
+
+      <section class="card">
+        <div class="section-title-row"><h3>Payment History</h3></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="parentPaymentList"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="auth.js"></script>
+    <script src="role-views.js"></script>
+  </body>
+</html>

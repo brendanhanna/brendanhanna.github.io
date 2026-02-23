@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Life OS - Teacher View</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body data-page="teacher" data-requires-auth="true">
+    <main class="role-shell">
+      <header class="role-header">
+        <div>
+          <p class="eyebrow">Teacher Portal</p>
+          <h1 id="teacherName">Instructor</h1>
+          <p class="subtitle">Daily teaching flow, rosters, and attendance tracking</p>
+        </div>
+        <div class="role-links">
+          <a class="button" href="schedule.html">Full Schedule</a>
+          <a class="button" href="events.html">Event Rehearsals</a>
+        </div>
+      </header>
+
+      <section class="cards-grid teacher-kpis">
+        <div class="card">
+          <div class="kpi-label">Assigned Classes</div>
+          <div class="kpi-value" id="teacherTotalClasses">-</div>
+        </div>
+        <div class="card">
+          <div class="kpi-label">Total Students</div>
+          <div class="kpi-value" id="teacherTotalStudents">-</div>
+        </div>
+        <div class="card">
+          <div class="kpi-label">Teaching Hours / Week</div>
+          <div class="kpi-value" id="teacherHoursWeek">-</div>
+        </div>
+      </section>
+
+      <section class="two-col">
+        <article class="card">
+          <div class="section-title-row"><h3>Today's Classes</h3></div>
+          <div id="teacherTodayClasses" class="today-classes"></div>
+        </article>
+
+        <article class="card">
+          <div class="section-title-row"><h3>Class Roster & Check-in</h3></div>
+          <label class="muted" for="teacherClassPicker">Select Class</label>
+          <select id="teacherClassPicker"></select>
+          <p class="muted" style="margin: 8px 0 10px">
+            Attendance draft for: <strong id="teacherRosterClass">-</strong>
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Age</th>
+                  <th>Guardian</th>
+                  <th>Attendance</th>
+                </tr>
+              </thead>
+              <tbody id="teacherRosterBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="auth.js"></script>
+    <script src="role-views.js"></script>
+  </body>
+</html>

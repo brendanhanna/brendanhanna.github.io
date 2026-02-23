@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Life OS - Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body data-page="dashboard" data-requires-auth="true">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">PS</div>
+          <div>
+            <h2>Studio Life OS</h2>
+            <p>2 locations | 278 active enrollments</p>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <a class="nav-link" data-nav href="dashboard.html"><span class="nav-ico" aria-hidden="true">&#128200;</span>Dashboard</a>
+          <a class="nav-link" data-nav href="schedule.html"><span class="nav-ico" aria-hidden="true">&#128197;</span>Schedule</a>
+          <a class="nav-link" data-nav href="students.html"><span class="nav-ico" aria-hidden="true">&#128101;</span>Students</a>
+          <a class="nav-link" data-nav href="payments.html"><span class="nav-ico" aria-hidden="true">&#128179;</span>Payments</a>
+          <a class="nav-link" data-nav href="events.html"><span class="nav-ico" aria-hidden="true">&#127917;</span>Recitals / Events</a>
+        </nav>
+
+        <div class="sidebar-foot">
+          <strong>Today</strong><br />
+          Front desk check-in opens at 2:30 PM.
+        </div>
+      </aside>
+
+      <main>
+        <div class="topbar">
+          <div>
+            <h1 class="page-title">Dashboard</h1>
+            <div class="subtitle">At-a-glance studio operations for today</div>
+          </div>
+          <div class="actions"><button class="button">Export Snapshot</button></div>
+        </div>
+
+        <section class="cards-grid">
+          <div class="card">
+            <div class="kpi-label">Active Students</div>
+            <div class="kpi-value" id="kpiStudents">-</div>
+          </div>
+          <div class="card">
+            <div class="kpi-label">Classes This Week</div>
+            <div class="kpi-value" id="kpiClasses">-</div>
+          </div>
+          <div class="card">
+            <div class="kpi-label">Revenue This Month</div>
+            <div class="kpi-value" id="kpiRevenue">-</div>
+          </div>
+          <div class="card">
+            <div class="kpi-label">Outstanding Balances</div>
+            <div class="kpi-value" id="kpiOutstanding">-</div>
+          </div>
+        </section>
+
+        <section class="two-col">
+          <div class="card">
+            <div class="section-title-row">
+              <h3>Today's Classes</h3>
+              <span class="muted" id="todayLabel"></span>
+            </div>
+            <div id="todayClasses" class="today-classes"></div>
+          </div>
+          <div class="card">
+            <div class="section-title-row">
+              <h3>Alerts</h3>
+              <span class="muted">Action needed</span>
+            </div>
+            <div id="alertList" class="alert-list"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <nav class="bottom-nav">
+      <a class="bottom-link" data-nav href="dashboard.html">D<br />Dashboard</a>
+      <a class="bottom-link" data-nav href="schedule.html">S<br />Schedule</a>
+      <a class="bottom-link" data-nav href="students.html">ST<br />Students</a>
+      <a class="bottom-link" data-nav href="payments.html">P<br />Payments</a>
+      <a class="bottom-link" data-nav href="events.html">E<br />Events</a>
+    </nav>
+
+    <script src="data.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

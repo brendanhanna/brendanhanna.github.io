@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Life OS - Login</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body data-auth="login">
+    <main class="login-shell">
+      <section class="login-hero">
+        <p class="eyebrow">Dance Studio Management Prototype</p>
+        <h1>Studio Life OS</h1>
+        <p>
+          Unified operations for studio owners, teachers, and parents. Log in with demo credentials or switch directly into
+          a role view.
+        </p>
+        <ul>
+          <li>Owner: scheduling, student management, billing, recitals</li>
+          <li>Teacher: daily classes, rosters, attendance workflow</li>
+          <li>Parent: child schedule, attendance, balances, announcements</li>
+        </ul>
+      </section>
+
+      <section class="login-card">
+        <h2>Sign In</h2>
+        <p class="muted">Password for demo accounts: <strong>dance123</strong></p>
+
+        <form id="loginForm" class="login-form">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" placeholder="owner@studiolife.com" required />
+
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" placeholder="dance123" required />
+
+          <button type="submit" class="button button-primary">Sign In</button>
+          <button id="continueSessionButton" type="button" class="button"></button>
+          <p id="loginMessage" class="login-message"></p>
+        </form>
+
+        <div class="demo-block">
+          <h3>Quick Role Switch</h3>
+          <div id="demoAccounts" class="demo-grid"></div>
+          <div style="margin-top: 10px">
+            <a class="button" href="feedback.html">Send Feedback</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="auth.js"></script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Life OS - Studio Owner View</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body data-page="owner" data-requires-auth="true">
+    <main class="role-shell">
+      <header class="role-header">
+        <div>
+          <p class="eyebrow">Studio Owner Portal</p>
+          <h1>Executive Snapshot</h1>
+          <p class="subtitle">Cross-functional overview across operations, finance, and event readiness</p>
+        </div>
+        <div class="role-links">
+          <a class="button" href="dashboard.html">Operational Dashboard</a>
+          <a class="button button-primary" href="schedule.html">Manage Schedule</a>
+        </div>
+      </header>
+
+      <section class="cards-grid">
+        <div class="card">
+          <div class="kpi-label">Revenue This Month</div>
+          <div class="kpi-value" id="ownerRevenue">-</div>
+        </div>
+        <div class="card">
+          <div class="kpi-label">Outstanding Balances</div>
+          <div class="kpi-value" id="ownerOutstanding">-</div>
+        </div>
+        <div class="card">
+          <div class="kpi-label">Active Students</div>
+          <div class="kpi-value" id="ownerStudents">-</div>
+        </div>
+        <div class="card">
+          <div class="kpi-label">Class Sessions / Week</div>
+          <div class="kpi-value" id="ownerClassSessions">-</div>
+        </div>
+      </section>
+
+      <section class="two-col">
+        <article class="card">
+          <div class="section-title-row"><h3>Collections Risk</h3></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Guardian</th>
+                  <th>Balance</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="ownerOverdueRows"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="section-title-row"><h3>Class Utilization</h3></div>
+          <div id="ownerCapacityList" class="util-list"></div>
+
+          <div class="section-title-row" style="margin-top: 16px"><h3>Upcoming Events</h3></div>
+          <div id="ownerEventsList" class="util-list"></div>
+        </article>
+      </section>
+
+      <section class="card">
+        <div class="section-title-row"><h3>Operations Shortcuts</h3></div>
+        <div class="shortcut-grid">
+          <a class="shortcut-card" href="schedule.html"><strong>Schedule Planner</strong><span>Edit class blocks and room usage</span></a>
+          <a class="shortcut-card" href="students.html"><strong>Student Records</strong><span>Search, filters, attendance, notes</span></a>
+          <a class="shortcut-card" href="payments.html"><strong>Payments</strong><span>Transaction statuses and balances</span></a>
+          <a class="shortcut-card" href="events.html"><strong>Recitals & Events</strong><span>Costumes, rehearsals, and ticketing</span></a>
+        </div>
+      </section>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="auth.js"></script>
+    <script src="role-views.js"></script>
+  </body>
+</html>

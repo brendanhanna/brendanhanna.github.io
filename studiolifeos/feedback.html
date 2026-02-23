@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Life OS - Feedback</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body>
+    <main class="role-shell" style="max-width: 760px">
+      <header class="role-header">
+        <div>
+          <p class="eyebrow">Feedback</p>
+          <h1>Share Your Notes</h1>
+          <p class="subtitle">Help improve Studio Life OS by sending feature ideas and usability issues.</p>
+        </div>
+        <div class="role-links">
+          <a class="button" href="login.html">Back to Login</a>
+          <a class="button" href="dashboard.html">Open App</a>
+        </div>
+      </header>
+
+      <section class="card">
+        <form id="feedbackForm" class="form-grid">
+          <div>
+            <label for="fbRole">Your Role</label>
+            <select id="fbRole" required>
+              <option value="Studio Owner">Studio Owner</option>
+              <option value="Teacher">Teacher</option>
+              <option value="Parent">Parent</option>
+              <option value="Student">Student</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="fbRating">Overall Experience</label>
+            <select id="fbRating" required>
+              <option value="5 - Excellent">5 - Excellent</option>
+              <option value="4 - Good">4 - Good</option>
+              <option value="3 - Okay">3 - Okay</option>
+              <option value="2 - Needs Work">2 - Needs Work</option>
+              <option value="1 - Frustrating">1 - Frustrating</option>
+            </select>
+          </div>
+          <div class="full">
+            <label for="fbPage">Page or Feature</label>
+            <input id="fbPage" placeholder="Example: Schedule calendar, Parent portal, Payments table" />
+          </div>
+          <div class="full">
+            <label for="fbNotes">Feedback</label>
+            <textarea id="fbNotes" rows="6" required placeholder="What worked well? What was confusing? What should be added?"></textarea>
+          </div>
+          <div class="full actions" style="justify-content: flex-start">
+            <button class="button button-primary" type="submit">Send Feedback</button>
+            <button class="button" type="button" id="copyFeedbackBtn">Copy Text</button>
+          </div>
+        </form>
+
+        <p class="muted" id="feedbackStatus" style="margin-top: 10px"></p>
+        <textarea id="feedbackPayload" rows="7" readonly style="margin-top: 10px"></textarea>
+      </section>
+    </main>
+
+    <script src="feedback.js"></script>
+  </body>
+</html>

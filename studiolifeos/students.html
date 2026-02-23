@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Life OS - Students</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body data-page="students" data-requires-auth="true">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">PS</div>
+          <div>
+            <h2>Studio Life OS</h2>
+            <p>2 locations | 278 active enrollments</p>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <a class="nav-link" data-nav href="dashboard.html"><span class="nav-ico" aria-hidden="true">&#128200;</span>Dashboard</a>
+          <a class="nav-link" data-nav href="schedule.html"><span class="nav-ico" aria-hidden="true">&#128197;</span>Schedule</a>
+          <a class="nav-link" data-nav href="students.html"><span class="nav-ico" aria-hidden="true">&#128101;</span>Students</a>
+          <a class="nav-link" data-nav href="payments.html"><span class="nav-ico" aria-hidden="true">&#128179;</span>Payments</a>
+          <a class="nav-link" data-nav href="events.html"><span class="nav-ico" aria-hidden="true">&#127917;</span>Recitals / Events</a>
+        </nav>
+
+        <div class="sidebar-foot">
+          <strong>Roster</strong><br />
+          Click any row to open student profile and attendance.
+        </div>
+      </aside>
+
+      <main>
+        <div class="topbar">
+          <div>
+            <h1 class="page-title">Students</h1>
+            <div class="subtitle">Search, filter, and manage student records</div>
+          </div>
+        </div>
+
+        <section class="card">
+          <div class="filters-row">
+            <input id="studentSearchInput" placeholder="Search name, guardian, phone" />
+            <select id="studentStyleFilter">
+              <option value="">All Styles</option>
+            </select>
+            <select id="studentAgeFilter">
+              <option value="">All Ages</option>
+              <option value="3-5">Ages 3-5</option>
+              <option value="6-8">Ages 6-8</option>
+              <option value="9-12">Ages 9-12</option>
+              <option value="13+">Ages 13+</option>
+            </select>
+            <select id="studentPaymentFilter">
+              <option value="">All Payment Statuses</option>
+              <option value="paid">Paid</option>
+              <option value="pending">Pending</option>
+              <option value="overdue">Overdue</option>
+            </select>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th data-sort="name">Name</th>
+                  <th data-sort="age">Age</th>
+                  <th data-sort="guardianName">Guardian</th>
+                  <th data-sort="phone">Phone</th>
+                  <th data-sort="activeClasses">Active Classes</th>
+                  <th data-sort="membershipType">Package</th>
+                  <th data-sort="balance">Balance</th>
+                </tr>
+              </thead>
+              <tbody id="studentTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <aside class="drawer" id="studentPanel">
+      <div class="drawer-header">
+        <h3 id="studentPanelTitle">Student Profile</h3>
+        <button class="close-btn" id="closeStudentPanel">x</button>
+      </div>
+      <div class="drawer-body" id="studentPanelBody"></div>
+    </aside>
+
+    <nav class="bottom-nav">
+      <a class="bottom-link" data-nav href="dashboard.html">D<br />Dashboard</a>
+      <a class="bottom-link" data-nav href="schedule.html">S<br />Schedule</a>
+      <a class="bottom-link" data-nav href="students.html">ST<br />Students</a>
+      <a class="bottom-link" data-nav href="payments.html">P<br />Payments</a>
+      <a class="bottom-link" data-nav href="events.html">E<br />Events</a>
+    </nav>
+
+    <script src="data.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

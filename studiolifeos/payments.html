@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Life OS - Payments</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body data-page="payments" data-requires-auth="true">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">PS</div>
+          <div>
+            <h2>Studio Life OS</h2>
+            <p>2 locations | 278 active enrollments</p>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <a class="nav-link" data-nav href="dashboard.html"><span class="nav-ico" aria-hidden="true">&#128200;</span>Dashboard</a>
+          <a class="nav-link" data-nav href="schedule.html"><span class="nav-ico" aria-hidden="true">&#128197;</span>Schedule</a>
+          <a class="nav-link" data-nav href="students.html"><span class="nav-ico" aria-hidden="true">&#128101;</span>Students</a>
+          <a class="nav-link" data-nav href="payments.html"><span class="nav-ico" aria-hidden="true">&#128179;</span>Payments</a>
+          <a class="nav-link" data-nav href="events.html"><span class="nav-ico" aria-hidden="true">&#127917;</span>Recitals / Events</a>
+        </nav>
+
+        <div class="sidebar-foot">
+          <strong>Billing</strong><br />
+          Use lookup to quickly answer family balance questions.
+        </div>
+      </aside>
+
+      <main>
+        <div class="topbar">
+          <div>
+            <h1 class="page-title">Payments</h1>
+            <div class="subtitle">Revenue and transaction tracking</div>
+          </div>
+        </div>
+
+        <section class="payment-grid">
+          <div class="card">
+            <div class="kpi-label">Revenue This Month</div>
+            <div class="kpi-value" id="paymentRevenueMonth">-</div>
+          </div>
+          <div class="card">
+            <div class="kpi-label">Outstanding Balances</div>
+            <div class="kpi-value" id="paymentOutstanding">-</div>
+          </div>
+          <div class="card">
+            <div class="kpi-label">Recent Transactions (14d)</div>
+            <div class="kpi-value" id="paymentRecentCount">-</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="filters-row five">
+            <input id="paymentSearchInput" placeholder="Search by student or type" />
+            <select id="paymentStatusFilter">
+              <option value="">All Statuses</option>
+              <option value="paid">Paid</option>
+              <option value="pending">Pending</option>
+              <option value="overdue">Overdue</option>
+            </select>
+            <select id="paymentTypeFilter">
+              <option value="">All Types</option>
+            </select>
+            <input id="paymentStartDate" type="date" />
+            <input id="paymentEndDate" type="date" />
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th data-sort="date">Date</th>
+                  <th data-sort="student">Student</th>
+                  <th data-sort="amount">Amount</th>
+                  <th data-sort="type">Type</th>
+                  <th data-sort="status">Status</th>
+                </tr>
+              </thead>
+              <tbody id="paymentTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="lookup-card card">
+            <h3>Student Balance Lookup</h3>
+            <input id="balanceLookupInput" list="studentLookupList" placeholder="Type student name" />
+            <datalist id="studentLookupList"></datalist>
+            <div id="balanceLookupResult"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <nav class="bottom-nav">
+      <a class="bottom-link" data-nav href="dashboard.html">D<br />Dashboard</a>
+      <a class="bottom-link" data-nav href="schedule.html">S<br />Schedule</a>
+      <a class="bottom-link" data-nav href="students.html">ST<br />Students</a>
+      <a class="bottom-link" data-nav href="payments.html">P<br />Payments</a>
+      <a class="bottom-link" data-nav href="events.html">E<br />Events</a>
+    </nav>
+
+    <script src="data.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
