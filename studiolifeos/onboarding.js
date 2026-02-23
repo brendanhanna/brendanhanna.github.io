@@ -1,7 +1,9 @@
 (function () {
   if (!document.body || document.body.dataset.auth !== "login") return;
 
-  var STORAGE_KEY = "studioLifeFlyoverSeenV1";
+  var STORAGE_KEY = "studioLifeFlyoverSeenV2";
+  var params = new URLSearchParams(window.location.search || "");
+  var forceTour = params.get("tour") === "1";
   var steps = [
     {
       title: "Welcome to Studio Life OS",
@@ -39,7 +41,7 @@
     });
   }
 
-  if (!hasSeenFlyover()) {
+  if (forceTour || !hasSeenFlyover()) {
     openFlyover();
   }
 

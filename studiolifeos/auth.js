@@ -56,6 +56,7 @@
     }
   }
 
+  applyRoleNavVisibility();
   initRoleDock();
 
   function initLogin() {
@@ -179,6 +180,28 @@
         window.location.href = "login.html";
       });
     }
+  }
+
+  function applyRoleNavVisibility() {
+    var session = getSession();
+    if (!session || !session.role) return;
+
+    var roleLinks = {
+      owner: ["dashboard.html", "schedule.html", "students.html", "payments.html", "events.html"],
+      teacher: ["dashboard.html", "schedule.html", "students.html", "events.html"],
+      parent: ["dashboard.html", "payments.html", "events.html"]
+    };
+
+    var allowed = roleLinks[session.role];
+    if (!allowed) return;
+
+    Array.prototype.slice.call(document.querySelectorAll("[data-nav]")).forEach(function (node) {
+      var href = String(node.getAttribute("href") || "").toLowerCase();
+      if (!href) return;
+      if (allowed.indexOf(href) === -1) {
+        node.style.display = "none";
+      }
+    });
   }
 
   function switchRole(role) {

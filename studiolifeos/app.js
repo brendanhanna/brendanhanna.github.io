@@ -74,6 +74,91 @@
         if (event.target === modal) modal.classList.remove("open");
       });
     });
+
+    initMainSidebarCollapse();
+  }
+
+  function initMainSidebarCollapse() {
+    var sidebar = document.querySelector(".app-shell .sidebar");
+    if (!sidebar) return;
+
+    var body = document.body;
+    var storageKey = "studioLifeSidebarCollapsedV1";
+    var legacyKey = "studioLifeMainSidebarCollapsedV1";
+
+    if (!sidebar.querySelector(".sidebar-head")) {
+      var brand = sidebar.querySelector(".brand");
+      if (brand) {
+        var brandText = brand.querySelector("div");
+        if (brandText) brandText.classList.add("brand-text");
+
+        var head = document.createElement("div");
+        head.className = "sidebar-head";
+        sidebar.insertBefore(head, sidebar.firstChild);
+        head.appendChild(brand);
+
+        var toggle = document.createElement("button");
+        toggle.className = "sidebar-toggle";
+        toggle.type = "button";
+        toggle.id = "mainSidebarToggle";
+        toggle.setAttribute("aria-label", "Collapse navigation");
+        toggle.setAttribute("title", "Collapse navigation");
+        toggle.innerHTML = "&#9776;";
+        head.appendChild(toggle);
+      }
+    }
+
+    qsa(".nav-link", sidebar).forEach(function (link) {
+      if (link.querySelector(".nav-label")) return;
+
+      var icon = link.querySelector(".nav-ico");
+      var labelText = "";
+      Array.prototype.slice.call(link.childNodes).forEach(function (node) {
+        if (node === icon) return;
+        if (node.nodeType === Node.TEXT_NODE) labelText += node.textContent;
+      });
+      labelText = labelText.trim();
+      if (!labelText) return;
+
+      Array.prototype.slice.call(link.childNodes).forEach(function (node) {
+        if (node !== icon && node.nodeType === Node.TEXT_NODE) {
+          link.removeChild(node);
+        }
+      });
+
+      var label = document.createElement("span");
+      label.className = "nav-label";
+      label.textContent = labelText;
+      link.appendChild(label);
+    });
+
+    try {
+      var saved = localStorage.getItem(storageKey);
+      if (saved !== "1" && saved !== "0") {
+        var legacy = localStorage.getItem(legacyKey);
+        if (legacy === "1" || legacy === "0") {
+          saved = legacy;
+          localStorage.setItem(storageKey, legacy);
+        }
+      }
+      if (saved === "1") {
+        body.classList.add("app-sidebar-collapsed");
+      }
+    } catch (error) {
+      // Ignore storage access errors in prototype mode.
+    }
+
+    var toggleButton = document.getElementById("mainSidebarToggle");
+    if (!toggleButton) return;
+
+    toggleButton.addEventListener("click", function () {
+      body.classList.toggle("app-sidebar-collapsed");
+      try {
+        localStorage.setItem(storageKey, body.classList.contains("app-sidebar-collapsed") ? "1" : "0");
+      } catch (error) {
+        // Ignore storage access errors in prototype mode.
+      }
+    });
   }
 
   function initDashboard() {
