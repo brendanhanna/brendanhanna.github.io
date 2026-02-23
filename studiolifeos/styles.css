@@ -883,6 +883,13 @@ textarea {
   gap: 8px;
 }
 
+.login-helper-row {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .demo-chip {
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -966,6 +973,36 @@ textarea {
 .shortcut-card span {
   color: var(--muted);
   font-size: 0.84rem;
+}
+
+.owner-nav-hub {
+  border-color: color-mix(in srgb, var(--brand) 28%, var(--line));
+}
+
+.owner-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.owner-nav-link {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.owner-nav-link span {
+  font-size: 1rem;
+}
+
+.owner-nav-link:hover {
+  border-color: var(--brand);
+  background: var(--table-hover);
 }
 
 .attendance-toggle {
@@ -1101,6 +1138,87 @@ textarea {
   border-color: var(--brand);
 }
 
+body.flyover-open {
+  overflow: hidden;
+}
+
+.flyover {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: none;
+}
+
+.flyover.open {
+  display: grid;
+  place-items: center;
+}
+
+.flyover-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 15, 29, 0.58);
+}
+
+.flyover-card {
+  position: relative;
+  width: min(640px, 92vw);
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 30px 48px rgba(7, 15, 31, 0.34);
+  padding: 20px 18px 16px;
+  z-index: 1;
+}
+
+.flyover-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+
+.flyover-card h2 {
+  margin: 0 0 8px;
+}
+
+.flyover-card p {
+  margin: 0 0 8px;
+  color: var(--text);
+}
+
+.flyover-tip {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.flyover-dots {
+  display: flex;
+  gap: 6px;
+  margin: 10px 0 12px;
+}
+
+.flyover-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.flyover-dots span.active {
+  background: var(--brand);
+}
+
+.flyover-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 body[data-auth="login"] .theme-toggle {
   right: 18px;
   bottom: 18px;
@@ -1143,6 +1261,10 @@ body[data-auth="login"] .theme-toggle {
     grid-template-columns: 1fr;
   }
 
+  .owner-nav-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .role-dock {
     right: 10px;
     bottom: 78px;
@@ -1156,5 +1278,9 @@ body[data-auth="login"] .theme-toggle {
   body[data-auth="login"] .theme-toggle {
     right: 10px;
     bottom: 10px;
+  }
+
+  .flyover-card {
+    width: min(560px, 94vw);
   }
 }
