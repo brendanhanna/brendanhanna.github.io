@@ -15,9 +15,9 @@
       var saved = localStorage.getItem(KEY);
       if (saved === "light" || saved === "dark") return saved;
     } catch (error) {
-      // Ignore storage access errors and fall back to system preference.
+      // Ignore storage access errors and fall back to default theme.
     }
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return "light";
   }
 
   function applyTheme(theme) {
