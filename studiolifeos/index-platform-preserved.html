@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Life OS | Dance Studio Website + Operations Platform</title>
+    <meta
+      name="description"
+      content="Studio Life OS is an all-in-one dance studio platform: marketing website, parent experience, teacher workflow, payments, scheduling, and events in one system."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body class="marketing-page">
+    <div class="marketing-orb orb-a" aria-hidden="true"></div>
+    <div class="marketing-orb orb-b" aria-hidden="true"></div>
+
+    <header class="marketing-topbar">
+      <a class="marketing-brand" href="index.html" aria-label="Studio Life OS Home">
+        <span class="brand-mark">SL</span>
+        <span>
+          <strong>Studio Life OS</strong>
+          <small>Website + Studio Platform</small>
+        </span>
+      </a>
+
+      <nav class="marketing-nav" aria-label="Primary">
+        <a href="#platform">Platform</a>
+        <a href="#roles">Role Views</a>
+        <a href="#features">Capabilities</a>
+        <a href="#pricing">Plans</a>
+      </nav>
+
+      <div class="marketing-nav-actions">
+        <a class="button" href="login.html">Studio Login</a>
+        <a class="button button-primary" href="login.html?tour=1">Launch Interactive Demo</a>
+      </div>
+    </header>
+
+    <main class="marketing-main">
+      <section class="marketing-hero marketing-reveal">
+        <div class="marketing-hero-copy">
+          <p class="eyebrow">One Stop Shop for Dance Studios</p>
+          <h1>Run your public website and studio operations from one platform.</h1>
+          <p>
+            Studio Life OS combines an engaging marketing front end with role-specific owner, teacher, and parent workflows.
+            No more disconnected tools for schedules, enrollment, payments, recitals, and communication.
+          </p>
+          <div class="actions">
+            <a class="button button-primary" href="login.html?tour=1">Try the Live Prototype</a>
+            <a class="button" href="#platform">Explore Features</a>
+          </div>
+          <div class="marketing-metrics" role="list" aria-label="Key Metrics">
+            <div class="metric-chip" role="listitem"><strong>1-3</strong><span>locations supported</span></div>
+            <div class="metric-chip" role="listitem"><strong>50-300</strong><span>students per studio</span></div>
+            <div class="metric-chip" role="listitem"><strong>3</strong><span>role-based portals</span></div>
+          </div>
+        </div>
+
+        <div class="marketing-hero-media">
+          <div class="marketing-image-frame">
+            <picture>
+              <source srcset="assets/login-cover.webp" type="image/webp" />
+              <img src="assets/login-cover.png" alt="Dance artists moving through flowing light accents." />
+            </picture>
+          </div>
+          <article class="marketing-fly-card" aria-label="Operations Snapshot">
+            <h3>Today at a Glance</h3>
+            <ul>
+              <li><span>Classes Running</span><strong>12</strong></li>
+              <li><span>Rostered Students</span><strong>278</strong></li>
+              <li><span>Pending Balances</span><strong>$3,634</strong></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="platform" class="marketing-section marketing-reveal">
+        <p class="eyebrow">Connected Front + Back Stage</p>
+        <h2>Replace your studio website and your management stack at the same time.</h2>
+        <div class="marketing-dual-grid">
+          <article class="marketing-card marketing-card-feature">
+            <h3>Public Studio Website</h3>
+            <p>Attract new families with a modern, branded front-end experience.</p>
+            <ul>
+              <li>Class offerings and age tracks</li>
+              <li>Recital/event highlights and announcements</li>
+              <li>Lead capture and enrollment calls-to-action</li>
+              <li>Parent-facing policy and document center</li>
+            </ul>
+          </article>
+
+          <article class="marketing-card marketing-card-feature">
+            <h3>Operations Management Portal</h3>
+            <p>Run scheduling, student records, attendance, and billing in one place.</p>
+            <ul>
+              <li>Owner dashboards and admin controls</li>
+              <li>Teacher roster and attendance workflow</li>
+              <li>Parent payments, waivers, and files</li>
+              <li>Recitals, costumes, rehearsals, and fees</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="roles" class="marketing-section marketing-reveal">
+        <p class="eyebrow">Role-Tailored UX</p>
+        <h2>Each user sees exactly what they need.</h2>
+        <div class="marketing-role-tabs" id="marketingRoleTabs" role="tablist" aria-label="Role Feature Tabs">
+          <button type="button" class="button active" data-role-tab="owner" role="tab" aria-selected="true">Owner</button>
+          <button type="button" class="button" data-role-tab="teacher" role="tab" aria-selected="false">Teacher</button>
+          <button type="button" class="button" data-role-tab="parent" role="tab" aria-selected="false">Parent</button>
+        </div>
+
+        <div class="marketing-role-panels" id="marketingRolePanels">
+          <article class="marketing-card active" data-role-panel="owner" role="tabpanel">
+            <h3>Owner Command Center</h3>
+            <p>Executive visibility across revenue, enrollment, staffing, and recital readiness.</p>
+            <ul>
+              <li>Dashboard KPIs and risk flags</li>
+              <li>Schedule Explorer: teacher, room/day, and room+teacher</li>
+              <li>Admin Center for full data control</li>
+            </ul>
+          </article>
+          <article class="marketing-card" data-role-panel="teacher" role="tabpanel">
+            <h3>Teacher Daily Workflow</h3>
+            <p>Clean flow from class prep to check-in and event rehearsal coordination.</p>
+            <ul>
+              <li>Daily class schedule and room details</li>
+              <li>Separate roster and attendance views</li>
+              <li>Event assignments scoped to teacher classes</li>
+            </ul>
+          </article>
+          <article class="marketing-card" data-role-panel="parent" role="tabpanel">
+            <h3>Parent Self-Service Portal</h3>
+            <p>Reduce office overhead with family-friendly tools available 24/7.</p>
+            <ul>
+              <li>Student schedule, attendance, and balances</li>
+              <li>Enrollment requests and billing settings</li>
+              <li>Waivers, files, and recital updates</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="features" class="marketing-section marketing-reveal">
+        <p class="eyebrow">Built for Growth</p>
+        <h2>Core capabilities for real studio operations.</h2>
+        <div class="marketing-feature-grid">
+          <article class="marketing-card">
+            <h3>Scheduling</h3>
+            <p>Weekly calendars, class capacity, rooms, and instructor allocations.</p>
+          </article>
+          <article class="marketing-card">
+            <h3>Students</h3>
+            <p>Profiles, guardians, attendance history, notes, and package tracking.</p>
+          </article>
+          <article class="marketing-card">
+            <h3>Payments</h3>
+            <p>Transaction status, payment type, method/source, and balance lookup.</p>
+          </article>
+          <article class="marketing-card">
+            <h3>Recitals & Events</h3>
+            <p>Routine assignments, costume statuses, rehearsals, and fee tracking.</p>
+          </article>
+          <article class="marketing-card">
+            <h3>Documents</h3>
+            <p>Publish policy docs and resources directly to the parent portal.</p>
+          </article>
+          <article class="marketing-card">
+            <h3>Guided Onboarding</h3>
+            <p>Contextual tours and hotspot walkthroughs for first-time users.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="pricing" class="marketing-section marketing-reveal">
+        <p class="eyebrow">Packaging Concept</p>
+        <h2>Simple tiers for small to mid-size studios.</h2>
+        <div class="marketing-pricing-grid">
+          <article class="marketing-card pricing-card">
+            <h3>Starter</h3>
+            <p class="pricing-sub">Single location</p>
+            <strong class="pricing-price">$149/mo</strong>
+            <ul>
+              <li>Owner, Teacher, Parent portals</li>
+              <li>Class scheduling + attendance</li>
+              <li>Payments + event tracking</li>
+            </ul>
+          </article>
+          <article class="marketing-card pricing-card pricing-card-featured">
+            <h3>Growth</h3>
+            <p class="pricing-sub">Up to 3 locations</p>
+            <strong class="pricing-price">$249/mo</strong>
+            <ul>
+              <li>Everything in Starter</li>
+              <li>Website + portal brand customization</li>
+              <li>Advanced schedule explorer + admin controls</li>
+            </ul>
+          </article>
+          <article class="marketing-card pricing-card">
+            <h3>Premier</h3>
+            <p class="pricing-sub">Multi-program studios</p>
+            <strong class="pricing-price">Custom</strong>
+            <ul>
+              <li>Migration and setup support</li>
+              <li>Custom workflow extensions</li>
+              <li>Priority implementation services</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="marketing-cta marketing-reveal" id="portal">
+        <h2>Ready to put this in front of studio owners for feedback?</h2>
+        <p>Use this as your public-facing front door, then route staff and families directly into the portal experience.</p>
+        <div class="actions">
+          <a class="button button-primary" href="login.html?tour=1">Open Portal Login</a>
+          <a class="button" href="owner.html">Jump to Owner View</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="marketing-footer">
+      <p>Studio Life OS Prototype</p>
+      <div class="marketing-footer-links">
+        <a href="#platform">Platform</a>
+        <a href="#roles">Role Views</a>
+        <a href="#pricing">Plans</a>
+        <a href="login.html">Studio Login</a>
+      </div>
+    </footer>
+
+    <script src="marketing-platform-preserved.js"></script>
+  </body>
+</html>
