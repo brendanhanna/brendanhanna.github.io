@@ -24,6 +24,7 @@
           <a class="nav-link" data-nav href="students.html"><span class="nav-ico" aria-hidden="true">&#128101;</span>Students</a>
           <a class="nav-link" data-nav href="payments.html"><span class="nav-ico" aria-hidden="true">&#128179;</span>Payments</a>
           <a class="nav-link" data-nav href="events.html"><span class="nav-ico" aria-hidden="true">&#127917;</span>Recitals / Events</a>
+          <a class="nav-link" data-nav href="owner-admin.html"><span class="nav-ico" aria-hidden="true">&#9881;</span>Admin Center</a>
         </nav>
 
         <div class="sidebar-foot">
@@ -42,22 +43,22 @@
 
         <section class="payment-grid">
           <div class="card">
-            <div class="kpi-label">Revenue This Month</div>
+            <div class="kpi-label" id="paymentLabelRevenue">Revenue This Month</div>
             <div class="kpi-value" id="paymentRevenueMonth">-</div>
           </div>
           <div class="card">
-            <div class="kpi-label">Outstanding Balances</div>
+            <div class="kpi-label" id="paymentLabelOutstanding">Outstanding Balances</div>
             <div class="kpi-value" id="paymentOutstanding">-</div>
           </div>
           <div class="card">
-            <div class="kpi-label">Recent Transactions (14d)</div>
+            <div class="kpi-label" id="paymentLabelRecent">Recent Transactions (14d)</div>
             <div class="kpi-value" id="paymentRecentCount">-</div>
           </div>
         </section>
 
         <section class="card">
-          <div class="filters-row five">
-            <input id="paymentSearchInput" placeholder="Search by student or type" />
+          <div class="filters-row six">
+            <input id="paymentSearchInput" placeholder="Search by student, type, or method" />
             <select id="paymentStatusFilter">
               <option value="">All Statuses</option>
               <option value="paid">Paid</option>
@@ -67,9 +68,13 @@
             <select id="paymentTypeFilter">
               <option value="">All Types</option>
             </select>
+            <select id="paymentMethodFilter">
+              <option value="">All Methods / Sources</option>
+            </select>
             <input id="paymentStartDate" type="date" />
             <input id="paymentEndDate" type="date" />
           </div>
+          <p class="muted" id="paymentScopeNote"></p>
 
           <div class="table-wrap">
             <table>
@@ -79,6 +84,7 @@
                   <th data-sort="student">Student</th>
                   <th data-sort="amount">Amount</th>
                   <th data-sort="type">Type</th>
+                  <th data-sort="method">Method / Source</th>
                   <th data-sort="status">Status</th>
                 </tr>
               </thead>
@@ -102,6 +108,7 @@
       <a class="bottom-link" data-nav href="students.html">ST<br />Students</a>
       <a class="bottom-link" data-nav href="payments.html">P<br />Payments</a>
       <a class="bottom-link" data-nav href="events.html">E<br />Events</a>
+      <a class="bottom-link" data-nav href="owner-admin.html">&#9881;<br />Admin</a>
     </nav>
 
     <script src="data.js"></script>

@@ -3,14 +3,15 @@
   if (!body) return;
 
   var page = body.dataset.page || "";
-  if (!["owner", "teacher", "parent"].includes(page)) return;
+  if (!["owner", "owner-admin", "teacher", "parent"].includes(page)) return;
 
   var session = window.Auth && window.Auth.getSession ? window.Auth.getSession() : null;
-  var role = (session && session.role) || page;
+  var role = (session && session.role) || (page.indexOf("owner") === 0 ? "owner" : page);
 
   var navItemsByRole = {
     owner: [
       { href: "owner.html", label: "Owner Home", icon: "&#127970;" },
+      { href: "owner-admin.html", label: "Admin Center", icon: "&#9881;" },
       { href: "dashboard.html", label: "Dashboard", icon: "&#128200;" },
       { href: "schedule.html", label: "Schedule", icon: "&#128197;" },
       { href: "students.html", label: "Students", icon: "&#128101;" },

@@ -535,46 +535,46 @@ window.DanceData = {
     }
   ],
   transactions: [
-    { id: "t1", date: "2026-02-01", studentId: "s1", amount: 185, type: "monthly tuition", status: "paid", method: "card" },
-    { id: "t2", date: "2026-02-01", studentId: "s2", amount: 185, type: "monthly tuition", status: "pending", method: "card" },
-    { id: "t3", date: "2026-02-01", studentId: "s3", amount: 220, type: "monthly tuition", status: "paid", method: "ach" },
-    { id: "t4", date: "2026-02-02", studentId: "s4", amount: 220, type: "monthly tuition", status: "paid", method: "ach" },
-    { id: "t5", date: "2026-02-02", studentId: "s5", amount: 220, type: "monthly tuition", status: "pending", method: "card" },
-    { id: "t6", date: "2026-02-02", studentId: "s6", amount: 265, type: "monthly tuition", status: "paid", method: "ach" },
-    { id: "t7", date: "2026-02-03", studentId: "s7", amount: 220, type: "monthly tuition", status: "paid", method: "card" },
-    { id: "t8", date: "2026-02-03", studentId: "s8", amount: 265, type: "monthly tuition", status: "paid", method: "ach" },
-    { id: "t9", date: "2026-02-03", studentId: "s9", amount: 265, type: "monthly tuition", status: "overdue", method: "card" },
-    { id: "t10", date: "2026-02-04", studentId: "s10", amount: 150, type: "monthly tuition", status: "paid", method: "card" },
-    { id: "t11", date: "2026-02-04", studentId: "s11", amount: 150, type: "monthly tuition", status: "pending", method: "card" },
+    { id: "t1", date: "2026-02-01", studentId: "s1", amount: 185, type: "monthly tuition", status: "paid", method: "credit card" },
+    { id: "t2", date: "2026-02-01", studentId: "s2", amount: 185, type: "monthly tuition", status: "pending", method: "check" },
+    { id: "t3", date: "2026-02-01", studentId: "s3", amount: 220, type: "monthly tuition", status: "paid", method: "bank transfer (ach)" },
+    { id: "t4", date: "2026-02-02", studentId: "s4", amount: 220, type: "monthly tuition", status: "paid", method: "bank transfer (ach)" },
+    { id: "t5", date: "2026-02-02", studentId: "s5", amount: 220, type: "monthly tuition", status: "pending", method: "credit card" },
+    { id: "t6", date: "2026-02-02", studentId: "s6", amount: 265, type: "monthly tuition", status: "paid", method: "scholarship" },
+    { id: "t7", date: "2026-02-03", studentId: "s7", amount: 220, type: "monthly tuition", status: "paid", method: "credit card" },
+    { id: "t8", date: "2026-02-03", studentId: "s8", amount: 265, type: "monthly tuition", status: "paid", method: "bank transfer (ach)" },
+    { id: "t9", date: "2026-02-03", studentId: "s9", amount: 265, type: "monthly tuition", status: "overdue", method: "credit card" },
+    { id: "t10", date: "2026-02-04", studentId: "s10", amount: 150, type: "monthly tuition", status: "paid", method: "scholarship" },
+    { id: "t11", date: "2026-02-04", studentId: "s11", amount: 150, type: "monthly tuition", status: "pending", method: "check" },
     { id: "t12", date: "2026-02-04", studentId: "s12", amount: 150, type: "monthly tuition", status: "paid", method: "cash" },
-    { id: "t13", date: "2026-02-05", studentId: "s13", amount: 135, type: "monthly tuition", status: "overdue", method: "card" },
-    { id: "t14", date: "2026-02-05", studentId: "s14", amount: 135, type: "monthly tuition", status: "paid", method: "card" },
-    { id: "t15", date: "2026-02-05", studentId: "s15", amount: 135, type: "monthly tuition", status: "paid", method: "card" },
-    { id: "t16", date: "2026-02-06", studentId: "s16", amount: 135, type: "monthly tuition", status: "pending", method: "card" },
+    { id: "t13", date: "2026-02-05", studentId: "s13", amount: 135, type: "monthly tuition", status: "overdue", method: "credit card" },
+    { id: "t14", date: "2026-02-05", studentId: "s14", amount: 135, type: "monthly tuition", status: "paid", method: "credit card" },
+    { id: "t15", date: "2026-02-05", studentId: "s15", amount: 135, type: "monthly tuition", status: "paid", method: "gift certificate" },
+    { id: "t16", date: "2026-02-06", studentId: "s16", amount: 135, type: "monthly tuition", status: "pending", method: "check" },
     { id: "t17", date: "2026-02-06", studentId: "s17", amount: 135, type: "monthly tuition", status: "paid", method: "cash" },
-    { id: "t18", date: "2026-02-06", studentId: "s18", amount: 220, type: "monthly tuition", status: "paid", method: "ach" },
-    { id: "t19", date: "2026-02-07", studentId: "s19", amount: 220, type: "monthly tuition", status: "overdue", method: "card" },
-    { id: "t20", date: "2026-02-07", studentId: "s20", amount: 265, type: "monthly tuition", status: "paid", method: "ach" },
-    { id: "t21", date: "2026-02-08", studentId: "s21", amount: 265, type: "monthly tuition", status: "pending", method: "card" },
-    { id: "t22", date: "2026-02-08", studentId: "s22", amount: 265, type: "monthly tuition", status: "paid", method: "ach" },
-    { id: "t23", date: "2026-02-08", studentId: "s23", amount: 265, type: "monthly tuition", status: "paid", method: "card" },
-    { id: "t24", date: "2026-02-09", studentId: "s24", amount: 265, type: "monthly tuition", status: "overdue", method: "card" },
-    { id: "t25", date: "2026-02-09", studentId: "s25", amount: 210, type: "monthly tuition", status: "paid", method: "ach" },
-    { id: "t26", date: "2026-02-09", studentId: "s26", amount: 210, type: "monthly tuition", status: "pending", method: "card" },
-    { id: "t27", date: "2026-02-10", studentId: "s27", amount: 210, type: "monthly tuition", status: "paid", method: "card" },
-    { id: "t28", date: "2026-02-10", studentId: "s28", amount: 180, type: "monthly tuition", status: "overdue", method: "card" },
-    { id: "t29", date: "2026-02-12", studentId: "s5", amount: 75, type: "costume fee", status: "paid", method: "card" },
-    { id: "t30", date: "2026-02-12", studentId: "s9", amount: 75, type: "costume fee", status: "pending", method: "card" },
+    { id: "t18", date: "2026-02-06", studentId: "s18", amount: 220, type: "monthly tuition", status: "paid", method: "bank transfer (ach)" },
+    { id: "t19", date: "2026-02-07", studentId: "s19", amount: 220, type: "monthly tuition", status: "overdue", method: "credit card" },
+    { id: "t20", date: "2026-02-07", studentId: "s20", amount: 265, type: "monthly tuition", status: "paid", method: "bank transfer (ach)" },
+    { id: "t21", date: "2026-02-08", studentId: "s21", amount: 265, type: "monthly tuition", status: "pending", method: "check" },
+    { id: "t22", date: "2026-02-08", studentId: "s22", amount: 265, type: "monthly tuition", status: "paid", method: "bank transfer (ach)" },
+    { id: "t23", date: "2026-02-08", studentId: "s23", amount: 265, type: "monthly tuition", status: "paid", method: "credit card" },
+    { id: "t24", date: "2026-02-09", studentId: "s24", amount: 265, type: "monthly tuition", status: "overdue", method: "credit card" },
+    { id: "t25", date: "2026-02-09", studentId: "s25", amount: 210, type: "monthly tuition", status: "paid", method: "fundraising funds" },
+    { id: "t26", date: "2026-02-09", studentId: "s26", amount: 210, type: "monthly tuition", status: "pending", method: "check" },
+    { id: "t27", date: "2026-02-10", studentId: "s27", amount: 210, type: "monthly tuition", status: "paid", method: "credit card" },
+    { id: "t28", date: "2026-02-10", studentId: "s28", amount: 180, type: "monthly tuition", status: "overdue", method: "credit card" },
+    { id: "t29", date: "2026-02-12", studentId: "s5", amount: 75, type: "costume fee", status: "paid", method: "credit card" },
+    { id: "t30", date: "2026-02-12", studentId: "s9", amount: 75, type: "costume fee", status: "pending", method: "gift certificate" },
     { id: "t31", date: "2026-02-13", studentId: "s13", amount: 55, type: "recital fee", status: "pending", method: "cash" },
-    { id: "t32", date: "2026-02-13", studentId: "s24", amount: 55, type: "recital fee", status: "overdue", method: "card" },
-    { id: "t33", date: "2026-02-14", studentId: "s3", amount: 22, type: "drop-in", status: "paid", method: "card" },
-    { id: "t34", date: "2026-02-15", studentId: "s16", amount: 22, type: "drop-in", status: "paid", method: "cash" },
-    { id: "t35", date: "2026-02-16", studentId: "s19", amount: 55, type: "recital fee", status: "pending", method: "card" },
-    { id: "t36", date: "2026-02-18", studentId: "s28", amount: 75, type: "costume fee", status: "overdue", method: "card" },
-    { id: "t37", date: "2026-01-14", studentId: "s6", amount: 265, type: "monthly tuition", status: "paid", method: "ach" },
-    { id: "t38", date: "2026-01-15", studentId: "s8", amount: 265, type: "monthly tuition", status: "paid", method: "ach" },
-    { id: "t39", date: "2026-01-16", studentId: "s20", amount: 265, type: "monthly tuition", status: "paid", method: "ach" },
-    { id: "t40", date: "2026-01-17", studentId: "s22", amount: 265, type: "monthly tuition", status: "paid", method: "ach" }
+    { id: "t32", date: "2026-02-13", studentId: "s24", amount: 55, type: "recital fee", status: "overdue", method: "check" },
+    { id: "t33", date: "2026-02-14", studentId: "s3", amount: 22, type: "drop-in", status: "paid", method: "credit card" },
+    { id: "t34", date: "2026-02-15", studentId: "s16", amount: 22, type: "drop-in", status: "paid", method: "gift certificate" },
+    { id: "t35", date: "2026-02-16", studentId: "s19", amount: 55, type: "recital fee", status: "pending", method: "fundraising funds" },
+    { id: "t36", date: "2026-02-18", studentId: "s28", amount: 75, type: "costume fee", status: "overdue", method: "credit card" },
+    { id: "t37", date: "2026-01-14", studentId: "s6", amount: 265, type: "monthly tuition", status: "paid", method: "bank transfer (ach)" },
+    { id: "t38", date: "2026-01-15", studentId: "s8", amount: 265, type: "monthly tuition", status: "paid", method: "bank transfer (ach)" },
+    { id: "t39", date: "2026-01-16", studentId: "s20", amount: 265, type: "monthly tuition", status: "paid", method: "bank transfer (ach)" },
+    { id: "t40", date: "2026-01-17", studentId: "s22", amount: 265, type: "monthly tuition", status: "paid", method: "bank transfer (ach)" }
   ],
   events: [
     {
@@ -631,5 +631,107 @@ window.DanceData = {
       ticketing: { sold: 0, goal: 0, price: 0 },
       fees: { expected: 980, collected: 245 }
     }
-  ]
+  ],
+  parentPortal: {
+    bulletinPosts: [
+      {
+        id: "bp1",
+        title: "Spring Showcase Ticket Presale",
+        date: "2026-03-01",
+        body: "Family presale opens April 1 at 9:00 AM. Limit 6 tickets per household for week one."
+      },
+      {
+        id: "bp2",
+        title: "Costume Fittings",
+        date: "2026-02-28",
+        body: "Fittings begin March 10. Bring jazz shoes and hair secured for quick changing-room checks."
+      },
+      {
+        id: "bp3",
+        title: "Weather Policy Reminder",
+        date: "2026-02-20",
+        body: "If district schools close for severe weather, evening classes are canceled and moved to virtual drills."
+      }
+    ],
+    files: [
+      {
+        id: "f1",
+        name: "Spring Showcase Parent Packet.pdf",
+        category: "Recital",
+        size: "1.8 MB",
+        updated: "2026-02-15",
+        url: "https://example.com/files/spring-showcase-parent-packet.pdf"
+      },
+      {
+        id: "f2",
+        name: "Studio Calendar - March 2026.pdf",
+        category: "Calendar",
+        size: "620 KB",
+        updated: "2026-02-18",
+        url: "https://example.com/files/studio-calendar-march-2026.pdf"
+      },
+      {
+        id: "f3",
+        name: "Hair and Makeup Guidelines.pdf",
+        category: "Recital",
+        size: "420 KB",
+        updated: "2026-02-10",
+        url: "https://example.com/files/hair-makeup-guidelines.pdf"
+      }
+    ],
+    waiverTemplates: [
+      {
+        id: "w1",
+        title: "Annual Liability Waiver",
+        description: "Required for all active students each season.",
+        version: "2026.1"
+      },
+      {
+        id: "w2",
+        title: "Media Release Permission",
+        description: "Optional photo/video release for recital marketing.",
+        version: "2026.1"
+      },
+      {
+        id: "w3",
+        title: "Recital Participation Agreement",
+        description: "Required for students performing in spring showcase.",
+        version: "2026.1"
+      }
+    ],
+    parentProfiles: [
+      {
+        email: "nora.hart@email.com",
+        studentIds: ["s1"],
+        autopay: true,
+        paymentMethod: {
+          brand: "Visa",
+          last4: "4242",
+          exp: "09/28",
+          zip: "78701"
+        },
+        enrollmentRequests: [
+          {
+            id: "er1",
+            classId: "c2",
+            type: "enroll",
+            status: "approved",
+            submittedAt: "2026-02-05"
+          },
+          {
+            id: "er2",
+            classId: "c6",
+            type: "drop",
+            status: "submitted",
+            submittedAt: "2026-02-20"
+          }
+        ],
+        waivers: [
+          { waiverId: "w1", status: "signed", signedAt: "2026-01-12" },
+          { waiverId: "w2", status: "signed", signedAt: "2026-01-12" },
+          { waiverId: "w3", status: "pending", signedAt: "" }
+        ]
+      }
+    ]
+  }
 };

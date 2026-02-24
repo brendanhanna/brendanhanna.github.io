@@ -12,8 +12,8 @@
     },
     {
       title: "Login and Demo Access",
-      body: "Use the demo credentials or the Quick Role Switch cards to jump in as Owner, Teacher, or Parent.",
-      tip: "Demo password for all accounts is dance123."
+      body: "Use one of the listed demo account emails or the Quick Role Switch cards to jump in as Owner, Teacher, or Parent. Do not use your personal email on this prototype login.",
+      tip: "All demo accounts use password: dance123."
     },
     {
       title: "Theme and Display",

@@ -162,11 +162,27 @@
   }
 
   function initDashboard() {
+    const roleContext = getRoleContext();
     const now = new Date();
     const todayName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][now.getDay()];
-    const todayClasses = getClassInstances().filter(function (instance) {
+    const todayClasses = getClassInstances(roleContext.classes).filter(function (instance) {
       return instance.day === todayName;
     });
+    const subtitle = document.querySelector(".topbar .subtitle");
+    if (subtitle && roleContext.dashboardSubtitle) subtitle.textContent = roleContext.dashboardSubtitle;
+
+    if (roleContext.role === "teacher") {
+      byId("kpiStudentsLabel").textContent = "My Students";
+      byId("kpiClassesLabel").textContent = "My Classes This Week";
+      byId("kpiRevenueLabel").textContent = "Roster Paid This Month";
+      byId("kpiOutstandingLabel").textContent = "Roster Outstanding";
+    }
+    if (roleContext.role === "parent") {
+      byId("kpiStudentsLabel").textContent = "Students in Household";
+      byId("kpiClassesLabel").textContent = "Household Classes This Week";
+      byId("kpiRevenueLabel").textContent = "Paid This Month";
+      byId("kpiOutstandingLabel").textContent = "Household Balance";
+    }
 
     byId("todayLabel").textContent = formatDate(now.toISOString().slice(0, 10), {
       weekday: "long",
@@ -189,6 +205,7 @@
         return timeToMinutes(a.start) - timeToMinutes(b.start);
       })
       .forEach(function (item) {
+        const classDrillTarget = roleContext.role === "parent" ? "parent.html" : "schedule.html";
         const styleMeta = state.styles[item.style] || {};
         const classCard = document.createElement("button");
         classCard.className = "today-class-card";
@@ -211,12 +228,12 @@
           item.capacity +
           " enrolled</span></div>";
         classCard.addEventListener("click", function () {
-          window.location.href = "schedule.html";
+          window.location.href = classDrillTarget;
         });
         todayList.appendChild(classCard);
       });
 
-    const monthRevenue = state.transactions
+    const monthRevenue = roleContext.transactions
       .filter(function (tx) {
         const txDate = new Date(tx.date + "T12:00:00");
         return tx.status === "paid" && txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear();
@@ -225,15 +242,15 @@
         return sum + Number(tx.amount || 0);
       }, 0);
 
-    const outstanding = state.students.reduce(function (sum, student) {
+    const outstanding = roleContext.students.reduce(function (sum, student) {
       return sum + Math.max(0, Number(student.balance || 0));
     }, 0);
 
-    const activeStudents = state.students.filter(function (student) {
+    const activeStudents = roleContext.students.filter(function (student) {
       return student.classIds && student.classIds.length > 0;
     }).length;
 
-    const classSessionsThisWeek = state.classes.reduce(function (sum, danceClass) {
+    const classSessionsThisWeek = roleContext.classes.reduce(function (sum, danceClass) {
       return sum + (danceClass.days ? danceClass.days.length : 0);
     }, 0);
 
@@ -246,17 +263,17 @@
     alertList.innerHTML = "";
 
     const soon = addDays(now, 14);
-    const soonEvents = state.events.filter(function (evt) {
+    const soonEvents = roleContext.events.filter(function (evt) {
       const date = new Date(evt.date + "T12:00:00");
       return date >= now && date <= addDays(now, 60);
     });
 
-    const expiringStudents = state.students.filter(function (student) {
+    const expiringStudents = roleContext.students.filter(function (student) {
       const expiry = new Date(student.packageExpires + "T12:00:00");
       return expiry >= now && expiry <= soon;
     });
 
-    const overdueStudents = state.students.filter(function (student) {
+    const overdueStudents = roleContext.students.filter(function (student) {
       return student.paymentStatus === "overdue" || Number(student.balance || 0) >= 90;
     });
 
@@ -288,6 +305,7 @@
   }
 
   function initSchedule() {
+    const roleContext = getRoleContext();
     const timeRail = byId("timeRail");
     const dayColumns = byId("dayColumns");
     const legend = byId("scheduleLegend");
@@ -298,6 +316,8 @@
     const modal = byId("classModal");
     const form = byId("classForm");
     const modalTitle = byId("classModalTitle");
+    const subtitle = document.querySelector(".topbar .subtitle");
+    if (subtitle && roleContext.scheduleSubtitle) subtitle.textContent = roleContext.scheduleSubtitle;
 
     const startHour = 8;
     const endHour = 21;
@@ -338,7 +358,7 @@
         grid.style.height = (endHour - startHour) * pixelsPerHour + "px";
       });
 
-      getClassInstances().forEach(function (instance) {
+      getClassInstances(roleContext.classes).forEach(function (instance) {
         const dayColumn = dayColumns.querySelector(".day-column[data-day='" + instance.day + "'] .day-column-grid");
         if (!dayColumn) return;
 
@@ -381,7 +401,7 @@
     }
 
     function openClassPanel(classId) {
-      const danceClass = state.classes.find(function (item) {
+      const danceClass = roleContext.classes.find(function (item) {
         return item.id === classId;
       });
       if (!danceClass) return;
@@ -452,20 +472,37 @@
       panel.classList.add("open");
 
       editingClassId = classId;
-      byId("editClassButton").onclick = function () {
-        openClassModal(classId);
-      };
+      const editButton = byId("editClassButton");
+      if (editButton) {
+        if (roleContext.canManageClasses) {
+          editButton.style.display = "";
+          editButton.onclick = function () {
+            openClassModal(classId);
+          };
+        } else {
+          editButton.style.display = "none";
+          editButton.onclick = null;
+        }
+      }
     }
 
     byId("closeClassPanel").addEventListener("click", function () {
       panel.classList.remove("open");
     });
 
-    addButton.addEventListener("click", function () {
-      openClassModal();
-    });
+    if (addButton) {
+      if (roleContext.canManageClasses) {
+        addButton.style.display = "";
+        addButton.addEventListener("click", function () {
+          openClassModal();
+        });
+      } else {
+        addButton.style.display = "none";
+      }
+    }
 
     function openClassModal(classId) {
+      if (!roleContext.canManageClasses) return;
       editingClassId = classId || null;
       const classNameInput = byId("classNameInput");
       const classStyleInput = byId("classStyleInput");
@@ -515,6 +552,7 @@
 
     form.addEventListener("submit", function (event) {
       event.preventDefault();
+      if (!roleContext.canManageClasses) return;
 
       const name = byId("classNameInput").value.trim();
       const style = byId("classStyleInput").value;
@@ -569,6 +607,7 @@
   }
 
   function initStudents() {
+    const roleContext = getRoleContext();
     const searchInput = byId("studentSearchInput");
     const styleFilter = byId("studentStyleFilter");
     const ageFilter = byId("studentAgeFilter");
@@ -577,11 +616,32 @@
     const panel = byId("studentPanel");
     const panelBody = byId("studentPanelBody");
     const panelTitle = byId("studentPanelTitle");
+    const subtitle = document.querySelector(".topbar .subtitle");
+    if (subtitle && roleContext.studentsSubtitle) subtitle.textContent = roleContext.studentsSubtitle;
+
+    const scopedStudents = roleContext.students;
+    const scopedStudentMap = scopedStudents.reduce(function (map, student) {
+      map[student.id] = student;
+      return map;
+    }, {});
+    const roleClassIdSet = new Set(
+      roleContext.classes.map(function (danceClass) {
+        return danceClass.id;
+      })
+    );
+    const scopedStyleSet = new Set();
+    roleContext.classes.forEach(function (danceClass) {
+      scopedStyleSet.add(danceClass.style);
+    });
 
     const sortState = { key: "name", direction: "asc" };
 
     if (styleFilter.options.length < 2) {
-      Object.keys(state.styles).forEach(function (style) {
+      Array.from(scopedStyleSet)
+        .sort(function (a, b) {
+          return String(a || "").localeCompare(String(b || ""));
+        })
+        .forEach(function (style) {
         const option = document.createElement("option");
         option.value = style;
         option.textContent = style;
@@ -595,8 +655,13 @@
       const ageGroup = ageFilter.value;
       const payStatus = paymentFilter.value;
 
-      return state.students.filter(function (student) {
-        const classRecords = student.classIds.map(getClassById).filter(Boolean);
+      return scopedStudents.filter(function (student) {
+        const classRecords = student.classIds
+          .filter(function (classId) {
+            return roleClassIdSet.has(classId);
+          })
+          .map(getClassById)
+          .filter(Boolean);
         const styles = classRecords.map(function (record) {
           return record.style;
         });
@@ -624,7 +689,10 @@
     function renderTable() {
       const rows = filteredStudents().sort(function (a, b) {
         return compareValues(a, b, sortState.key, sortState.direction, function (student) {
-          if (sortState.key === "activeClasses") return student.classIds.length;
+          if (sortState.key === "activeClasses")
+            return student.classIds.filter(function (classId) {
+              return roleClassIdSet.has(classId);
+            }).length;
           if (sortState.key === "balance") return Number(student.balance || 0);
           return student[sortState.key];
         });
@@ -644,7 +712,9 @@
           "</td><td>" +
           escapeHtml(student.phone) +
           "</td><td>" +
-          student.classIds.length +
+          student.classIds.filter(function (classId) {
+            return roleClassIdSet.has(classId);
+          }).length +
           "</td><td>" +
           escapeHtml(student.membershipType) +
           "</td><td>" +
@@ -658,15 +728,20 @@
     }
 
     function openStudentPanel(studentId) {
-      const student = getStudentById(studentId);
+      const student = scopedStudentMap[studentId] || getStudentById(studentId);
       if (!student) return;
 
       panelTitle.textContent = student.name;
       panelBody.innerHTML = "";
 
-      const enrolled = student.classIds.map(getClassById).filter(Boolean);
-      const attendance = buildAttendanceHistory(student).slice(0, 12);
-      const paymentHistory = state.transactions
+      const enrolled = student.classIds
+        .filter(function (classId) {
+          return roleClassIdSet.has(classId);
+        })
+        .map(getClassById)
+        .filter(Boolean);
+      const attendance = buildAttendanceHistory(student, roleClassIdSet).slice(0, 12);
+      const paymentHistory = roleContext.transactions
         .filter(function (tx) {
           return tx.studentId === student.id;
         })
@@ -783,18 +858,45 @@
     const searchInput = byId("paymentSearchInput");
     const statusFilter = byId("paymentStatusFilter");
     const typeFilter = byId("paymentTypeFilter");
+    const methodFilter = byId("paymentMethodFilter");
     const startInput = byId("paymentStartDate");
     const endInput = byId("paymentEndDate");
     const lookupInput = byId("balanceLookupInput");
     const lookupResult = byId("balanceLookupResult");
+    const scopeNote = byId("paymentScopeNote");
+    const subtitle = document.querySelector(".topbar .subtitle");
+    const session = window.Auth && window.Auth.getSession ? window.Auth.getSession() : null;
+    const paymentScope = getPaymentScope(session);
+    const scopedStudents = paymentScope.students;
+    const scopedTransactions = paymentScope.transactions;
+    const scopedStudentMap = scopedStudents.reduce(function (map, student) {
+      map[student.id] = student;
+      return map;
+    }, {});
 
     const sortState = { key: "date", direction: "desc" };
 
-    const uniqueTypes = new Set(
-      state.transactions.map(function (tx) {
-        return tx.type;
-      })
-    );
+    if (scopeNote) scopeNote.textContent = paymentScope.note;
+    if (subtitle && paymentScope.subtitle) subtitle.textContent = paymentScope.subtitle;
+    if (paymentScope.role === "parent") {
+      const revenueLabel = byId("paymentLabelRevenue");
+      const outstandingLabel = byId("paymentLabelOutstanding");
+      const recentLabel = byId("paymentLabelRecent");
+      if (revenueLabel) revenueLabel.textContent = "Paid This Month";
+      if (outstandingLabel) outstandingLabel.textContent = "Household Balance";
+      if (recentLabel) recentLabel.textContent = "Recent Family Transactions (14d)";
+    }
+
+    const uniqueTypes = Array.from(
+      new Set(
+        scopedTransactions.map(function (tx) {
+          return tx.type;
+        })
+      )
+    ).sort(function (a, b) {
+      return String(a || "").localeCompare(String(b || ""));
+    });
+
     uniqueTypes.forEach(function (type) {
       const option = document.createElement("option");
       option.value = type;
@@ -802,8 +904,38 @@
       typeFilter.appendChild(option);
     });
 
+    const methodCatalog = [
+      "credit card",
+      "cash",
+      "check",
+      "scholarship",
+      "gift certificate",
+      "fundraising funds",
+      "bank transfer (ach)"
+    ];
+
+    const uniqueMethods = Array.from(
+      new Set(
+        methodCatalog.concat(
+          scopedTransactions.map(function (tx) {
+            return normalizePaymentMethod(tx.method);
+          })
+        )
+      )
+    ).sort(function (a, b) {
+      return String(a || "").localeCompare(String(b || ""));
+    });
+
+    uniqueMethods.forEach(function (method) {
+      if (!methodFilter) return;
+      const option = document.createElement("option");
+      option.value = method;
+      option.textContent = titleCase(method);
+      methodFilter.appendChild(option);
+    });
+
     const datalist = byId("studentLookupList");
-    state.students
+    scopedStudents
       .slice()
       .sort(function (a, b) {
         return a.name.localeCompare(b.name);
@@ -814,9 +946,17 @@
         datalist.appendChild(option);
       });
 
+    if (lookupInput && scopedStudents.length === 1) {
+      lookupInput.value = scopedStudents[0].name;
+    }
+
+    function getScopedStudentById(studentId) {
+      return scopedStudentMap[studentId] || getStudentById(studentId);
+    }
+
     function renderSummary() {
       const now = new Date();
-      const monthRevenue = state.transactions
+      const monthRevenue = scopedTransactions
         .filter(function (tx) {
           const date = new Date(tx.date + "T12:00:00");
           return tx.status === "paid" && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
@@ -825,11 +965,11 @@
           return sum + Number(tx.amount || 0);
         }, 0);
 
-      const outstanding = state.students.reduce(function (sum, student) {
+      const outstanding = scopedStudents.reduce(function (sum, student) {
         return sum + Number(student.balance || 0);
       }, 0);
 
-      const recentCount = state.transactions.filter(function (tx) {
+      const recentCount = scopedTransactions.filter(function (tx) {
         return new Date(tx.date + "T12:00:00") >= addDays(now, -14);
       }).length;
 
@@ -842,21 +982,24 @@
       const term = searchInput.value.trim().toLowerCase();
       const status = statusFilter.value;
       const type = typeFilter.value;
+      const method = methodFilter ? methodFilter.value : "";
       const startDate = startInput.value;
       const endDate = endInput.value;
 
-      return state.transactions.filter(function (tx) {
-        const student = getStudentById(tx.studentId);
+      return scopedTransactions.filter(function (tx) {
+        const student = getScopedStudentById(tx.studentId);
+        const normalizedMethod = normalizePaymentMethod(tx.method);
         const hitSearch =
           !term ||
-          [student ? student.name : "", tx.type, tx.status, tx.date].join(" ").toLowerCase().includes(term);
+          [student ? student.name : "", tx.type, normalizedMethod, tx.status, tx.date].join(" ").toLowerCase().includes(term);
 
         const hitStatus = !status || tx.status === status;
         const hitType = !type || tx.type === type;
+        const hitMethod = !method || normalizedMethod === method;
         const hitStart = !startDate || tx.date >= startDate;
         const hitEnd = !endDate || tx.date <= endDate;
 
-        return hitSearch && hitStatus && hitType && hitStart && hitEnd;
+        return hitSearch && hitStatus && hitType && hitMethod && hitStart && hitEnd;
       });
     }
 
@@ -864,17 +1007,18 @@
       const rows = filteredTransactions().sort(function (a, b) {
         return compareValues(a, b, sortState.key, sortState.direction, function (tx) {
           if (sortState.key === "student") {
-            const student = getStudentById(tx.studentId);
+            const student = getScopedStudentById(tx.studentId);
             return student ? student.name : "";
           }
           if (sortState.key === "amount") return Number(tx.amount || 0);
+          if (sortState.key === "method") return normalizePaymentMethod(tx.method);
           return tx[sortState.key];
         });
       });
 
       tableBody.innerHTML = "";
       rows.forEach(function (tx) {
-        const student = getStudentById(tx.studentId);
+        const student = getScopedStudentById(tx.studentId);
         const row = document.createElement("tr");
         row.innerHTML =
           "<td>" +
@@ -885,6 +1029,8 @@
           formatCurrency(tx.amount) +
           "</td><td>" +
           escapeHtml(titleCase(tx.type)) +
+          "</td><td>" +
+          escapeHtml(titleCase(normalizePaymentMethod(tx.method))) +
           "</td><td><span class='status-pill " +
           tx.status +
           "'>" +
@@ -901,7 +1047,7 @@
         return;
       }
 
-      const student = state.students.find(function (candidate) {
+      const student = scopedStudents.find(function (candidate) {
         return candidate.name.toLowerCase() === value;
       });
 
@@ -910,7 +1056,7 @@
         return;
       }
 
-      const lastPayment = state.transactions
+      const lastPayment = scopedTransactions
         .filter(function (tx) {
           return tx.studentId === student.id;
         })
@@ -928,14 +1074,24 @@
         "'>" +
         escapeHtml(student.paymentStatus) +
         "</span></p><p><strong>Last Transaction:</strong> " +
-        (lastPayment ? escapeHtml(formatDate(lastPayment.date) + " - " + titleCase(lastPayment.type)) : "No payments yet") +
+        (lastPayment
+          ? escapeHtml(
+              formatDate(lastPayment.date) +
+                " - " +
+                titleCase(lastPayment.type) +
+                " via " +
+                titleCase(normalizePaymentMethod(lastPayment.method))
+            )
+          : "No payments yet") +
         "</p>";
     }
 
-    [searchInput, statusFilter, typeFilter, startInput, endInput].forEach(function (control) {
-      control.addEventListener("input", renderTable);
-      control.addEventListener("change", renderTable);
-    });
+    [searchInput, statusFilter, typeFilter, methodFilter, startInput, endInput]
+      .filter(Boolean)
+      .forEach(function (control) {
+        control.addEventListener("input", renderTable);
+        control.addEventListener("change", renderTable);
+      });
 
     lookupInput.addEventListener("input", renderLookup);
 
@@ -958,15 +1114,22 @@
   }
 
   function initEvents() {
+    const roleContext = getRoleContext();
     const list = byId("eventList");
     const detail = byId("eventDetail");
     const statusFilter = byId("eventStatusFilter");
+    const subtitle = document.querySelector(".topbar .subtitle");
+    const scopeNote = byId("eventScopeNote");
+    const scopedEvents = roleContext.events;
+    const editableClassIdSet = roleContext.classIdSet || new Set();
 
     if (!list || !detail) return;
+    if (subtitle && roleContext.eventsSubtitle) subtitle.textContent = roleContext.eventsSubtitle;
+    if (scopeNote && roleContext.eventsScopeNote) scopeNote.textContent = roleContext.eventsScopeNote;
 
     const statuses = Array.from(
       new Set(
-        state.events.map(function (event) {
+        scopedEvents.map(function (event) {
           return event.status;
         })
       )
@@ -979,11 +1142,11 @@
       statusFilter.appendChild(option);
     });
 
-    let selectedId = state.events[0] ? state.events[0].id : null;
+    let selectedId = scopedEvents[0] ? scopedEvents[0].id : null;
 
     function visibleEvents() {
       const status = statusFilter.value;
-      return state.events
+      return scopedEvents
         .filter(function (event) {
           return !status || event.status === status;
         })
@@ -1025,7 +1188,7 @@
     }
 
     function renderDetail() {
-      const event = state.events.find(function (item) {
+      const event = scopedEvents.find(function (item) {
         return item.id === selectedId;
       });
 
@@ -1037,22 +1200,30 @@
       const routineRows = event.routines
         .map(function (routine, index) {
           const danceClass = getClassById(routine.classId);
+          const sourceIndex = routine._sourceIndex != null ? routine._sourceIndex : index;
+          const canEditCostume =
+            roleContext.role === "owner" || (roleContext.role === "teacher" && editableClassIdSet.has(routine.classId));
+          const costumeCell = canEditCostume
+            ? "<select class='costume-select' data-event='" +
+              escapeHtml(event.id) +
+              "' data-index='" +
+              sourceIndex +
+              "'>" +
+              ["Ordered", "Arrived", "Distributed", "N/A"]
+                .map(function (status) {
+                  return "<option value='" + status + "'" + (status === routine.costumeStatus ? " selected" : "") + ">" + status + "</option>";
+                })
+                .join("") +
+              "</select>"
+            : "<span class='status-pill neutral'>" + escapeHtml(routine.costumeStatus) + "</span>";
           return (
             "<tr><td>" +
             escapeHtml(routine.routine) +
             "</td><td>" +
             escapeHtml(danceClass ? danceClass.name : "Unknown") +
-            "</td><td><select class='costume-select' data-event='" +
-            escapeHtml(event.id) +
-            "' data-index='" +
-            index +
-            "'>" +
-            ["Ordered", "Arrived", "Distributed", "N/A"]
-              .map(function (status) {
-                return "<option value='" + status + "'" + (status === routine.costumeStatus ? " selected" : "") + ">" + status + "</option>";
-              })
-              .join("") +
-            "</select></td></tr>"
+            "</td><td>" +
+            costumeCell +
+            "</td></tr>"
           );
         })
         .join("");
@@ -1077,6 +1248,49 @@
       const fees = event.fees || { expected: 0, collected: 0 };
       const soldPercent = tickets.goal ? Math.min(100, Math.round((tickets.sold / tickets.goal) * 100)) : 0;
       const feePercent = fees.expected ? Math.min(100, Math.round((fees.collected / fees.expected) * 100)) : 0;
+      const showFinance = roleContext.role === "owner";
+      const familyOutstanding = roleContext.transactions
+        .filter(function (tx) {
+          return tx.status !== "paid" && (tx.type.indexOf("fee") !== -1 || tx.type.indexOf("tuition") !== -1 || tx.type === "drop-in");
+        })
+        .reduce(function (sum, tx) {
+          return sum + Number(tx.amount || 0);
+        }, 0);
+
+      const statsHtml = showFinance
+        ? "<div class='event-stats-grid'>" +
+          "<div class='detail-card'><h4>Ticket Tracking</h4><p><strong>Sold:</strong> " +
+          tickets.sold +
+          (tickets.goal ? " / " + tickets.goal : "") +
+          "</p><p><strong>Price:</strong> " +
+          formatCurrency(tickets.price) +
+          "</p><div class='progress'><span style='width:" +
+          soldPercent +
+          "%'></span></div></div>" +
+          "<div class='detail-card'><h4>Fee Tracking</h4><p><strong>Collected:</strong> " +
+          formatCurrency(fees.collected) +
+          "</p><p><strong>Outstanding:</strong> " +
+          formatCurrency(Math.max(0, fees.expected - fees.collected)) +
+          "</p><div class='progress'><span style='width:" +
+          feePercent +
+          "%'></span></div></div>" +
+          "</div>"
+        : "<div class='event-stats-grid'>" +
+          "<div class='detail-card'><h4>Ticket Tracking</h4><p><strong>Sold:</strong> " +
+          tickets.sold +
+          (tickets.goal ? " / " + tickets.goal : "") +
+          "</p><p><strong>Price:</strong> " +
+          formatCurrency(tickets.price) +
+          "</p><div class='progress'><span style='width:" +
+          soldPercent +
+          "%'></span></div></div>" +
+          "<div class='detail-card'><h4>" +
+          (roleContext.role === "parent" ? "Family Fee Snapshot" : "Finance Access") +
+          "</h4><p>" +
+          (roleContext.role === "parent"
+            ? "Outstanding family fees: " + formatCurrency(familyOutstanding)
+            : "Financial fee tracking is limited to studio owner access.") +
+          "</p></div></div>";
 
       detail.innerHTML =
         "<div class='event-detail-top'><h3>" +
@@ -1094,23 +1308,7 @@
         "<div class='detail-card'><h4>Rehearsal Schedule</h4><div class='table-wrap'><table><thead><tr><th>Date</th><th>Time</th><th>Focus</th><th>Room</th></tr></thead><tbody>" +
         rehearsalRows +
         "</tbody></table></div></div>" +
-        "<div class='event-stats-grid'>" +
-        "<div class='detail-card'><h4>Ticket Tracking</h4><p><strong>Sold:</strong> " +
-        tickets.sold +
-        (tickets.goal ? " / " + tickets.goal : "") +
-        "</p><p><strong>Price:</strong> " +
-        formatCurrency(tickets.price) +
-        "</p><div class='progress'><span style='width:" +
-        soldPercent +
-        "%'></span></div></div>" +
-        "<div class='detail-card'><h4>Fee Tracking</h4><p><strong>Collected:</strong> " +
-        formatCurrency(fees.collected) +
-        "</p><p><strong>Outstanding:</strong> " +
-        formatCurrency(Math.max(0, fees.expected - fees.collected)) +
-        "</p><div class='progress'><span style='width:" +
-        feePercent +
-        "%'></span></div></div>" +
-        "</div>";
+        statsHtml;
 
       qsa(".costume-select", detail).forEach(function (select) {
         select.addEventListener("change", function () {
@@ -1120,7 +1318,21 @@
             return item.id === eventId;
           });
           if (!activeEvent || !activeEvent.routines[index]) return;
+          const routineClassId = activeEvent.routines[index].classId;
+          const canEdit =
+            roleContext.role === "owner" || (roleContext.role === "teacher" && editableClassIdSet.has(routineClassId));
+          if (!canEdit) return;
           activeEvent.routines[index].costumeStatus = select.value;
+          const activeScopedEvent = scopedEvents.find(function (item) {
+            return item.id === eventId;
+          });
+          if (activeScopedEvent) {
+            const scopedRoutine = (activeScopedEvent.routines || []).find(function (routine) {
+              const sourceIndex = routine._sourceIndex != null ? routine._sourceIndex : -1;
+              return sourceIndex === index;
+            });
+            if (scopedRoutine) scopedRoutine.costumeStatus = select.value;
+          }
           saveState();
         });
       });
@@ -1135,9 +1347,10 @@
     renderDetail();
   }
 
-  function getClassInstances() {
+  function getClassInstances(classList) {
+    const source = Array.isArray(classList) ? classList : state.classes;
     const instances = [];
-    state.classes.forEach(function (danceClass) {
+    source.forEach(function (danceClass) {
       (danceClass.days || []).forEach(function (day) {
         instances.push(
           Object.assign(
@@ -1152,11 +1365,13 @@
     return instances;
   }
 
-  function buildAttendanceHistory(student) {
+  function buildAttendanceHistory(student, allowedClassIds) {
     const history = [];
     const now = new Date();
+    const classIdSet = allowedClassIds instanceof Set ? allowedClassIds : null;
 
     student.classIds.forEach(function (classId) {
+      if (classIdSet && !classIdSet.has(classId)) return;
       const danceClass = getClassById(classId);
       if (!danceClass) return;
 
@@ -1268,6 +1483,251 @@
         return part.charAt(0).toUpperCase() + part.slice(1);
       })
       .join(" ");
+  }
+
+  function normalizePaymentMethod(value) {
+    const method = String(value || "").trim().toLowerCase();
+    if (!method) return "credit card";
+
+    const aliases = {
+      card: "credit card",
+      cc: "credit card",
+      credit: "credit card",
+      "credit card": "credit card",
+      cash: "cash",
+      check: "check",
+      cheque: "check",
+      ach: "bank transfer (ach)",
+      "bank transfer": "bank transfer (ach)",
+      "bank transfer (ach)": "bank transfer (ach)",
+      scholarship: "scholarship",
+      "gift card": "gift certificate",
+      gift: "gift certificate",
+      "gift certificate": "gift certificate",
+      fundraising: "fundraising funds",
+      "fundraising fund": "fundraising funds",
+      "fundraising funds": "fundraising funds"
+    };
+
+    return aliases[method] || method;
+  }
+
+  function getRoleContext() {
+    const session = window.Auth && window.Auth.getSession ? window.Auth.getSession() : null;
+    const role = (session && session.role) || "owner";
+    const allClasses = state.classes;
+    const allStudents = state.students;
+    const allTransactions = state.transactions;
+    const allEvents = state.events;
+
+    if (role === "teacher") {
+      const instructorName = String((session && session.instructorName) || "").trim().toLowerCase();
+      const classes = allClasses.filter(function (danceClass) {
+        return String(danceClass.instructor || "").trim().toLowerCase() === instructorName;
+      });
+      const classIdSet = new Set(
+        classes.map(function (danceClass) {
+          return danceClass.id;
+        })
+      );
+      const students = allStudents.filter(function (student) {
+        return student.classIds.some(function (classId) {
+          return classIdSet.has(classId);
+        });
+      });
+      const studentIdSet = new Set(
+        students.map(function (student) {
+          return student.id;
+        })
+      );
+      const transactions = allTransactions.filter(function (tx) {
+        return studentIdSet.has(tx.studentId);
+      });
+      const events = scopeEventsByClassIds(allEvents, classIdSet);
+      const instructorLabel = (session && session.instructorName) || "your classes";
+
+      return {
+        role: role,
+        session: session,
+        classes: classes,
+        students: students,
+        transactions: transactions,
+        events: events,
+        classIdSet: classIdSet,
+        studentIdSet: studentIdSet,
+        canManageClasses: false,
+        dashboardSubtitle: "At-a-glance teaching operations for your roster",
+        scheduleSubtitle: "Weekly view for classes taught by " + instructorLabel,
+        studentsSubtitle: "Student roster scoped to your classes",
+        eventsSubtitle: "Events involving your classes",
+        eventsScopeNote: "Showing event details for routines assigned to " + instructorLabel + "."
+      };
+    }
+
+    if (role === "parent") {
+      const parentStudentIds = getParentStudentIds(session);
+      const studentIdSet = new Set(parentStudentIds);
+      const students = allStudents.filter(function (student) {
+        return studentIdSet.has(student.id);
+      });
+      const classIdSet = new Set();
+      students.forEach(function (student) {
+        (student.classIds || []).forEach(function (classId) {
+          classIdSet.add(classId);
+        });
+      });
+      const classes = allClasses.filter(function (danceClass) {
+        return classIdSet.has(danceClass.id);
+      });
+      const transactions = allTransactions.filter(function (tx) {
+        return studentIdSet.has(tx.studentId);
+      });
+      const events = scopeEventsByClassIds(allEvents, classIdSet);
+      const studentNames = students.map(function (student) {
+        return student.name;
+      });
+
+      return {
+        role: role,
+        session: session,
+        classes: classes,
+        students: students,
+        transactions: transactions,
+        events: events,
+        classIdSet: classIdSet,
+        studentIdSet: studentIdSet,
+        canManageClasses: false,
+        dashboardSubtitle: "At-a-glance family studio activity",
+        scheduleSubtitle: "Family schedule",
+        studentsSubtitle: "Family student records",
+        eventsSubtitle: "Recitals and events for your household",
+        eventsScopeNote: studentNames.length
+          ? "Showing events linked to: " + studentNames.join(", ") + "."
+          : "Showing household event details."
+      };
+    }
+
+    const classIdSet = new Set(
+      allClasses.map(function (danceClass) {
+        return danceClass.id;
+      })
+    );
+    const studentIdSet = new Set(
+      allStudents.map(function (student) {
+        return student.id;
+      })
+    );
+
+    return {
+      role: "owner",
+      session: session,
+      classes: allClasses,
+      students: allStudents,
+      transactions: allTransactions,
+      events: allEvents,
+      classIdSet: classIdSet,
+      studentIdSet: studentIdSet,
+      canManageClasses: true,
+      dashboardSubtitle: "At-a-glance studio operations for today",
+      scheduleSubtitle: "Weekly view (Monday to Saturday)",
+      studentsSubtitle: "Search, filter, and manage student records",
+      eventsSubtitle: "Track routines, rehearsals, and ticket/fee progress",
+      eventsScopeNote: "Showing studio-wide events and production tracking."
+    };
+  }
+
+  function scopeEventsByClassIds(events, classIdSet) {
+    if (!classIdSet || !classIdSet.size) return [];
+
+    return events
+      .map(function (event) {
+        const routines = (event.routines || [])
+          .map(function (routine, index) {
+            return Object.assign({ _sourceIndex: index }, routine);
+          })
+          .filter(function (routine) {
+            return classIdSet.has(routine.classId);
+          });
+
+        if (!routines.length) return null;
+        return Object.assign({}, event, { routines: routines });
+      })
+      .filter(Boolean);
+  }
+
+  function getPaymentScope(session) {
+    const role = (session && session.role) || "owner";
+    const allStudents = state.students.slice();
+    const allTransactions = state.transactions.slice();
+
+    if (role !== "parent") {
+      return {
+        role: role,
+        students: allStudents,
+        transactions: allTransactions,
+        subtitle: "Revenue and transaction tracking",
+        note: "Showing studio-wide payment activity."
+      };
+    }
+
+    const parentStudentIds = getParentStudentIds(session);
+    const idSet = new Set(parentStudentIds);
+
+    const students = allStudents.filter(function (student) {
+      return idSet.has(student.id);
+    });
+    const transactions = allTransactions.filter(function (tx) {
+      return idSet.has(tx.studentId);
+    });
+    const studentNames = students.map(function (student) {
+      return student.name;
+    });
+
+    return {
+      role: role,
+      students: students,
+      transactions: transactions,
+      subtitle: "Family billing and payment history",
+      note: studentNames.length
+        ? "Showing payment activity for: " + studentNames.join(", ") + "."
+        : "Showing payment activity for your household."
+    };
+  }
+
+  function getParentStudentIds(session) {
+    const ids = [];
+    const email = (session && session.email ? session.email : "").toLowerCase();
+
+    function addIds(list) {
+      (list || []).forEach(function (id) {
+        if (id && ids.indexOf(id) === -1) ids.push(id);
+      });
+    }
+
+    if (session && session.primaryStudentId) addIds([session.primaryStudentId]);
+
+    try {
+      const raw = localStorage.getItem("studioLifeParentPortalStateV1");
+      if (raw) {
+        const saved = JSON.parse(raw);
+        const profiles = Array.isArray(saved.parentProfiles) ? saved.parentProfiles : [];
+        const profile = profiles.find(function (item) {
+          return String(item.email || "").toLowerCase() === email;
+        });
+        if (profile && Array.isArray(profile.studentIds)) addIds(profile.studentIds);
+      }
+    } catch (error) {
+      // Ignore prototype storage parsing issues.
+    }
+
+    const seedPortal = window.DanceData && window.DanceData.parentPortal;
+    const seedProfiles = seedPortal && Array.isArray(seedPortal.parentProfiles) ? seedPortal.parentProfiles : [];
+    const seedProfile = seedProfiles.find(function (item) {
+      return String(item.email || "").toLowerCase() === email;
+    });
+    if (seedProfile && Array.isArray(seedProfile.studentIds)) addIds(seedProfile.studentIds);
+
+    return ids;
   }
 
   function seedRandom(seedText) {

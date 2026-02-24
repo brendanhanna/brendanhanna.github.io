@@ -5,6 +5,11 @@
     teacher: "teacher.html",
     parent: "parent.html"
   };
+  var ROLE_LINKS = {
+    owner: ["owner.html", "owner-admin.html", "dashboard.html", "schedule.html", "students.html", "payments.html", "events.html", "feedback.html"],
+    teacher: ["teacher.html", "dashboard.html", "schedule.html", "students.html", "events.html", "feedback.html"],
+    parent: ["parent.html", "dashboard.html", "payments.html", "events.html", "feedback.html"]
+  };
 
   var DEMO_USERS = [
     {
@@ -52,6 +57,10 @@
     if (!currentSession) {
       var redirect = encodeURIComponent(currentFile());
       window.location.href = "login.html?redirect=" + redirect;
+      return;
+    }
+    if (!isAllowedForRole(currentSession, currentFile())) {
+      window.location.href = ROLE_HOME[currentSession.role] || "login.html";
       return;
     }
   }
@@ -186,13 +195,7 @@
     var session = getSession();
     if (!session || !session.role) return;
 
-    var roleLinks = {
-      owner: ["dashboard.html", "schedule.html", "students.html", "payments.html", "events.html"],
-      teacher: ["dashboard.html", "schedule.html", "students.html", "events.html"],
-      parent: ["dashboard.html", "payments.html", "events.html"]
-    };
-
-    var allowed = roleLinks[session.role];
+    var allowed = ROLE_LINKS[session.role];
     if (!allowed) return;
 
     Array.prototype.slice.call(document.querySelectorAll("[data-nav]")).forEach(function (node) {
@@ -202,6 +205,14 @@
         node.style.display = "none";
       }
     });
+  }
+
+  function isAllowedForRole(session, file) {
+    if (!session || !session.role) return false;
+    var allowed = ROLE_LINKS[session.role];
+    if (!allowed || !allowed.length) return false;
+    var page = String(file || "").toLowerCase();
+    return allowed.indexOf(page) !== -1;
   }
 
   function switchRole(role) {

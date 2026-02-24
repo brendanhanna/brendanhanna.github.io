@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Life OS - Owner Admin Center</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body data-page="owner-admin" data-requires-auth="true">
+    <main class="role-shell">
+      <header class="role-header">
+        <div>
+          <p class="eyebrow">Studio Owner Portal</p>
+          <h1>Admin Center</h1>
+          <p class="subtitle">Add, edit, and remove operational records across the studio system.</p>
+        </div>
+        <div class="role-links">
+          <a class="button" href="owner.html">Back to Owner Home</a>
+          <a class="button button-primary" href="dashboard.html">Open Full Console</a>
+        </div>
+      </header>
+
+      <section class="card">
+        <div class="admin-tabs" id="ownerAdminTabs">
+          <button type="button" class="button active" data-admin-tab="teachers">Teachers</button>
+          <button type="button" class="button" data-admin-tab="students">Students</button>
+          <button type="button" class="button" data-admin-tab="classes">Classes & Times</button>
+          <button type="button" class="button" data-admin-tab="events">Events</button>
+          <button type="button" class="button" data-admin-tab="payments">Payments</button>
+          <button type="button" class="button" data-admin-tab="docs">Documents</button>
+        </div>
+
+        <div class="admin-panel active" data-admin-panel="teachers">
+          <p class="muted">Teacher records manage roster ownership and class assignment labels for this prototype.</p>
+          <div class="form-grid admin-form-grid">
+            <input id="ownerTeacherNameInput" placeholder="Teacher name" />
+            <input id="ownerTeacherEmailInput" placeholder="Email" />
+            <input id="ownerTeacherPhoneInput" placeholder="Phone" />
+            <input id="ownerTeacherSpecialtiesInput" placeholder="Specialties (comma separated)" />
+          </div>
+          <div class="actions admin-actions">
+            <button class="button button-primary" type="button" id="ownerSaveTeacherButton">Save Teacher</button>
+            <button class="button" type="button" id="ownerResetTeacherButton">Clear</button>
+          </div>
+          <p class="muted" id="ownerTeacherMessage"></p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Classes</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ownerTeacherRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="admin-panel" data-admin-panel="students">
+          <div class="form-grid admin-form-grid">
+            <input id="ownerStudentNameInput" placeholder="Student name" />
+            <input id="ownerStudentAgeInput" type="number" min="2" max="22" placeholder="Age" />
+            <input id="ownerStudentGuardianInput" placeholder="Guardian name" />
+            <input id="ownerStudentPhoneInput" placeholder="Phone" />
+            <input id="ownerStudentMembershipInput" placeholder="Membership / package" />
+            <input id="ownerStudentBalanceInput" type="number" min="0" step="1" placeholder="Balance" />
+            <select id="ownerStudentPaymentStatusInput">
+              <option value="paid">Paid</option>
+              <option value="pending">Pending</option>
+              <option value="overdue">Overdue</option>
+            </select>
+            <input id="ownerStudentPackageExpiryInput" type="date" />
+          </div>
+          <div class="actions admin-actions">
+            <button class="button button-primary" type="button" id="ownerSaveStudentButton">Save Student</button>
+            <button class="button" type="button" id="ownerResetStudentButton">Clear</button>
+          </div>
+          <p class="muted" id="ownerStudentMessage"></p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Guardian</th>
+                  <th>Phone</th>
+                  <th>Balance</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ownerStudentRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="admin-panel" data-admin-panel="classes">
+          <div class="form-grid admin-form-grid">
+            <input id="ownerClassNameInput" placeholder="Class name" />
+            <select id="ownerClassStyleInput">
+              <option value="">Style</option>
+            </select>
+            <input id="ownerClassInstructorInput" placeholder="Instructor" />
+            <input id="ownerClassRoomInput" placeholder="Room" />
+            <input id="ownerClassDaysInput" placeholder="Days (Mon,Tue...)" />
+            <input id="ownerClassStartInput" type="time" />
+            <input id="ownerClassEndInput" type="time" />
+            <input id="ownerClassCapacityInput" type="number" min="1" max="40" placeholder="Capacity" />
+            <input id="ownerClassAgeRangeInput" placeholder="Age range (e.g. Ages 8-12)" />
+          </div>
+          <div class="actions admin-actions">
+            <button class="button button-primary" type="button" id="ownerSaveClassButton">Save Class</button>
+            <button class="button" type="button" id="ownerResetClassButton">Clear</button>
+          </div>
+          <p class="muted" id="ownerClassMessage"></p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Style</th>
+                  <th>Instructor</th>
+                  <th>Days</th>
+                  <th>Time</th>
+                  <th>Room</th>
+                  <th>Enrollment</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ownerClassRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="admin-panel" data-admin-panel="events">
+          <div class="form-grid admin-form-grid">
+            <input id="ownerEventNameInput" placeholder="Event name" />
+            <input id="ownerEventDateInput" type="date" />
+            <input id="ownerEventVenueInput" placeholder="Venue" />
+            <input id="ownerEventStatusInput" placeholder="Status (On Track / Planning...)" />
+          </div>
+          <div class="actions admin-actions">
+            <button class="button button-primary" type="button" id="ownerSaveEventButton">Save Event</button>
+            <button class="button" type="button" id="ownerResetEventButton">Clear</button>
+          </div>
+          <p class="muted" id="ownerEventMessage"></p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Date</th>
+                  <th>Venue</th>
+                  <th>Status</th>
+                  <th>Routines</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ownerEventRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="admin-panel" data-admin-panel="payments">
+          <div class="form-grid admin-form-grid">
+            <input id="ownerPaymentDateInput" type="date" />
+            <select id="ownerPaymentStudentInput">
+              <option value="">Student</option>
+            </select>
+            <input id="ownerPaymentAmountInput" type="number" min="1" step="1" placeholder="Amount" />
+            <input id="ownerPaymentTypeInput" placeholder="Type (tuition, recital fee...)" />
+            <input id="ownerPaymentMethodInput" placeholder="Method/source" />
+            <select id="ownerPaymentStatusInput">
+              <option value="paid">Paid</option>
+              <option value="pending">Pending</option>
+              <option value="overdue">Overdue</option>
+            </select>
+          </div>
+          <div class="actions admin-actions">
+            <button class="button button-primary" type="button" id="ownerSavePaymentButton">Save Transaction</button>
+            <button class="button" type="button" id="ownerResetPaymentButton">Clear</button>
+          </div>
+          <p class="muted" id="ownerPaymentMessage"></p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Student</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  <th>Method</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ownerPaymentRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="admin-panel" data-admin-panel="docs">
+          <div class="form-grid admin-form-grid">
+            <input id="ownerDocNameInput" placeholder="Document name" />
+            <input id="ownerDocCategoryInput" placeholder="Category" />
+            <input id="ownerDocSizeInput" placeholder="Size (e.g. 1.2 MB)" />
+            <input id="ownerDocUpdatedInput" type="date" />
+            <input id="ownerDocUrlInput" class="full" placeholder="Document URL" />
+          </div>
+          <div class="actions admin-actions">
+            <button class="button button-primary" type="button" id="ownerSaveDocButton">Save Document</button>
+            <button class="button" type="button" id="ownerResetDocButton">Clear</button>
+          </div>
+          <p class="muted" id="ownerDocMessage"></p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Updated</th>
+                  <th>Size</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ownerDocRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="auth.js"></script>
+    <script src="role-nav.js"></script>
+    <script src="role-views.js"></script>
+  </body>
+</html>

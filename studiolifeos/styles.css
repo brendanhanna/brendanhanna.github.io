@@ -416,6 +416,10 @@ main {
   grid-template-columns: repeat(5, minmax(130px, 1fr));
 }
 
+.filters-row.six {
+  grid-template-columns: repeat(6, minmax(120px, 1fr));
+}
+
 .filters-row input,
 .filters-row select,
 .form-grid input,
@@ -490,6 +494,21 @@ tbody tr:hover {
 .status-pill.pending {
   background: #fff3d7;
   color: #8b6200;
+}
+
+.status-pill.submitted {
+  background: #fff3d7;
+  color: #8b6200;
+}
+
+.status-pill.approved {
+  background: #def7e5;
+  color: #157347;
+}
+
+.status-pill.rejected {
+  background: #fbe1e5;
+  color: #b42338;
 }
 
 .status-pill.overdue,
@@ -860,6 +879,7 @@ textarea {
   .event-layout,
   .filters-row,
   .filters-row.five,
+  .filters-row.six,
   .event-stats-grid,
   .form-grid {
     grid-template-columns: 1fr;
@@ -994,7 +1014,7 @@ textarea {
 .role-app-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 256px 1fr;
+  grid-template-columns: 256px minmax(0, 1fr);
   transition: grid-template-columns 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -1002,6 +1022,8 @@ textarea {
   max-width: none;
   margin: 0;
   padding: 22px;
+  min-width: 0;
+  width: 100%;
 }
 
 .role-sidebar {
@@ -1119,7 +1141,7 @@ textarea {
 }
 
 body.role-sidebar-collapsed .role-app-shell {
-  grid-template-columns: 78px 1fr;
+  grid-template-columns: 78px minmax(0, 1fr);
 }
 
 body.role-sidebar-collapsed .role-sidebar-brand-text,
@@ -1172,6 +1194,13 @@ body.role-sidebar-collapsed .role-nav-link {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.role-shell > *,
+.two-col > *,
+.cards-grid > * {
+  min-width: 0;
 }
 
 .kpi-value.small {
@@ -1219,6 +1248,65 @@ body.role-sidebar-collapsed .role-nav-link {
   font-size: 0.84rem;
 }
 
+.stack-list {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.stack-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  background: var(--surface);
+}
+
+.stack-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stack-item-meta {
+  color: var(--muted);
+  font-size: 0.83rem;
+  margin-top: 4px;
+}
+
+.check-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.check-control input {
+  width: auto;
+}
+
+.bulletin-list {
+  display: grid;
+  gap: 10px;
+}
+
+.bulletin-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  background: var(--surface);
+}
+
+.bulletin-item h4 {
+  margin: 0;
+}
+
+.bulletin-item p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
 .owner-nav-hub {
   border-color: color-mix(in srgb, var(--brand) 28%, var(--line));
 }
@@ -1247,6 +1335,37 @@ body.role-sidebar-collapsed .role-nav-link {
 .owner-nav-link:hover {
   border-color: var(--brand);
   background: var(--table-hover);
+}
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.admin-tabs .button.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.admin-panel {
+  display: none;
+  gap: 10px;
+}
+
+.admin-panel.active {
+  display: grid;
+}
+
+.admin-form-grid {
+  margin-bottom: 4px;
+}
+
+.admin-actions {
+  justify-content: flex-start;
+  margin-bottom: 4px;
 }
 
 .attendance-toggle {
@@ -1517,6 +1636,11 @@ body[data-auth="login"] .theme-toggle {
     grid-template-columns: 1fr 1fr;
   }
 
+  .admin-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
   .role-dock {
     right: 10px;
     bottom: 78px;
@@ -1534,5 +1658,11 @@ body[data-auth="login"] .theme-toggle {
 
   .flyover-card {
     width: min(560px, 94vw);
+  }
+}
+
+@media (max-width: 1320px) {
+  .role-app-shell .two-col {
+    grid-template-columns: 1fr;
   }
 }
