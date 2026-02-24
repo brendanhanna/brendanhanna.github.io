@@ -6,9 +6,9 @@
     parent: "parent.html"
   };
   var ROLE_LINKS = {
-    owner: ["owner.html", "owner-admin.html", "dashboard.html", "schedule.html", "students.html", "payments.html", "events.html", "feedback.html"],
-    teacher: ["teacher.html", "dashboard.html", "schedule.html", "students.html", "events.html", "feedback.html"],
-    parent: ["parent.html", "dashboard.html", "payments.html", "events.html", "feedback.html"]
+    owner: ["owner.html", "owner-admin.html", "dashboard.html", "schedule.html", "students.html", "payments.html", "events.html"],
+    teacher: ["teacher.html", "dashboard.html", "schedule.html", "students.html", "events.html"],
+    parent: ["parent.html", "dashboard.html", "payments.html", "events.html"]
   };
 
   var DEMO_USERS = [
@@ -157,7 +157,6 @@
       "<button type='button' data-switch-role='owner'>Studio Owner</button>" +
       "<button type='button' data-switch-role='teacher'>Teacher</button>" +
       "<button type='button' data-switch-role='parent'>Parent</button>" +
-      "<a class='role-dock-link' href='feedback.html'>Send Feedback</a>" +
       "<button type='button' data-action='logout'>Log Out</button>" +
       "</div>";
 

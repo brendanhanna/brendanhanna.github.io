@@ -16,21 +16,18 @@
       { href: "schedule.html", label: "Schedule", icon: "&#128197;" },
       { href: "students.html", label: "Students", icon: "&#128101;" },
       { href: "payments.html", label: "Payments", icon: "&#128179;" },
-      { href: "events.html", label: "Recitals / Events", icon: "&#127917;" },
-      { href: "feedback.html", label: "Feedback", icon: "&#9993;" }
+      { href: "events.html", label: "Recitals / Events", icon: "&#127917;" }
     ],
     teacher: [
       { href: "teacher.html", label: "Teacher Home", icon: "&#127979;" },
       { href: "schedule.html", label: "My Schedule", icon: "&#128197;" },
       { href: "students.html", label: "Students", icon: "&#128101;" },
-      { href: "events.html", label: "Events", icon: "&#127917;" },
-      { href: "feedback.html", label: "Feedback", icon: "&#9993;" }
+      { href: "events.html", label: "Events", icon: "&#127917;" }
     ],
     parent: [
       { href: "parent.html", label: "Parent Home", icon: "&#127968;" },
       { href: "payments.html", label: "Payments", icon: "&#128179;" },
-      { href: "events.html", label: "Events", icon: "&#127917;" },
-      { href: "feedback.html", label: "Feedback", icon: "&#9993;" }
+      { href: "events.html", label: "Events", icon: "&#127917;" }
     ]
   };
 

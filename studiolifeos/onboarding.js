@@ -23,7 +23,7 @@
     {
       title: "Role Selector and Navigation",
       body: "After login, use the round role button at bottom-right to switch roles. On Owner view, use Full Studio Console Navigation at the top to jump into the full app pages.",
-      tip: "You can always return to feedback and role tools from the same floating menu."
+      tip: "You can always return to role switching and theme tools from the same floating menu."
     }
   ];
 
