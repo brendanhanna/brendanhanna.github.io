@@ -17,6 +17,10 @@
   --eyebrow: #336174;
   --hero-text: #2a4357;
   --login-hero-bg: radial-gradient(circle at 10% 10%, #fef3c7 0%, #eff6ff 52%, #ecfeff 100%);
+  --login-hero-image-webp: url("assets/login-cover.webp");
+  --login-hero-image-png: url("assets/login-cover.png");
+  --login-hero-overlay-start: rgba(255, 255, 255, 0.8);
+  --login-hero-overlay-end: rgba(255, 255, 255, 0.7);
   --brand: #0f7b84;
   --brand-dark: #0a5960;
   --danger: #b42338;
@@ -47,6 +51,8 @@
   --eyebrow: #8fb8d8;
   --hero-text: #b6d2e8;
   --login-hero-bg: radial-gradient(circle at 10% 10%, #1f3149 0%, #142033 52%, #10182a 100%);
+  --login-hero-overlay-start: rgba(8, 14, 24, 0.72);
+  --login-hero-overlay-end: rgba(11, 18, 32, 0.78);
   --shadow: 0 12px 30px rgba(0, 0, 0, 0.42);
 }
 
@@ -934,7 +940,14 @@ textarea {
 }
 
 .login-hero {
-  background: var(--login-hero-bg);
+  background-image:
+    linear-gradient(140deg, var(--login-hero-overlay-start), var(--login-hero-overlay-end)),
+    var(--login-hero-image-webp),
+    var(--login-hero-image-png),
+    var(--login-hero-bg);
+  background-position: center;
+  background-size: 100% 100%, cover, cover, cover;
+  background-repeat: no-repeat;
 }
 
 .eyebrow {
@@ -955,6 +968,7 @@ textarea {
   margin: 14px 0 0;
   padding-left: 18px;
   color: var(--hero-text);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .login-form {
