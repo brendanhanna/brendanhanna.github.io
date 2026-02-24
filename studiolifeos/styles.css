@@ -256,6 +256,24 @@ body.app-sidebar-collapsed .nav-link {
   transition: opacity 0.18s ease, transform 0.2s ease, max-width 0.22s ease, padding 0.2s ease, background 0.2s ease;
 }
 
+.sidebar-logout-btn {
+  margin-top: 10px;
+  width: 100%;
+  border: 1px solid rgba(255, 148, 166, 0.38);
+  border-radius: 8px;
+  background: rgba(180, 35, 56, 0.2);
+  color: #ffe4e8;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.sidebar-logout-btn:hover {
+  background: rgba(180, 35, 56, 0.3);
+}
+
 main {
   padding: 24px 24px 28px;
 }
@@ -1107,6 +1125,8 @@ textarea {
   display: grid;
   align-content: start;
   gap: 6px;
+  overflow: auto;
+  padding-right: 2px;
 }
 
 .role-nav-link {
@@ -1143,15 +1163,42 @@ textarea {
 .role-sidebar-foot {
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding-top: 10px;
+  display: grid;
+  gap: 8px;
 }
 
 .role-sidebar-foot-link {
   display: inline-flex;
+  align-items: center;
   color: #dbe8ff;
-  font-size: 0.84rem;
-  text-decoration: underline;
+  font-size: 0.82rem;
+  text-decoration: none;
   max-width: 180px;
   white-space: nowrap;
+  border: 1px solid rgba(163, 191, 227, 0.28);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 8px 10px;
+}
+
+.role-sidebar-foot-link:hover {
+  background: rgba(122, 186, 255, 0.16);
+  border-color: rgba(122, 186, 255, 0.32);
+}
+
+.role-sidebar-logout {
+  width: 100%;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  color: #ffd8de;
+  border-color: rgba(255, 148, 166, 0.38);
+  background: rgba(180, 35, 56, 0.2);
+}
+
+.role-sidebar-logout:hover {
+  background: rgba(180, 35, 56, 0.3);
+  border-color: rgba(255, 148, 166, 0.52);
 }
 
 body.role-sidebar-collapsed .role-app-shell {
@@ -1351,6 +1398,78 @@ body.role-sidebar-collapsed .role-nav-link {
   background: var(--table-hover);
 }
 
+.owner-schedule-toolbar {
+  display: grid;
+  grid-template-columns: 110px minmax(170px, 320px);
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 12px;
+}
+
+.owner-schedule-mode {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0 4px;
+}
+
+.owner-schedule-mode .button {
+  padding: 7px 12px;
+}
+
+.owner-schedule-mode .button.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.owner-schedule-toolbar select {
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+.owner-room-schedule-table td {
+  vertical-align: top;
+}
+
+.owner-room-cell {
+  min-width: 240px;
+}
+
+.owner-room-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px;
+  background: var(--surface-soft);
+  display: grid;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.owner-room-item:last-child {
+  margin-bottom: 0;
+}
+
+.owner-room-item strong {
+  font-size: 0.78rem;
+}
+
+.owner-room-item-title {
+  color: var(--text);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.owner-room-item span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
 .admin-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -1545,7 +1664,7 @@ body.flyover-open {
   background: var(--surface);
   box-shadow: 0 30px 48px rgba(7, 15, 31, 0.34);
   padding: 20px 18px 16px;
-  z-index: 1;
+  z-index: 3;
 }
 
 .flyover-close {
@@ -1594,6 +1713,51 @@ body.flyover-open {
   display: flex;
   justify-content: space-between;
   gap: 8px;
+}
+
+.tour-hotspot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  border: 2px solid color-mix(in srgb, var(--brand) 82%, #ffffff 18%);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--brand) 28%, transparent),
+    0 0 24px color-mix(in srgb, var(--brand) 42%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  transition:
+    left 0.2s ease,
+    top 0.2s ease,
+    width 0.2s ease,
+    height 0.2s ease,
+    opacity 0.16s ease;
+}
+
+.tour-hotspot.visible {
+  opacity: 1;
+  animation: tourPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes tourPulse {
+  0% {
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, var(--brand) 28%, transparent),
+      0 0 18px color-mix(in srgb, var(--brand) 38%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--brand) 36%, transparent),
+      0 0 30px color-mix(in srgb, var(--brand) 56%, transparent);
+  }
+  100% {
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, var(--brand) 28%, transparent),
+      0 0 18px color-mix(in srgb, var(--brand) 38%, transparent);
+  }
 }
 
 body[data-auth="login"] .theme-toggle {
@@ -1648,6 +1812,10 @@ body[data-auth="login"] .theme-toggle {
 
   .owner-nav-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .owner-schedule-toolbar {
+    grid-template-columns: 1fr;
   }
 
   .admin-tabs {

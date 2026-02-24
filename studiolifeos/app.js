@@ -76,6 +76,7 @@
     });
 
     initMainSidebarCollapse();
+    initSidebarLogout();
   }
 
   function initMainSidebarCollapse() {
@@ -161,6 +162,26 @@
     });
   }
 
+  function initSidebarLogout() {
+    var sidebarFoot = document.querySelector(".app-shell .sidebar .sidebar-foot");
+    if (!sidebarFoot || sidebarFoot.querySelector("[data-sidebar-logout]")) return;
+
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "sidebar-logout-btn";
+    button.setAttribute("data-sidebar-logout", "1");
+    button.textContent = "Log Out";
+
+    button.addEventListener("click", function () {
+      if (window.Auth && typeof window.Auth.clearSession === "function") {
+        window.Auth.clearSession();
+      }
+      window.location.href = "login.html";
+    });
+
+    sidebarFoot.appendChild(button);
+  }
+
   function initDashboard() {
     const roleContext = getRoleContext();
     const now = new Date();
@@ -215,7 +236,7 @@
           "<strong>" +
           escapeHtml(item.name) +
           "</strong><span>" +
-          escapeHtml(item.start + "-" + item.end) +
+          escapeHtml(to12Hour(item.start) + " - " + to12Hour(item.end)) +
           "</span></div>" +
           "<div class='today-class-meta'>" +
           "<span>" +
@@ -1234,7 +1255,7 @@
             "<tr><td>" +
             escapeHtml(formatDate(rehearsal.date)) +
             "</td><td>" +
-            escapeHtml(rehearsal.time) +
+            escapeHtml(formatTimeRange(rehearsal.time)) +
             "</td><td>" +
             escapeHtml(rehearsal.focus) +
             "</td><td>" +
@@ -1474,6 +1495,37 @@
     const hour = ((hour24 + 11) % 12) + 1;
     const suffix = hour24 >= 12 ? "PM" : "AM";
     return hour + ":" + String(mins).padStart(2, "0") + " " + suffix;
+  }
+
+  function formatTimeRange(value) {
+    const text = String(value || "").trim();
+    if (!text) return "";
+
+    const parts = text.split(/\s*-\s*/);
+    if (parts.length === 2) {
+      const start = normalizeDisplayTime(parts[0]);
+      const end = normalizeDisplayTime(parts[1]);
+      if (start && end) return start + " - " + end;
+    }
+
+    return normalizeDisplayTime(text) || text;
+  }
+
+  function normalizeDisplayTime(value) {
+    const text = String(value || "").trim();
+    if (!text) return "";
+
+    const ampm = text.match(/^(\d{1,2})(?::(\d{2}))?\s*([AaPp])\.?\s*[Mm]\.?$/);
+    if (ampm) {
+      const hour = Number(ampm[1]);
+      const mins = ampm[2] != null ? Number(ampm[2]) : 0;
+      if (!Number.isFinite(hour) || !Number.isFinite(mins) || hour < 1 || hour > 12 || mins < 0 || mins > 59) return "";
+      return hour + ":" + String(mins).padStart(2, "0") + " " + (ampm[3].toUpperCase() === "P" ? "PM" : "AM");
+    }
+
+    if (/^\d{1,2}:\d{2}$/.test(text)) return to12Hour(text);
+    if (/^\d{1,2}$/.test(text)) return to12Hour(text + ":00");
+    return "";
   }
 
   function titleCase(value) {

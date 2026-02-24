@@ -16,27 +16,27 @@
           <p class="subtitle">Cross-functional overview across operations, finance, and event readiness</p>
         </div>
         <div class="role-links">
-          <a class="button" href="dashboard.html">Open Full Console</a>
-          <a class="button button-primary" href="schedule.html">Manage Schedule</a>
+          <a class="button" href="owner.html?view=schedule">Schedule by Teacher</a>
+          <a class="button button-primary" href="owner-admin.html">Admin Center</a>
         </div>
       </header>
 
-      <section class="card owner-nav-hub">
+      <section class="card owner-nav-hub" data-owner-view="overview navigation">
         <div class="section-title-row">
           <h3>Full Studio Console Navigation</h3>
-          <span class="muted">Use these links to access the full sidebar-driven app.</span>
+          <span class="muted">Jump to the exact operating area for owners.</span>
         </div>
         <div class="owner-nav-grid">
-          <a class="owner-nav-link" href="dashboard.html"><span>&#128200;</span>Dashboard</a>
-          <a class="owner-nav-link" href="schedule.html"><span>&#128197;</span>Schedule</a>
-          <a class="owner-nav-link" href="students.html"><span>&#128101;</span>Students</a>
-          <a class="owner-nav-link" href="payments.html"><span>&#128179;</span>Payments</a>
-          <a class="owner-nav-link" href="events.html"><span>&#127917;</span>Recitals / Events</a>
+          <a class="owner-nav-link" href="owner.html?view=snapshot"><span>&#128200;</span>Dashboard</a>
+          <a class="owner-nav-link" href="owner.html?view=schedule"><span>&#128197;</span>Schedule</a>
+          <a class="owner-nav-link" href="owner-admin.html?tab=students"><span>&#128101;</span>Students</a>
+          <a class="owner-nav-link" href="owner-admin.html?tab=payments"><span>&#128179;</span>Payments</a>
+          <a class="owner-nav-link" href="owner-admin.html?tab=events"><span>&#127917;</span>Recitals / Events</a>
           <a class="owner-nav-link" href="owner-admin.html"><span>&#9881;</span>Admin Center</a>
         </div>
       </section>
 
-      <section class="cards-grid">
+      <section class="cards-grid" data-owner-view="overview snapshot finance">
         <div class="card">
           <div class="kpi-label">Revenue This Month</div>
           <div class="kpi-value" id="ownerRevenue">-</div>
@@ -55,7 +55,7 @@
         </div>
       </section>
 
-      <section class="two-col">
+      <section class="two-col" data-owner-view="overview finance operations">
         <article class="card">
           <div class="section-title-row"><h3>Collections Risk</h3></div>
           <div class="table-wrap">
@@ -82,18 +82,36 @@
         </article>
       </section>
 
-      <section class="card">
+      <section class="card" data-owner-view="overview schedule operations">
+        <div class="section-title-row">
+          <h3>Schedule Explorer</h3>
+          <span class="muted">Switch between teacher load and room/day coverage.</span>
+        </div>
+        <div class="owner-schedule-mode" id="ownerScheduleModeSwitch">
+          <button type="button" class="button" data-owner-schedule-mode="teacher">By Teacher</button>
+          <button type="button" class="button" data-owner-schedule-mode="room">By Room / Day</button>
+          <button type="button" class="button" data-owner-schedule-mode="room-teacher">By Room + Teacher</button>
+        </div>
+        <div class="owner-schedule-toolbar">
+          <label class="muted" id="ownerTeacherScheduleFilterLabel" for="ownerTeacherScheduleFilter">Teacher</label>
+          <select id="ownerTeacherScheduleFilter"></select>
+        </div>
+        <div id="ownerTeacherScheduleList" class="stack-list"></div>
+        <div id="ownerRoomScheduleGrid"></div>
+      </section>
+
+      <section class="card" data-owner-view="overview shortcuts operations">
         <div class="section-title-row"><h3>Operations Shortcuts</h3></div>
         <div class="shortcut-grid">
-          <a class="shortcut-card" href="schedule.html"><strong>Schedule Planner</strong><span>Edit class blocks and room usage</span></a>
-          <a class="shortcut-card" href="students.html"><strong>Student Records</strong><span>Search, filters, attendance, notes</span></a>
-          <a class="shortcut-card" href="payments.html"><strong>Payments</strong><span>Transaction statuses and balances</span></a>
-          <a class="shortcut-card" href="events.html"><strong>Recitals & Events</strong><span>Costumes, rehearsals, and ticketing</span></a>
-          <a class="shortcut-card" href="owner-admin.html"><strong>Admin Center</strong><span>Manage teachers, students, classes, payments, and documents</span></a>
+          <a class="shortcut-card" href="owner-admin.html?tab=classes"><strong>Schedule Planner</strong><span>Edit class blocks, times, and room usage</span></a>
+          <a class="shortcut-card" href="owner-admin.html?tab=students"><strong>Student Records</strong><span>Guardians, enrollment, notes, and balances</span></a>
+          <a class="shortcut-card" href="owner-admin.html?tab=payments"><strong>Payments</strong><span>Transactions, payment type, and payment method</span></a>
+          <a class="shortcut-card" href="owner-admin.html?tab=events"><strong>Recitals & Events</strong><span>Routines, rehearsals, and ticket readiness</span></a>
+          <a class="shortcut-card" href="owner-admin.html?tab=teachers"><strong>Admin Center</strong><span>Manage teachers, students, classes, payments, and documents</span></a>
         </div>
       </section>
 
-      <section class="card">
+      <section class="card" data-owner-view="overview admin">
         <div class="section-title-row">
           <h3>Owner Admin Center</h3>
           <span class="muted">Admin tools are now on a dedicated page.</span>
@@ -109,5 +127,6 @@
     <script src="auth.js"></script>
     <script src="role-nav.js"></script>
     <script src="role-views.js"></script>
+    <script src="onboarding.js"></script>
   </body>
 </html>

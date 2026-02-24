@@ -11,23 +11,31 @@
   var navItemsByRole = {
     owner: [
       { href: "owner.html", label: "Owner Home", icon: "&#127970;" },
-      { href: "dashboard.html", label: "Dashboard", icon: "&#128200;" },
-      { href: "schedule.html", label: "Schedule", icon: "&#128197;" },
-      { href: "students.html", label: "Students", icon: "&#128101;" },
-      { href: "payments.html", label: "Payments", icon: "&#128179;" },
-      { href: "events.html", label: "Recitals / Events", icon: "&#127917;" },
+      { href: "owner.html?view=snapshot", label: "Dashboard", icon: "&#128200;" },
+      { href: "owner.html?view=schedule", label: "Schedule", icon: "&#128197;" },
+      { href: "owner-admin.html?tab=students", label: "Students", icon: "&#128101;" },
+      { href: "owner-admin.html?tab=payments", label: "Payments", icon: "&#128179;" },
+      { href: "owner-admin.html?tab=events", label: "Recitals / Events", icon: "&#127917;" },
       { href: "owner-admin.html", label: "Admin Center", icon: "&#9881;" }
     ],
     teacher: [
       { href: "teacher.html", label: "Teacher Home", icon: "&#127979;" },
-      { href: "schedule.html", label: "My Schedule", icon: "&#128197;" },
-      { href: "students.html", label: "Students", icon: "&#128101;" },
-      { href: "events.html", label: "Events", icon: "&#127917;" }
+      { href: "teacher.html?view=metrics", label: "Dashboard", icon: "&#128200;" },
+      { href: "teacher.html?view=classes", label: "Schedule", icon: "&#128197;" },
+      { href: "teacher.html?view=roster", label: "Roster", icon: "&#128101;" },
+      { href: "teacher.html?view=attendance", label: "Attendance", icon: "&#9989;" },
+      { href: "teacher.html?view=events", label: "Recitals / Events", icon: "&#127917;" }
     ],
     parent: [
       { href: "parent.html", label: "Parent Home", icon: "&#127968;" },
-      { href: "payments.html", label: "Payments", icon: "&#128179;" },
-      { href: "events.html", label: "Events", icon: "&#127917;" }
+      { href: "parent.html?view=schedule", label: "Schedule", icon: "&#128197;" },
+      { href: "parent.html?view=payments", label: "Payments", icon: "&#128179;" },
+      { href: "parent.html?view=enrollment", label: "Enrollment", icon: "&#128221;" },
+      { href: "parent.html?view=billing", label: "Billing Settings", icon: "&#128179;" },
+      { href: "parent.html?view=waivers", label: "Waivers", icon: "&#9997;" },
+      { href: "parent.html?view=documents", label: "Documents", icon: "&#128196;" },
+      { href: "parent.html?view=events", label: "Events", icon: "&#127917;" },
+      { href: "parent.html?view=bulletin", label: "Bulletin", icon: "&#128227;" }
     ]
   };
 
@@ -54,7 +62,9 @@
     "</div>" +
     "<nav class='role-sidebar-nav' id='roleSidebarNav'></nav>" +
     "<div class='role-sidebar-foot'>" +
+    "<button class='role-sidebar-foot-link' type='button' id='openTourButton' data-open-tour='1'>Help / Tour</button>" +
     "<a class='role-sidebar-foot-link' href='login.html'>Switch Account</a>" +
+    "<button class='role-sidebar-foot-link role-sidebar-logout' type='button' id='roleSidebarLogout'>Log Out</button>" +
     "</div>";
 
   shell.appendChild(sidebar);
@@ -67,15 +77,30 @@
 
   renderNav();
   initializeCollapse();
+  initializeLogout();
+  window.addEventListener("popstate", renderNav);
+  window.addEventListener("hashchange", renderNav);
+  window.addEventListener("studio:nav-refresh", renderNav);
 
   function renderNav() {
     var nav = document.getElementById("roleSidebarNav");
     if (!nav) return;
 
     var currentFile = (window.location.pathname.split("/").pop() || "").toLowerCase();
+    var currentQuery = (window.location.search || "").replace(/^\?/, "").toLowerCase();
     nav.innerHTML = navItems
       .map(function (item) {
-        var active = currentFile === item.href.toLowerCase() ? " active" : "";
+        var itemHref = String(item.href || "").toLowerCase();
+        var hrefParts = itemHref.split("?");
+        var hrefFile = hrefParts[0] || "";
+        var hrefQuery = hrefParts[1] || "";
+        var active = "";
+
+        if (hrefFile === currentFile) {
+          if (!hrefQuery && (!currentQuery || currentQuery === "view=overview")) active = " active";
+          if (hrefQuery && hrefQuery === currentQuery) active = " active";
+        }
+
         return (
           "<a class='role-nav-link" +
           active +
@@ -120,6 +145,18 @@
       } catch (error) {
         // Ignore storage access errors in prototype mode.
       }
+    });
+  }
+
+  function initializeLogout() {
+    var logoutButton = document.getElementById("roleSidebarLogout");
+    if (!logoutButton) return;
+
+    logoutButton.addEventListener("click", function () {
+      if (window.Auth && typeof window.Auth.clearSession === "function") {
+        window.Auth.clearSession();
+      }
+      window.location.href = "login.html";
     });
   }
 

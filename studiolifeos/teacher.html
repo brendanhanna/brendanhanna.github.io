@@ -16,12 +16,12 @@
           <p class="subtitle">Daily teaching flow, rosters, and attendance tracking</p>
         </div>
         <div class="role-links">
-          <a class="button" href="schedule.html">Full Schedule</a>
-          <a class="button" href="events.html">Event Rehearsals</a>
+          <a class="button" href="teacher.html?view=classes">Schedule</a>
+          <a class="button" href="teacher.html?view=attendance">Attendance</a>
         </div>
       </header>
 
-      <section class="cards-grid teacher-kpis">
+      <section class="cards-grid teacher-kpis" data-teacher-view="overview metrics">
         <div class="card">
           <div class="kpi-label">Assigned Classes</div>
           <div class="kpi-value" id="teacherTotalClasses">-</div>
@@ -36,33 +36,54 @@
         </div>
       </section>
 
-      <section class="two-col">
-        <article class="card">
-          <div class="section-title-row"><h3>Today's Classes</h3></div>
-          <div id="teacherTodayClasses" class="today-classes"></div>
-        </article>
+      <section class="card" data-teacher-view="overview classes">
+        <div class="section-title-row"><h3>Today's Classes</h3></div>
+        <div id="teacherTodayClasses" class="today-classes"></div>
+      </section>
 
-        <article class="card">
-          <div class="section-title-row"><h3>Class Roster & Check-in</h3></div>
-          <label class="muted" for="teacherClassPicker">Select Class</label>
-          <select id="teacherClassPicker"></select>
-          <p class="muted" style="margin: 8px 0 10px">
-            Attendance draft for: <strong id="teacherRosterClass">-</strong>
-          </p>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Student</th>
-                  <th>Age</th>
-                  <th>Guardian</th>
-                  <th>Attendance</th>
-                </tr>
-              </thead>
-              <tbody id="teacherRosterBody"></tbody>
-            </table>
-          </div>
-        </article>
+      <section class="card" data-teacher-view="overview roster">
+        <div class="section-title-row"><h3>Student Roster</h3></div>
+        <p class="muted">All active students assigned to your classes.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Age</th>
+                <th>Guardian</th>
+                <th>Classes</th>
+              </tr>
+            </thead>
+            <tbody id="teacherRosterDirectoryRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card" data-teacher-view="overview attendance">
+        <div class="section-title-row"><h3>Attendance Check-in</h3></div>
+        <label class="muted" for="teacherClassPicker">Select Class</label>
+        <select id="teacherClassPicker"></select>
+        <p class="muted" style="margin: 8px 0 10px">
+          Attendance draft for: <strong id="teacherRosterClass">-</strong>
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Age</th>
+                <th>Guardian</th>
+                <th>Attendance</th>
+              </tr>
+            </thead>
+            <tbody id="teacherRosterBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card" data-teacher-view="overview events">
+        <div class="section-title-row"><h3>Upcoming Event Rehearsals</h3></div>
+        <div id="teacherEventList" class="stack-list"></div>
       </section>
     </main>
 
@@ -70,5 +91,6 @@
     <script src="auth.js"></script>
     <script src="role-nav.js"></script>
     <script src="role-views.js"></script>
+    <script src="onboarding.js"></script>
   </body>
 </html>

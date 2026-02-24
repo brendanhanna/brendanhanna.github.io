@@ -95,9 +95,11 @@
 
     renderEnrollmentCenter();
     renderBillingSettings();
+    renderParentEventCenter();
     renderWaiverCenter();
     renderFileCenter();
     renderBulletinBoard();
+    applyParentSectionView();
 
     function renderEnrollmentCenter() {
       var enrolledContainer = document.getElementById("parentEnrolledManageList");
@@ -269,7 +271,7 @@
 
       saveButton.onclick = function () {
         profile.paymentMethod.brand = brandInput.value.trim() || "Card";
-        profile.paymentMethod.last4 = (last4Input.value || "").replace(/\\D/g, "").slice(-4);
+        profile.paymentMethod.last4 = (last4Input.value || "").replace(/\D/g, "").slice(-4);
         profile.paymentMethod.exp = expInput.value.trim() || "01/30";
         profile.paymentMethod.zip = zipInput.value.trim() || "00000";
         profile.autopay = Boolean(autopayToggle.checked);
@@ -316,6 +318,58 @@
         if (!tx) return;
         downloadReceipt(student, tx);
       };
+    }
+
+    function renderParentEventCenter() {
+      var eventList = document.getElementById("parentEventList");
+      if (!eventList) return;
+
+      var classIdSet = new Set(student.classIds || []);
+      var scopedEvents = (data.events || [])
+        .map(function (eventItem) {
+          var routines = (eventItem.routines || []).filter(function (routine) {
+            return classIdSet.has(routine.classId);
+          });
+          return {
+            event: eventItem,
+            routines: routines
+          };
+        })
+        .filter(function (entry) {
+          return entry.routines.length > 0;
+        })
+        .sort(function (a, b) {
+          return String(a.event.date || "").localeCompare(String(b.event.date || ""));
+        });
+
+      if (!scopedEvents.length) {
+        eventList.innerHTML = "<div class='empty-state'>No upcoming events are assigned to your enrolled classes.</div>";
+        return;
+      }
+
+      eventList.innerHTML = scopedEvents
+        .map(function (entry) {
+          var routineNames = entry.routines
+            .slice(0, 4)
+            .map(function (routine) {
+              var danceClass = getClassById(routine.classId);
+              return danceClass ? danceClass.name : routine.routine;
+            })
+            .join(", ");
+
+          return (
+            "<div class='stack-item'><div class='stack-item-top'><strong>" +
+            escapeHtml(entry.event.name) +
+            "</strong><span class='status-pill neutral'>" +
+            escapeHtml(entry.event.status) +
+            "</span></div><div class='stack-item-meta'>" +
+            escapeHtml(formatDate(entry.event.date) + " | " + entry.event.venue) +
+            "</div><div class='stack-item-meta'>" +
+            escapeHtml("Classes performing: " + routineNames) +
+            "</div></div>"
+          );
+        })
+        .join("");
     }
 
     function renderWaiverCenter() {
@@ -422,6 +476,41 @@
         })
         .join("");
     }
+
+    function applyParentSectionView() {
+      var activeView = getParentView();
+      var sections = Array.prototype.slice.call(document.querySelectorAll("[data-parent-view]"));
+      sections.forEach(function (section) {
+        var views = String(section.getAttribute("data-parent-view") || "")
+          .toLowerCase()
+          .split(/\s+/)
+          .filter(Boolean);
+        var shouldShow = activeView === "overview" ? views.indexOf("overview") !== -1 : views.indexOf(activeView) !== -1;
+        section.style.display = shouldShow ? "" : "none";
+      });
+    }
+
+    function getParentView() {
+      var allowed = [
+        "overview",
+        "schedule",
+        "announcements",
+        "payments",
+        "enrollment",
+        "billing",
+        "waivers",
+        "documents",
+        "events",
+        "bulletin"
+      ];
+      try {
+        var params = new URLSearchParams(window.location.search || "");
+        var requested = String(params.get("view") || "").toLowerCase();
+        return allowed.indexOf(requested) !== -1 ? requested : "overview";
+      } catch (error) {
+        return "overview";
+      }
+    }
   }
 
   function loadAppData() {
@@ -516,7 +605,52 @@
       picker.addEventListener("change", renderTeacherRoster);
     }
 
+    renderTeacherRosterDirectory();
     renderTeacherRoster();
+    renderTeacherEventCenter();
+    applyTeacherSectionView();
+
+    function renderTeacherRosterDirectory() {
+      var rosterBody = document.getElementById("teacherRosterDirectoryRows");
+      if (!rosterBody) return;
+
+      var studentMap = {};
+      myClasses.forEach(function (danceClass) {
+        danceClass.studentIds.forEach(function (studentId) {
+          if (!studentMap[studentId]) studentMap[studentId] = [];
+          studentMap[studentId].push(danceClass.name);
+        });
+      });
+
+      var rows = Object.keys(studentMap)
+        .map(function (studentId) {
+          var student = getStudentById(studentId);
+          if (!student) return null;
+          return {
+            name: student.name,
+            html:
+              "<tr><td>" +
+              escapeHtml(student.name) +
+              "</td><td>Age " +
+              student.age +
+              "</td><td>" +
+              escapeHtml(student.guardianName) +
+              "</td><td>" +
+              escapeHtml(studentMap[studentId].sort().join(", ")) +
+              "</td></tr>"
+          };
+        })
+        .filter(Boolean)
+        .sort(function (a, b) {
+          return a.name.localeCompare(b.name);
+        })
+        .map(function (row) {
+          return row.html;
+        })
+        .join("");
+
+      rosterBody.innerHTML = rows || "<tr><td colspan='4'>No assigned students yet.</td></tr>";
+    }
 
     function renderTeacherRoster() {
       var classId = picker && picker.value;
@@ -557,17 +691,99 @@
 
       setText("teacherRosterClass", danceClass.name);
     }
+
+    function renderTeacherEventCenter() {
+      var eventList = document.getElementById("teacherEventList");
+      if (!eventList) return;
+
+      var classIdSet = new Set(
+        myClasses.map(function (danceClass) {
+          return danceClass.id;
+        })
+      );
+
+      var scopedEvents = (data.events || [])
+        .map(function (eventItem) {
+          var routines = (eventItem.routines || []).filter(function (routine) {
+            return classIdSet.has(routine.classId);
+          });
+          return {
+            event: eventItem,
+            routines: routines
+          };
+        })
+        .filter(function (entry) {
+          return entry.routines.length > 0;
+        })
+        .sort(function (a, b) {
+          return String(a.event.date || "").localeCompare(String(b.event.date || ""));
+        });
+
+      if (!scopedEvents.length) {
+        eventList.innerHTML = "<div class='empty-state'>No upcoming rehearsals linked to your classes.</div>";
+        return;
+      }
+
+      eventList.innerHTML = scopedEvents
+        .map(function (entry) {
+          var routineNames = entry.routines
+            .slice(0, 4)
+            .map(function (routine) {
+              return routine.routine;
+            })
+            .join(", ");
+
+          return (
+            "<div class='stack-item'><div class='stack-item-top'><strong>" +
+            escapeHtml(entry.event.name) +
+            "</strong><span class='status-pill neutral'>" +
+            escapeHtml(entry.event.status) +
+            "</span></div><div class='stack-item-meta'>" +
+            escapeHtml(formatDate(entry.event.date) + " | " + entry.event.venue) +
+            "</div><div class='stack-item-meta'>" +
+            escapeHtml("Assigned routines: " + routineNames) +
+            "</div></div>"
+          );
+        })
+        .join("");
+    }
+
+    function applyTeacherSectionView() {
+      var activeView = getTeacherView();
+      var sections = Array.prototype.slice.call(document.querySelectorAll("[data-teacher-view]"));
+      sections.forEach(function (section) {
+        var views = String(section.getAttribute("data-teacher-view") || "")
+          .toLowerCase()
+          .split(/\s+/)
+          .filter(Boolean);
+        var shouldShow = activeView === "overview" ? views.indexOf("overview") !== -1 : views.indexOf(activeView) !== -1;
+        section.style.display = shouldShow ? "" : "none";
+      });
+    }
+
+    function getTeacherView() {
+      var allowed = ["overview", "metrics", "classes", "roster", "attendance", "events"];
+      try {
+        var params = new URLSearchParams(window.location.search || "");
+        var requested = String(params.get("view") || "").toLowerCase();
+        return allowed.indexOf(requested) !== -1 ? requested : "overview";
+      } catch (error) {
+        return "overview";
+      }
+    }
   }
 
   function initOwnerView() {
     var portalState = loadParentPortalState();
     var initialTeacherCount = Array.isArray(portalState.teachers) ? portalState.teachers.length : 0;
+    var ownerScheduleMode = loadOwnerScheduleMode();
     ensureTeacherRecords(portalState);
     if ((portalState.teachers || []).length !== initialTeacherCount) {
       saveParentPortalState(portalState);
     }
     renderOwnerSnapshot();
     initOwnerAdmin(portalState, renderOwnerSnapshot);
+    applyOwnerSectionView();
 
     function renderOwnerSnapshot() {
       var now = new Date();
@@ -650,6 +866,276 @@
         })
         .join("");
       setHtml("ownerEventsList", upcomingEvents || "<div class='empty-state'>No upcoming events scheduled.</div>");
+
+      renderOwnerScheduleExplorer();
+    }
+
+    function renderOwnerScheduleExplorer() {
+      var filter = document.getElementById("ownerTeacherScheduleFilter");
+      var filterLabel = document.getElementById("ownerTeacherScheduleFilterLabel");
+      var list = document.getElementById("ownerTeacherScheduleList");
+      var grid = document.getElementById("ownerRoomScheduleGrid");
+      var modeSwitch = document.getElementById("ownerScheduleModeSwitch");
+      if (!filter || !filterLabel || !list || !grid || !modeSwitch) return;
+
+      var modeButtons = Array.prototype.slice.call(modeSwitch.querySelectorAll("[data-owner-schedule-mode]"));
+      if (!modeSwitch.dataset.bound) {
+        modeButtons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            var nextMode = button.getAttribute("data-owner-schedule-mode");
+            if (nextMode !== "teacher" && nextMode !== "room" && nextMode !== "room-teacher") return;
+            ownerScheduleMode = nextMode;
+            saveOwnerScheduleMode(ownerScheduleMode);
+            renderOwnerScheduleExplorer();
+          });
+        });
+        modeSwitch.dataset.bound = "1";
+      }
+
+      modeButtons.forEach(function (button) {
+        var isActive = button.getAttribute("data-owner-schedule-mode") === ownerScheduleMode;
+        button.classList.toggle("active", isActive);
+      });
+
+      var isTeacherMode = ownerScheduleMode === "teacher";
+      var isRoomTeacherMode = ownerScheduleMode === "room-teacher";
+      filter.style.display = isTeacherMode || isRoomTeacherMode ? "" : "none";
+      filterLabel.style.display = isTeacherMode || isRoomTeacherMode ? "" : "none";
+      list.style.display = isTeacherMode ? "grid" : "none";
+      grid.style.display = isTeacherMode ? "none" : "block";
+      filterLabel.textContent = isRoomTeacherMode ? "Teacher Filter" : "Teacher";
+
+      var teacherNames = unique(
+        data.classes.map(function (danceClass) {
+          return String(danceClass.instructor || "").trim() || "Unassigned";
+        })
+      )
+        .slice()
+        .sort(function (a, b) {
+          return a.localeCompare(b);
+        });
+
+      var previousValue = filter.value || "all";
+      filter.innerHTML =
+        "<option value='all'>All Teachers</option>" +
+        teacherNames
+          .map(function (name) {
+            return "<option value='" + escapeHtml(name) + "'>" + escapeHtml(name) + "</option>";
+          })
+          .join("");
+      if (previousValue === "all" || teacherNames.indexOf(previousValue) !== -1) {
+        filter.value = previousValue;
+      } else {
+        filter.value = "all";
+      }
+
+      if (!filter.dataset.bound) {
+        filter.addEventListener("change", renderOwnerScheduleExplorer);
+        filter.dataset.bound = "1";
+      }
+
+      var dayOrder = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7 };
+      var dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+      if (!isTeacherMode) {
+        var roomTeacherFilter = filter.value || "all";
+        var roomNames = unique(
+          data.classes.map(function (danceClass) {
+            return String(danceClass.room || "").trim() || "TBD";
+          })
+        )
+          .slice()
+          .sort(function (a, b) {
+            return a.localeCompare(b);
+          });
+        var activeDays = dayLabels.filter(function (day) {
+          return data.classes.some(function (danceClass) {
+            return (danceClass.days || []).indexOf(day) !== -1;
+          });
+        });
+
+        if (!roomNames.length || !activeDays.length) {
+          grid.innerHTML = "<div class='empty-state'>No classes available to build the room schedule.</div>";
+          return;
+        }
+
+        var roomHeaders = roomNames
+          .map(function (room) {
+            return "<th>" + escapeHtml(room) + "</th>";
+          })
+          .join("");
+
+        var totalVisibleSlots = 0;
+        var rows = activeDays
+          .map(function (day) {
+            var roomCells = roomNames
+              .map(function (room) {
+                var slots = data.classes
+                  .filter(function (danceClass) {
+                    var teacher = String(danceClass.instructor || "").trim() || "Unassigned";
+                    if (isRoomTeacherMode && roomTeacherFilter !== "all" && teacher !== roomTeacherFilter) return false;
+                    return (danceClass.days || []).indexOf(day) !== -1 && (String(danceClass.room || "").trim() || "TBD") === room;
+                  })
+                  .sort(function (a, b) {
+                    return timeToMinutes(a.start) - timeToMinutes(b.start);
+                  });
+                totalVisibleSlots += slots.length;
+
+                if (!slots.length) {
+                  return "<td class='owner-room-cell'><span class='muted'>-</span></td>";
+                }
+
+                var slotHtml = slots
+                  .map(function (slot) {
+                    return (
+                      "<div class='owner-room-item'><strong>" +
+                      escapeHtml(to12Hour(slot.start) + " - " + to12Hour(slot.end)) +
+                      "</strong><span class='owner-room-item-title'>" +
+                      escapeHtml(slot.name + " (" + slot.style + ")") +
+                      "</span><span>" +
+                      escapeHtml(slot.instructor + " | " + slot.studentIds.length + "/" + slot.capacity + " enrolled") +
+                      "</span></div>"
+                    );
+                  })
+                  .join("");
+
+                return "<td class='owner-room-cell'>" + slotHtml + "</td>";
+              })
+              .join("");
+
+            return "<tr><td><strong>" + escapeHtml(day) + "</strong></td>" + roomCells + "</tr>";
+          })
+          .join("");
+
+        if (totalVisibleSlots === 0) {
+          grid.innerHTML = "<div class='empty-state'>No classes match the current room/day teacher filter.</div>";
+          return;
+        }
+
+        grid.innerHTML =
+          "<div class='table-wrap'><table class='owner-room-schedule-table'><thead><tr><th>Day</th>" +
+          roomHeaders +
+          "</tr></thead><tbody>" +
+          rows +
+          "</tbody></table></div>";
+        return;
+      }
+
+      var selectedTeacher = filter.value || "all";
+      var teacherGroups = {};
+
+      data.classes.forEach(function (danceClass) {
+        var teacher = String(danceClass.instructor || "").trim() || "Unassigned";
+        if (selectedTeacher !== "all" && teacher !== selectedTeacher) return;
+        if (!teacherGroups[teacher]) teacherGroups[teacher] = [];
+        teacherGroups[teacher].push(danceClass);
+      });
+
+      var groupNames = Object.keys(teacherGroups).sort(function (a, b) {
+        return a.localeCompare(b);
+      });
+
+      if (!groupNames.length) {
+        list.innerHTML = "<div class='empty-state'>No schedule rows available for that teacher.</div>";
+        return;
+      }
+
+      list.innerHTML = groupNames
+        .map(function (teacher) {
+          var classes = teacherGroups[teacher];
+          var weeklyHours = classes.reduce(function (sum, danceClass) {
+            var sessionHours = (timeToMinutes(danceClass.end) - timeToMinutes(danceClass.start)) / 60;
+            return sum + sessionHours * (danceClass.days || []).length;
+          }, 0);
+
+          var slots = [];
+          classes.forEach(function (danceClass) {
+            (danceClass.days || []).forEach(function (day) {
+              slots.push({
+                day: day,
+                start: danceClass.start,
+                end: danceClass.end,
+                name: danceClass.name,
+                room: danceClass.room,
+                style: danceClass.style,
+                enrolled: (danceClass.studentIds || []).length,
+                capacity: danceClass.capacity
+              });
+            });
+          });
+
+          slots.sort(function (a, b) {
+            var dayDiff = (dayOrder[a.day] || 99) - (dayOrder[b.day] || 99);
+            if (dayDiff !== 0) return dayDiff;
+            return timeToMinutes(a.start) - timeToMinutes(b.start);
+          });
+
+          var slotHtml = slots
+            .map(function (slot) {
+              return (
+                "<div class='util-row'><span>" +
+                escapeHtml(slot.day + " " + to12Hour(slot.start) + "-" + to12Hour(slot.end) + " | " + slot.name + " (" + slot.style + ")") +
+                "</span><span>" +
+                escapeHtml(slot.room + " | " + slot.enrolled + "/" + slot.capacity) +
+                "</span></div>"
+              );
+            })
+            .join("");
+
+          return (
+            "<div class='stack-item'><div class='stack-item-top'><strong>" +
+            escapeHtml(teacher) +
+            "</strong><span class='muted'>" +
+            escapeHtml(classes.length + " classes | " + weeklyHours.toFixed(1) + " hrs/week") +
+            "</span></div><div class='util-list'>" +
+            slotHtml +
+            "</div></div>"
+          );
+        })
+        .join("");
+    }
+
+    function loadOwnerScheduleMode() {
+      try {
+        var saved = localStorage.getItem("studioLifeOwnerScheduleModeV1");
+        if (saved === "room" || saved === "room-teacher") return saved;
+        return "teacher";
+      } catch (error) {
+        return "teacher";
+      }
+    }
+
+    function saveOwnerScheduleMode(mode) {
+      try {
+        var normalized = mode === "room" || mode === "room-teacher" ? mode : "teacher";
+        localStorage.setItem("studioLifeOwnerScheduleModeV1", normalized);
+      } catch (error) {
+        // Ignore storage access errors in prototype mode.
+      }
+    }
+
+    function applyOwnerSectionView() {
+      var activeView = getOwnerView();
+      var sections = Array.prototype.slice.call(document.querySelectorAll("[data-owner-view]"));
+      sections.forEach(function (section) {
+        var views = String(section.getAttribute("data-owner-view") || "")
+          .toLowerCase()
+          .split(/\s+/)
+          .filter(Boolean);
+        var shouldShow = activeView === "overview" ? views.indexOf("overview") !== -1 : views.indexOf(activeView) !== -1;
+        section.style.display = shouldShow ? "" : "none";
+      });
+    }
+
+    function getOwnerView() {
+      var allowed = ["overview", "navigation", "snapshot", "schedule", "finance", "operations", "shortcuts", "admin"];
+      try {
+        var params = new URLSearchParams(window.location.search || "");
+        var requested = String(params.get("view") || "").toLowerCase();
+        return allowed.indexOf(requested) !== -1 ? requested : "overview";
+      } catch (error) {
+        return "overview";
+      }
     }
   }
 
@@ -668,6 +1154,7 @@
     if (!tabs) return;
 
     var panels = Array.prototype.slice.call(document.querySelectorAll("[data-admin-panel]"));
+    var validTabs = ["teachers", "students", "classes", "events", "payments", "docs"];
     var editState = {
       teacherId: "",
       studentId: "",
@@ -681,9 +1168,14 @@
       var target = event.target;
       if (!target || !target.getAttribute("data-admin-tab")) return;
       activateTab(target.getAttribute("data-admin-tab"));
+      setActiveTabRoute(target.getAttribute("data-admin-tab"));
     });
 
-    activateTab("teachers");
+    window.addEventListener("hashchange", function () {
+      activateTab(getInitialAdminTab());
+    });
+
+    activateTab(getInitialAdminTab());
 
     var teacherNameInput = document.getElementById("ownerTeacherNameInput");
     var teacherEmailInput = document.getElementById("ownerTeacherEmailInput");
@@ -772,12 +1264,42 @@
     renderAll();
 
     function activateTab(tabId) {
+      if (validTabs.indexOf(tabId) === -1) tabId = "teachers";
       Array.prototype.slice.call(tabs.querySelectorAll("[data-admin-tab]")).forEach(function (button) {
         button.classList.toggle("active", button.getAttribute("data-admin-tab") === tabId);
       });
       panels.forEach(function (panel) {
         panel.classList.toggle("active", panel.getAttribute("data-admin-panel") === tabId);
       });
+    }
+
+    function getInitialAdminTab() {
+      try {
+        var hashTab = String(window.location.hash || "")
+          .replace(/^#/, "")
+          .toLowerCase();
+        if (validTabs.indexOf(hashTab) !== -1) return hashTab;
+
+        var params = new URLSearchParams(window.location.search || "");
+        var queryTab = String(params.get("tab") || "").toLowerCase();
+        if (validTabs.indexOf(queryTab) !== -1) return queryTab;
+      } catch (error) {
+        // Ignore URL parsing errors in prototype mode.
+      }
+      return "teachers";
+    }
+
+    function setActiveTabRoute(tabId) {
+      if (validTabs.indexOf(tabId) === -1) return;
+      try {
+        var url = new URL(window.location.href);
+        url.searchParams.set("tab", tabId);
+        url.hash = tabId;
+        window.history.replaceState(null, "", url.toString());
+        window.dispatchEvent(new Event("studio:nav-refresh"));
+      } catch (error) {
+        // Ignore route updates in prototype mode.
+      }
     }
 
     function renderAll() {
@@ -1753,12 +2275,12 @@
     var text = String(ageRange || "").toLowerCase();
     if (!text) return true;
 
-    var between = text.match(/(\\d+)\\s*-\\s*(\\d+)/);
+    var between = text.match(/(\d+)\s*-\s*(\d+)/);
     if (between) {
       return age >= Number(between[1]) && age <= Number(between[2]);
     }
 
-    var plus = text.match(/(\\d+)\\s*\\+/);
+    var plus = text.match(/(\d+)\s*\+/);
     if (plus) {
       return age >= Number(plus[1]);
     }
@@ -1776,7 +2298,7 @@
       "Amount: " + formatCurrency(tx.amount),
       "Status: " + titleCase(tx.status),
       "Method: " + titleCase(normalizePaymentMethod(tx.method))
-    ].join("\\n");
+    ].join("\n");
 
     var blob = new Blob([content], { type: "text/plain;charset=utf-8" });
     var link = document.createElement("a");

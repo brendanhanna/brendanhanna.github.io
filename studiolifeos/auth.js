@@ -8,7 +8,7 @@
   var ROLE_LINKS = {
     owner: ["owner.html", "owner-admin.html", "dashboard.html", "schedule.html", "students.html", "payments.html", "events.html"],
     teacher: ["teacher.html", "dashboard.html", "schedule.html", "students.html", "events.html"],
-    parent: ["parent.html", "dashboard.html", "payments.html", "events.html"]
+    parent: ["parent.html"]
   };
 
   var DEMO_USERS = [
@@ -154,6 +154,7 @@
       "<p class='role-dock-user'>Signed in: " +
       escapeHtml(session.name) +
       "</p>" +
+      "<button type='button' data-action='tour'>Help / Tour</button>" +
       "<button type='button' data-switch-role='owner'>Studio Owner</button>" +
       "<button type='button' data-switch-role='teacher'>Teacher</button>" +
       "<button type='button' data-switch-role='parent'>Parent</button>" +
@@ -186,6 +187,14 @@
       logout.addEventListener("click", function () {
         clearSession();
         window.location.href = "login.html";
+      });
+    }
+
+    var tour = menu.querySelector("button[data-action='tour']");
+    if (tour) {
+      tour.addEventListener("click", function () {
+        menu.classList.remove("open");
+        window.dispatchEvent(new Event("studio:open-tour"));
       });
     }
   }

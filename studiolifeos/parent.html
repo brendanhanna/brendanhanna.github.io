@@ -16,12 +16,12 @@
           <p class="subtitle" id="parentStudentMeta"></p>
         </div>
         <div class="role-links">
-          <a class="button" href="events.html">Recitals & Events</a>
-          <a class="button" href="payments.html">Billing Center</a>
+          <a class="button" href="parent.html?view=enrollment">Enrollment Center</a>
+          <a class="button" href="parent.html?view=billing">Billing Center</a>
         </div>
       </header>
 
-      <section class="cards-grid">
+      <section class="cards-grid" data-parent-view="overview">
         <div class="card">
           <div class="kpi-label">Active Classes</div>
           <div class="kpi-value" id="parentUpcomingCount">-</div>
@@ -40,7 +40,7 @@
         </div>
       </section>
 
-      <section class="two-col">
+      <section class="two-col" data-parent-view="overview schedule announcements">
         <article class="card">
           <div class="section-title-row"><h3>Weekly Schedule</h3></div>
           <div class="table-wrap">
@@ -65,7 +65,7 @@
         </article>
       </section>
 
-      <section class="card">
+      <section class="card" data-parent-view="overview payments billing">
         <div class="section-title-row"><h3>Payment History</h3></div>
         <div class="table-wrap">
           <table>
@@ -82,94 +82,95 @@
         </div>
       </section>
 
-      <section class="two-col">
-        <article class="card">
-          <div class="section-title-row">
-            <h3>Class Enrollment Center</h3>
-            <span class="muted">Request add/drop</span>
-          </div>
-          <p class="muted" id="parentEnrollmentMessage"></p>
-          <h4>Current Classes</h4>
-          <div id="parentEnrolledManageList" class="stack-list"></div>
-          <h4>Available Classes</h4>
-          <div id="parentAvailableClassList" class="stack-list"></div>
-          <h4>Enrollment Requests</h4>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Class</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="parentRequestRows"></tbody>
-            </table>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="section-title-row"><h3>Billing Settings</h3></div>
-          <div class="form-grid">
-            <div>
-              <label for="parentCardBrand">Card Brand</label>
-              <input id="parentCardBrand" placeholder="Visa" />
-            </div>
-            <div>
-              <label for="parentCardLast4">Last 4</label>
-              <input id="parentCardLast4" maxlength="4" placeholder="4242" />
-            </div>
-            <div>
-              <label for="parentCardExp">Exp</label>
-              <input id="parentCardExp" placeholder="09/28" />
-            </div>
-            <div>
-              <label for="parentCardZip">ZIP</label>
-              <input id="parentCardZip" placeholder="78701" />
-            </div>
-            <div class="full">
-              <label class="check-control">
-                <input id="parentAutopayToggle" type="checkbox" />
-                Enable autopay for tuition and recital fees
-              </label>
-            </div>
-          </div>
-          <div class="actions" style="margin-top: 10px; justify-content: flex-start">
-            <button class="button button-primary" type="button" id="parentSaveBillingButton">Save Billing Settings</button>
-          </div>
-          <p class="muted" id="parentBillingMessage"></p>
-          <h4>Receipts (Paid Transactions)</h4>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Type</th>
-                  <th>Amount</th>
-                  <th>Receipt</th>
-                </tr>
-              </thead>
-              <tbody id="parentReceiptRows"></tbody>
-            </table>
-          </div>
-        </article>
+      <section class="card" data-parent-view="enrollment">
+        <div class="section-title-row">
+          <h3>Class Enrollment Center</h3>
+          <span class="muted">Request add/drop</span>
+        </div>
+        <p class="muted" id="parentEnrollmentMessage"></p>
+        <h4>Current Classes</h4>
+        <div id="parentEnrolledManageList" class="stack-list"></div>
+        <h4>Available Classes</h4>
+        <div id="parentAvailableClassList" class="stack-list"></div>
+        <h4>Enrollment Requests</h4>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Class</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="parentRequestRows"></tbody>
+          </table>
+        </div>
       </section>
 
-      <section class="two-col">
-        <article class="card">
-          <div class="section-title-row"><h3>Waivers</h3></div>
-          <div id="parentWaiverList" class="stack-list"></div>
-        </article>
-
-        <article class="card">
-          <div class="section-title-row"><h3>Studio Files</h3></div>
-          <div id="parentFileList" class="stack-list"></div>
-        </article>
+      <section class="card" data-parent-view="billing">
+        <div class="section-title-row"><h3>Billing Settings</h3></div>
+        <div class="form-grid">
+          <div>
+            <label for="parentCardBrand">Card Brand</label>
+            <input id="parentCardBrand" placeholder="Visa" />
+          </div>
+          <div>
+            <label for="parentCardLast4">Last 4</label>
+            <input id="parentCardLast4" maxlength="4" placeholder="4242" />
+          </div>
+          <div>
+            <label for="parentCardExp">Exp</label>
+            <input id="parentCardExp" placeholder="09/28" />
+          </div>
+          <div>
+            <label for="parentCardZip">ZIP</label>
+            <input id="parentCardZip" placeholder="78701" />
+          </div>
+          <div class="full">
+            <label class="check-control">
+              <input id="parentAutopayToggle" type="checkbox" />
+              Enable autopay for tuition and recital fees
+            </label>
+          </div>
+        </div>
+        <div class="actions" style="margin-top: 10px; justify-content: flex-start">
+          <button class="button button-primary" type="button" id="parentSaveBillingButton">Save Billing Settings</button>
+        </div>
+        <p class="muted" id="parentBillingMessage"></p>
+        <h4>Receipts (Paid Transactions)</h4>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Receipt</th>
+              </tr>
+            </thead>
+            <tbody id="parentReceiptRows"></tbody>
+          </table>
+        </div>
       </section>
 
-      <section class="card">
+      <section class="card" data-parent-view="events overview">
+        <div class="section-title-row"><h3>Recitals & Events</h3></div>
+        <div id="parentEventList" class="stack-list"></div>
+      </section>
+
+      <section class="card" data-parent-view="waivers overview">
+        <div class="section-title-row"><h3>Waivers</h3></div>
+        <div id="parentWaiverList" class="stack-list"></div>
+      </section>
+
+      <section class="card" data-parent-view="documents overview">
+        <div class="section-title-row"><h3>Studio Files</h3></div>
+        <div id="parentFileList" class="stack-list"></div>
+      </section>
+
+      <section class="card" data-parent-view="bulletin overview announcements">
         <div class="section-title-row"><h3>Bulletin Board</h3></div>
         <div id="parentBulletinList" class="bulletin-list"></div>
       </section>
@@ -179,5 +180,6 @@
     <script src="auth.js"></script>
     <script src="role-nav.js"></script>
     <script src="role-views.js"></script>
+    <script src="onboarding.js"></script>
   </body>
 </html>
