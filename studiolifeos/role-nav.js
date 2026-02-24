@@ -11,12 +11,12 @@
   var navItemsByRole = {
     owner: [
       { href: "owner.html", label: "Owner Home", icon: "&#127970;" },
-      { href: "owner-admin.html", label: "Admin Center", icon: "&#9881;" },
       { href: "dashboard.html", label: "Dashboard", icon: "&#128200;" },
       { href: "schedule.html", label: "Schedule", icon: "&#128197;" },
       { href: "students.html", label: "Students", icon: "&#128101;" },
       { href: "payments.html", label: "Payments", icon: "&#128179;" },
-      { href: "events.html", label: "Recitals / Events", icon: "&#127917;" }
+      { href: "events.html", label: "Recitals / Events", icon: "&#127917;" },
+      { href: "owner-admin.html", label: "Admin Center", icon: "&#9881;" }
     ],
     teacher: [
       { href: "teacher.html", label: "Teacher Home", icon: "&#127979;" },
